@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title data-i18n-doc-title="meta.success.title">Payment successful - MCP Builder</title>
+<link href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23DC2626'/%3E%3Cpath d='M11 11l4 4-4 4M19 19h3' stroke='white' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E" rel="icon" type="image/svg+xml"/>
+  <script src="i18n.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            surface: { 900: '#0A0A0A', 800: '#111111', 700: '#1A1A1A', 600: '#222222', 500: '#2A2A2A' },
+            brand: { 50: '#FEE2E2', 100: '#FECACA', 200: '#FCA5A5', 300: '#F87171', 400: '#EF4444', 500: '#DC2626', 600: '#B91C1C', 700: '#991B1B', 800: '#7F1D1D', 900: '#450A0A' },
+          },
+        },
+      },
+    };
+  </script>
+<style>
+    body { background: #0A0A0A; color: #FAFAFA; font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11'; -webkit-font-smoothing: antialiased; }
+    .bg-radial { background: radial-gradient(ellipse 60% 50% at 50% 30%, rgba(34, 197, 94, 0.06) 0%, transparent 60%); }
+    .card { background: #111111; border: 1px solid rgba(255, 255, 255, 0.06); }
+    .code-block { background: #0D0D0D; border: 1px solid rgba(255,255,255,0.05); }
+    .btn-primary { background: linear-gradient(180deg, #EF4444 0%, #DC2626 100%); transition: all 0.15s ease; }
+    .btn-primary:hover { background: linear-gradient(180deg, #F87171 0%, #EF4444 100%); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(220, 38, 38, 0.3); }
+    @keyframes scaleIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+    .animate-scale-in { animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  </style>
+</head>
+<body class="bg-radial min-h-screen flex items-center justify-center p-4">
+<div data-lang-switcher class="fixed top-4 right-4 z-50"></div>
+<div class="w-full max-w-lg text-center">
+<!-- Success icon -->
+<div class="flex justify-center mb-6">
+<div class="w-20 h-20 rounded-full bg-emerald-500/10 border-2 border-emerald-500/30 flex items-center justify-center animate-scale-in">
+<svg class="w-10 h-10 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
+</div>
+</div>
+<h1 class="text-3xl font-bold text-white mb-2" data-i18n="payment-successful-2">Payment successful!</h1>
+<p class="text-neutral-400 text-base mb-2" data-i18n="your-mcp-server-was-generated-successfully">Your MCP server was generated successfully.</p>
+<p class="text-neutral-500 text-[13px] mb-8"><span data-i18n="order-id">Order ID:</span> <span class="font-mono text-neutral-400" id="orderIdDisplay">#MB-XXXXXXXX</span></p>
+<!-- Download card -->
+<div class="card rounded-2xl p-8 mb-6">
+<h2 class="text-lg font-semibold text-white mb-2" data-i18n="your-server-is-ready">Your server is ready</h2>
+<p class="text-neutral-400 text-[13px] mb-6" data-i18n="click-the-button-to-download-the">Click the button to download the .zip file with the complete server and installation instructions.</p>
+<button class="btn-primary w-full py-4 rounded-xl text-white font-semibold text-[15px] flex items-center justify-center gap-2.5 shadow-lg shadow-brand-500/25">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+        <span data-i18n="download-server-zip">Download server.zip</span>
+      </button>
+</div>
+<!-- Instructions -->
+<div class="card rounded-2xl p-6 mb-6">
+<h3 class="text-[14px] font-semibold text-white mb-4" data-i18n="quick-installation">Quick installation</h3>
+<div class="rounded-xl overflow-hidden">
+<div class="flex items-center justify-between px-4 py-2.5 bg-white/[0.03] border-b border-white/[0.04]">
+<span class="text-[11px] font-mono text-neutral-500" data-i18n="2-steps">2 steps</span>
+</div>
+<pre class="code-block p-4 overflow-x-auto text-left text-[12px]"><code><span class="text-neutral-500" data-i18n-pre="1-install-dependencies"># 1. Install dependencies</span>
+npm install
+
+<span class="text-neutral-500" data-i18n-pre="2-add-to-claude-desktop-config"># 2. Add to Claude Desktop config.json</span>
+{ "command": "node", "args": ["./server/index.js"] }</code></pre>
+</div>
+<a class="inline-block mt-4 text-[13px] text-brand-400 hover:text-brand-300 transition-colors" data-i18n="view-full-documentation" href="docs.html">View full documentation →</a>
+</div>
+<!-- Help -->
+<div class="text-[13px] text-neutral-500">
+<p><span data-i18n="need-help">Need help?</span> <a class="text-brand-400 hover:text-brand-300 transition-colors" data-i18n="contact-support" href="support.html">Contact support</a></p>
+</div>
+<!-- Back to home -->
+<a class="inline-block mt-6 text-[12px] text-neutral-500 hover:text-white transition-colors" data-i18n="back-to-home" href="index.html">← Back to home</a>
+</div>
+<script>
+    // Parse order ID from URL params (e.g., ?order=MB-XXXXXX)
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get('order');
+    if (orderId) {
+      document.getElementById('orderIdDisplay').textContent = '#' + orderId;
+    }
+  </script>
+</body>
+</html>

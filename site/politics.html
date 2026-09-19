@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title data-i18n-doc-title="meta.legal.title">Legal - MCP Builder</title>
+<link href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23DC2626'/%3E%3Cpath d='M11 11l4 4-4 4M19 19h3' stroke='white' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E" rel="icon" type="image/svg+xml"/>
+  <script src="i18n.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            surface: { 900: '#0A0A0A', 800: '#111111', 700: '#1A1A1A', 600: '#222222', 500: '#2A2A2A' },
+            brand: { 50: '#FEE2E2', 100: '#FECACA', 200: '#FCA5A5', 300: '#F87171', 400: '#EF4444', 500: '#DC2626', 600: '#B91C1C', 700: '#991B1B', 800: '#7F1D1D', 900: '#450A0A' },
+          },
+        },
+      },
+    };
+  </script>
+<style>
+    body { background: #0A0A0A; color: #FAFAFA; font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11'; -webkit-font-smoothing: antialiased; }
+    .bg-grid { background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px); background-size: 80px 80px; }
+    .card { background: #111111; border: 1px solid rgba(255, 255, 255, 0.06); }
+    .sidebar-link { transition: all 0.15s ease; }
+    .sidebar-link.active { background: rgba(220, 38, 38, 0.08); border-left: 2px solid #DC2626; color: #FAFAFA; }
+    .sidebar-link:hover { background: rgba(255, 255, 255, 0.04); }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0A0A0A; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+  </style>
+</head>
+<body class="bg-grid min-h-screen">
+<header class="fixed top-0 left-0 right-0 z-50 bg-surface-900/80 backdrop-blur-xl border-b border-white/[0.04]">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+<a class="flex items-center gap-2.5 group" href="index.html">
+<div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center">
+<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
+</div>
+<span class="font-mono font-bold text-[15px] tracking-tight"><span class="text-brand-500">&gt;_</span><span class="text-white">mcp</span><span class="text-neutral-400">builder</span></span>
+</a>
+<nav class="hidden lg:flex items-center gap-1">
+<a class="px-3.5 py-2 text-[13px] font-medium text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]" data-i18n="home" href="index.html">Home</a>
+<a class="px-3.5 py-2 text-[13px] font-medium text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]" data-i18n="documentation" href="docs.html">Documentation</a>
+<a class="px-3.5 py-2 text-[13px] font-medium text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]" data-i18n="support" href="support.html">Support</a>
+</nav>
+<div class="flex items-center gap-2">
+<div data-lang-switcher></div>
+<a class="hidden sm:block px-3.5 py-2 text-[13px] font-medium text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]" data-i18n="support" href="support.html">Support</a>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-16">
+<div class="max-w-7xl mx-auto px-4 sm:px-6">
+<div class="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-8">
+<!-- Sidebar -->
+<aside class="hidden lg:block">
+<nav class="sticky top-24 space-y-1 card rounded-xl p-3">
+<a class="sidebar-link active block px-3 py-2 text-[13px] text-neutral-300 rounded-lg" data-i18n="terms-of-service" href="#terms">Terms of Service</a>
+<a class="sidebar-link block px-3 py-2 text-[13px] text-neutral-300 rounded-lg" data-i18n="privacy-policy" href="#privacy">Privacy Policy</a>
+<a class="sidebar-link block px-3 py-2 text-[13px] text-neutral-300 rounded-lg" data-i18n="refund-policy" href="#refund">Refund Policy</a>
+<a class="sidebar-link block px-3 py-2 text-[13px] text-neutral-300 rounded-lg" data-i18n="license" href="#license">License</a>
+</nav>
+</aside>
+<!-- Content -->
+<article class="max-w-3xl">
+<h1 class="text-3xl font-bold text-white mb-2" data-i18n="legal">Legal</h1>
+<p class="text-neutral-500 text-[13px] mb-10" data-i18n="last-updated-september-15-2026">Last updated: September 15, 2026</p>
+<!-- Terms -->
+<section class="mb-12" id="terms">
+<h2 class="text-xl font-semibold text-white mb-4" data-i18n="terms-of-service">Terms of Service</h2>
+<div class="space-y-4 text-[14px] text-neutral-400 leading-relaxed">
+<p data-i18n-html="1-acceptance-of-terms-by-accessing"><strong class="text-neutral-300">1. Acceptance of terms.</strong> By accessing and using MCP Builder ("the Service"), you accept these Terms of Service in full. If you disagree with any part, do not use the Service.</p>
+<p data-i18n-html="2-description-of-the-service-mcp"><strong class="text-neutral-300">2. Description of the service.</strong> MCP Builder is a platform that generates MCP (Model Context Protocol) servers through an online payment process. The user configures the parameters of the desired server, makes a one-time payment, and receives a downloadable file with the complete server.</p>
+<p data-i18n-html="3-payment-model-each-mcp-server"><strong class="text-neutral-300">3. Payment model.</strong> Each MCP server is sold separately. The price varies by the type of data source selected ($5, $15 or $20 USD per server). There are no subscriptions or recurring charges.</p>
+<p data-i18n-html="4-product-ownership-once-paid-the"><strong class="text-neutral-300">4. Product ownership.</strong> Once paid, the generated MCP server is yours to use without restrictions. The source code is delivered under the MIT license, which means you can modify it, distribute it and use it commercially.</p>
+<p data-i18n-html="5-acceptable-use-you-agree-not"><strong class="text-neutral-300">5. Acceptable use.</strong> You agree not to use the Service to generate MCP servers for illegal or malicious purposes, or that violate third-party rights.</p>
+<p data-i18n-html="6-limitation-of-liability-the-service"><strong class="text-neutral-300">6. Limitation of liability.</strong> The Service is provided "as is", without warranties of any kind. We are not liable for damages arising from the use of the Service.</p>
+</div>
+</section>
+<!-- Privacy -->
+<section class="mb-12" id="privacy">
+<h2 class="text-xl font-semibold text-white mb-4" data-i18n="privacy-policy">Privacy Policy</h2>
+<div class="space-y-4 text-[14px] text-neutral-400 leading-relaxed">
+<p data-i18n-html="1-information-we-collect-we-only"><strong class="text-neutral-300">1. Information we collect.</strong> We only collect strictly necessary information: your email address (provided during payment) and the technical details of the MCP server you asked us to generate.</p>
+<p data-i18n-html="2-use-of-information-your-email"><strong class="text-neutral-300">2. Use of information.</strong> Your email is used only to send you the purchase receipt and download instructions. We do not send spam or share your email with third parties.</p>
+<p data-i18n-html="3-payment-data-your-credit-card"><strong class="text-neutral-300">3. Payment data.</strong> Your credit card data is processed directly by Stripe, our payment provider. We never store or have access to your full card details.</p>
+<p data-i18n-html="4-security-we-use-ssl-tls"><strong class="text-neutral-300">4. Security.</strong> We use SSL/TLS encryption for all communications. Our infrastructure follows industry security best practices.</p>
+<p data-i18n-html="5-data-retention-we-keep-your"><strong class="text-neutral-300">5. Data retention.</strong> We keep your information for as long as necessary to provide the Service and comply with legal obligations. You can request deletion of your data by contacting support.</p>
+</div>
+</section>
+<!-- Refund -->
+<section class="mb-12" id="refund">
+<h2 class="text-xl font-semibold text-white mb-4" data-i18n="refund-policy">Refund Policy</h2>
+<div class="space-y-4 text-[14px] text-neutral-400 leading-relaxed">
+<div class="card rounded-xl p-5 border-emerald-500/20">
+<div class="flex items-start gap-3">
+<svg class="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+<div>
+<p class="text-[14px] font-semibold text-white mb-1" data-i18n="7-day-money-back-guarantee">7-day money-back guarantee</p>
+<p class="text-[13px] text-neutral-400" data-i18n="if-the-generated-mcp-server-does">If the generated MCP server does not work as described in the documentation, you are entitled to a full refund within the first 7 days after purchase.</p>
+</div>
+</div>
+</div>
+<p><strong class="text-neutral-300" data-i18n="how-do-i-request-a-refund">How do I request a refund?</strong></p>
+<ol class="list-decimal list-inside space-y-2 ml-4">
+<li><span data-i18n="contact-our-support-team-through-the">Contact our support team through the</span> <a class="text-brand-400 hover:text-brand-300 transition-colors" data-i18n="contact-form" href="support.html">contact form</a>.</li>
+<li data-i18n="include-your-order-id-mb-xxxxxx">Include your order ID (#MB-XXXXXX) and a description of the problem.</li>
+<li data-i18n="our-team-will-review-your-case">Our team will review your case and process the refund within 48 hours.</li>
+</ol>
+<p class="mt-4" data-i18n-html="cases-not-covered-refunds-are-not"><strong class="text-neutral-300">Cases not covered.</strong> Refunds are not issued if the problem is caused by incorrect user configuration, missing system requirements (e.g. Node.js not installed), or improper use of the MCP server.</p>
+</div>
+</section>
+<!-- License -->
+<section class="mb-12" id="license">
+<h2 class="text-xl font-semibold text-white mb-4" data-i18n="license">License</h2>
+<div class="space-y-4 text-[14px] text-neutral-400 leading-relaxed">
+<p><strong class="text-neutral-300">MIT License</strong></p>
+<p data-i18n-html="the-source-code-generated-by-mcp">The source code generated by MCP Builder is licensed under the <strong class="text-neutral-300">MIT License</strong>. This means you can:</p>
+<ul class="list-disc list-inside space-y-1 ml-4">
+<li data-i18n="use-the-code-in-personal-and">Use the code in personal and commercial projects</li>
+<li data-i18n="modify-the-code-as-you-like">Modify the code as you like</li>
+<li data-i18n="distribute-the-code-original-or-modified">Distribute the code (original or modified)</li>
+<li data-i18n="use-it-in-private-projects-without">Use it in private projects without restrictions</li>
+</ul>
+<p class="mt-4" data-i18n="the-only-condition-is-to-keep">The only condition is to keep the copyright notice and license included in the code.</p>
+</div>
+</section>
+</article>
+</div>
+</div>
+</main>
+<footer class="py-10 px-6 border-t border-white/[0.04]">
+<div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+<div class="flex items-center gap-4">
+<span class="font-mono font-bold text-[13px]"><span class="text-brand-500">&gt;_</span><span class="text-white">mcp</span><span class="text-neutral-500">builder</span></span>
+<span class="text-[11px] text-neutral-600">© 2026</span>
+<a class="text-[11px] text-neutral-500 hover:text-white transition-colors" href="https://github.com/Josequevedov08" target="_blank">@Josequevedov08</a>
+</div>
+<div class="flex flex-wrap items-center gap-4 md:gap-6 text-[12px] font-medium text-neutral-500">
+<a class="hover:text-white transition-colors" data-i18n="home" href="index.html">Home</a>
+<a class="hover:text-white transition-colors" data-i18n="documentation" href="docs.html">Documentation</a>
+<a class="hover:text-white transition-colors" data-i18n="support" href="support.html">Support</a>
+<a class="hover:text-white transition-colors" href="https://github.com/Josequevedov08" target="_blank">GitHub</a>
+</div>
+</div>
+</footer>
+<script>
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+      link.addEventListener('click', function() {
+        document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

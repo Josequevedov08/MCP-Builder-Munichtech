@@ -1,0 +1,71 @@
+# Secrets and credentials: never commit these
+.env
+.env.*
+!.env.example
+*.env
+.envrc
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa*
+id_ed25519*
+*.secret
+*.secrets
+secrets/
+.secrets/
+credentials.json
+credentials/
+service-account*.json
+*-credentials.json
+client_secret*.json
+token.json
+.netrc
+.npmrc
+.pypirc
+.aws/
+.ssh/
+.gcloud/
+
+# Encrypted credential material and generated audio
+audio_out/
+*.enc
+*.sqlite
+*.sqlite3
+*.db
+
+# Python
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Node
+node_modules/
+
+# Logs
+*.log
+logs/
+
+# Editors, tools and operating system
+.vscode/
+.idea/
+.claude/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.bak
+*.tmp

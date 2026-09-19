@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title data-i18n-doc-title="meta.admin.title">Admin panel - MCP Builder</title>
+<link href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23DC2626'/%3E%3Cpath d='M11 11l4 4-4 4M19 19h3' stroke='white' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E" rel="icon" type="image/svg+xml"/>
+  <script src="i18n.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            surface: { 900: '#0A0A0A', 800: '#111111', 700: '#1A1A1A', 600: '#222222', 500: '#2A2A2A' },
+            brand: { 50: '#FEE2E2', 100: '#FECACA', 200: '#FCA5A5', 300: '#F87171', 400: '#EF4444', 500: '#DC2626', 600: '#B91C1C', 700: '#991B1B', 800: '#7F1D1D', 900: '#450A0A' },
+          },
+        },
+      },
+    };
+  </script>
+<style>
+    body {
+      background: #0A0A0A;
+      color: #FAFAFA;
+      -webkit-font-smoothing: antialiased;
+    }
+    .card {
+      background: #111111;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .bar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .bar-fill {
+      background: linear-gradient(90deg, #EF4444, #DC2626);
+    }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0A0A0A; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+  </style>
+</head>
+<body class="min-h-screen">
+<!-- Demo banner -->
+<div class="bg-amber-500/10 border-b border-amber-500/20 px-6 py-2.5 text-center">
+<p class="text-[12px] font-medium text-amber-400" data-i18n="demo-panel-all-data-shown-is">Demo panel. All data shown is simulated and does not represent real activity.</p>
+</div>
+<!-- Header -->
+<header class="border-b border-white/[0.06] px-6 py-4">
+<div class="max-w-6xl mx-auto flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center">
+<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
+</div>
+<div>
+<p class="font-mono font-bold text-[14px]" data-i18n-html="admin-panel"><span class="text-brand-500">&gt;_</span> Admin panel</p>
+</div>
+</div>
+<div class="flex items-center gap-4"><div data-lang-switcher></div><a class="text-[13px] font-medium text-neutral-400 hover:text-white transition-colors flex items-center gap-1.5" href="index.html">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+        <span data-i18n="back-to-site">Back to site</span>
+      </a></div>
+</div>
+</header>
+<main class="max-w-6xl mx-auto px-6 py-10">
+<div class="mb-8">
+<h1 class="text-2xl font-bold tracking-tight mb-1" data-i18n="usage-metrics">Usage metrics</h1>
+<p class="text-[13px] text-neutral-500" data-i18n="simulated-data-from-the-last-30">Simulated data from the last 30 days for demonstration purposes.</p>
+</div>
+<!-- KPI cards -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+<div class="card rounded-xl p-5">
+<div class="flex items-center justify-between mb-3">
+<span class="text-[11px] font-mono uppercase tracking-wider text-neutral-500" data-i18n="downloads">Downloads</span>
+<svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<p class="text-2xl font-extrabold text-white">1,842</p>
+<p class="text-[11px] text-emerald-400 mt-1" data-i18n="12-4-vs-last-month">+12.4% vs last month</p>
+</div>
+<div class="card rounded-xl p-5">
+<div class="flex items-center justify-between mb-3">
+<span class="text-[11px] font-mono uppercase tracking-wider text-neutral-500" data-i18n="revenue">Revenue</span>
+<svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V6m0 12v-2m0-8c-1.11 0-2.08.402-2.599 1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<p class="text-2xl font-extrabold text-white">$18,540</p>
+<p class="text-[11px] text-emerald-400 mt-1" data-i18n="8-1-vs-last-month">+8.1% vs last month</p>
+</div>
+<div class="card rounded-xl p-5">
+<div class="flex items-center justify-between mb-3">
+<span class="text-[11px] font-mono uppercase tracking-wider text-neutral-500" data-i18n="support-contacts">Support contacts</span>
+<svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<p class="text-2xl font-extrabold text-white">63</p>
+<p class="text-[11px] text-neutral-500 mt-1" data-i18n="response-time-4h">Response time: 4h</p>
+</div>
+<div class="card rounded-xl p-5">
+<div class="flex items-center justify-between mb-3">
+<span class="text-[11px] font-mono uppercase tracking-wider text-neutral-500" data-i18n="refunds">Refunds</span>
+<svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 10h10a5 5 0 015 5v0a5 5 0 01-5 5H8m0 0l3-3m-3 3l3 3M3 10l3-3m-3 3l3 3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<p class="text-2xl font-extrabold text-white">4</p>
+<p class="text-[11px] text-neutral-500 mt-1" data-i18n="0-2-of-orders">0.2% of orders</p>
+</div>
+</div>
+<div class="grid lg:grid-cols-3 gap-6 mb-10">
+<!-- Downloads by plan -->
+<div class="card rounded-xl p-6 lg:col-span-1">
+<p class="text-[13px] font-semibold text-white mb-5" data-i18n="downloads-by-plan">Downloads by plan</p>
+<div class="space-y-4">
+<div>
+<div class="flex items-center justify-between text-[12px] mb-1.5">
+<span class="text-neutral-400" data-i18n="local-files-2">Local Files</span>
+<span class="text-neutral-500 font-mono">612</span>
+</div>
+<div class="h-2 rounded-full bar-track overflow-hidden"><div class="h-full bar-fill rounded-full" style="width: 45%"></div></div>
+</div>
+<div>
+<div class="flex items-center justify-between text-[12px] mb-1.5">
+<span class="text-neutral-400" data-i18n="database-2">Database</span>
+<span class="text-neutral-500 font-mono">981</span>
+</div>
+<div class="h-2 rounded-full bar-track overflow-hidden"><div class="h-full bar-fill rounded-full" style="width: 72%"></div></div>
+</div>
+<div>
+<div class="flex items-center justify-between text-[12px] mb-1.5">
+<span class="text-neutral-400" data-i18n="external-api">External API</span>
+<span class="text-neutral-500 font-mono">249</span>
+</div>
+<div class="h-2 rounded-full bar-track overflow-hidden"><div class="h-full bar-fill rounded-full" style="width: 28%"></div></div>
+</div>
+</div>
+</div>
+<!-- Recent activity -->
+<div class="card rounded-xl overflow-hidden lg:col-span-2">
+<div class="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between">
+<p class="text-[13px] font-semibold text-white" data-i18n="recent-activity">Recent activity</p>
+<span class="text-[10px] font-mono text-neutral-600 uppercase" data-i18n="simulated-data">Simulated data</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="text-[11px] font-mono uppercase tracking-wider text-neutral-600">
+<th class="px-6 py-3 font-medium" data-i18n="order">Order</th>
+<th class="px-6 py-3 font-medium" data-i18n="plan">Plan</th>
+<th class="px-6 py-3 font-medium" data-i18n="amount">Amount</th>
+<th class="px-6 py-3 font-medium" data-i18n="status">Status</th>
+<th class="px-6 py-3 font-medium" data-i18n="date">Date</th>
+</tr>
+</thead>
+<tbody class="text-[13px]">
+<tr class="border-t border-white/[0.05]">
+<td class="px-6 py-3 font-mono text-neutral-400">#MB-7F2A</td>
+<td class="px-6 py-3 text-neutral-300" data-i18n="database-2">Database</td>
+<td class="px-6 py-3 text-white font-medium">$15.00</td>
+<td class="px-6 py-3"><span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[11px] font-medium" data-i18n="paid">Paid</span></td>
+<td class="px-6 py-3 text-neutral-500" data-i18n="sep-14-2026">Sep 14, 2026</td>
+</tr>
+<tr class="border-t border-white/[0.05]">
+<td class="px-6 py-3 font-mono text-neutral-400">#MB-91BC</td>
+<td class="px-6 py-3 text-neutral-300" data-i18n="external-api">External API</td>
+<td class="px-6 py-3 text-white font-medium">$20.00</td>
+<td class="px-6 py-3"><span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[11px] font-medium" data-i18n="paid">Paid</span></td>
+<td class="px-6 py-3 text-neutral-500" data-i18n="sep-14-2026">Sep 14, 2026</td>
+</tr>
+<tr class="border-t border-white/[0.05]">
+<td class="px-6 py-3 font-mono text-neutral-400">#MB-3E09</td>
+<td class="px-6 py-3 text-neutral-300" data-i18n="local-files-2">Local Files</td>
+<td class="px-6 py-3 text-white font-medium">$5.00</td>
+<td class="px-6 py-3"><span class="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 text-[11px] font-medium" data-i18n="refunded">Refunded</span></td>
+<td class="px-6 py-3 text-neutral-500" data-i18n="sep-13-2026">Sep 13, 2026</td>
+</tr>
+<tr class="border-t border-white/[0.05]">
+<td class="px-6 py-3 font-mono text-neutral-400">#MB-6D41</td>
+<td class="px-6 py-3 text-neutral-300" data-i18n="database-2">Database</td>
+<td class="px-6 py-3 text-white font-medium">$15.00</td>
+<td class="px-6 py-3"><span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[11px] font-medium" data-i18n="paid">Paid</span></td>
+<td class="px-6 py-3 text-neutral-500" data-i18n="sep-13-2026">Sep 13, 2026</td>
+</tr>
+<tr class="border-t border-white/[0.05]">
+<td class="px-6 py-3 font-mono text-neutral-400">#MB-2A77</td>
+<td class="px-6 py-3 text-neutral-300" data-i18n="local-files-2">Local Files</td>
+<td class="px-6 py-3 text-white font-medium">$5.00</td>
+<td class="px-6 py-3"><span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[11px] font-medium" data-i18n="paid">Paid</span></td>
+<td class="px-6 py-3 text-neutral-500" data-i18n="sep-12-2026">Sep 12, 2026</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Support contacts summary -->
+<div class="card rounded-xl p-6">
+<p class="text-[13px] font-semibold text-white mb-5" data-i18n="reasons-for-contacting-support">Reasons for contacting support</p>
+<div class="grid sm:grid-cols-3 gap-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
+<svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<p class="text-[16px] font-bold text-white">28</p>
+<p class="text-[12px] text-neutral-500" data-i18n="installation-problems">Installation problems</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
+<svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<p class="text-[16px] font-bold text-white">19</p>
+<p class="text-[12px] text-neutral-500" data-i18n="questions-before-buying">Questions before buying</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center flex-shrink-0">
+<svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 10h10a5 5 0 015 5v0a5 5 0 01-5 5H8" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<p class="text-[16px] font-bold text-white">16</p>
+<p class="text-[12px] text-neutral-500" data-i18n="refund-requests">Refund requests</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="border-t border-white/[0.06] px-6 py-6 text-center">
+<p class="text-[11px] text-neutral-600" data-i18n="demo-admin-panel-not-connected-to">Demo admin panel. Not connected to real production data.</p>
+</footer>
+</body>
+</html>

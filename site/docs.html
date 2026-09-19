@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title data-i18n-doc-title="meta.docs.title">Documentation - MCP Builder</title>
+<link href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23DC2626'/%3E%3Cpath d='M11 11l4 4-4 4M19 19h3' stroke='white' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E" rel="icon" type="image/svg+xml"/>
+  <script src="i18n.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            surface: {
+              900: '#0A0A0A',
+              800: '#111111',
+              700: '#1A1A1A',
+              600: '#222222',
+              500: '#2A2A2A',
+            },
+            brand: {
+              50: '#FEE2E2',
+              100: '#FECACA',
+              200: '#FCA5A5',
+              300: '#F87171',
+              400: '#EF4444',
+              500: '#DC2626',
+              600: '#B91C1C',
+              700: '#991B1B',
+              800: '#7F1D1D',
+              900: '#450A0A',
+            },
+          },
+        },
+      },
+    };
+  </script>
+<style>
+    body { background: #0A0A0A; color: #FAFAFA; font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11'; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    .bg-grid { background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px); background-size: 80px 80px; }
+    .card { background: #111111; border: 1px solid rgba(255, 255, 255, 0.06); transition: all 0.2s ease; }
+    .input-field { background: #0A0A0A; border: 1px solid rgba(255, 255, 255, 0.08); color: #FAFAFA; transition: all 0.15s ease; }
+    .input-field:focus { border-color: #DC2626; outline: none; box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1); }
+    .btn-primary { background: linear-gradient(180deg, #EF4444 0%, #DC2626 100%); transition: all 0.15s ease; }
+    .btn-primary:hover { background: linear-gradient(180deg, #F87171 0%, #EF4444 100%); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(220, 38, 38, 0.3); }
+    .sidebar-link { transition: all 0.15s ease; }
+    .sidebar-link.active { background: rgba(220, 38, 38, 0.08); border-left: 2px solid #DC2626; color: #FAFAFA; }
+    .sidebar-link:hover { background: rgba(255, 255, 255, 0.04); }
+    .code-block { background: #0D0D0D; border: 1px solid rgba(255,255,255,0.05); }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0A0A0A; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #444; }
+  </style>
+</head>
+<body class="bg-grid min-h-screen">
+<!-- Header -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-surface-900/80 backdrop-blur-xl border-b border-white/[0.04]">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+<a class="flex items-center gap-2.5 group" href="index.html">
+<div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center">
+<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
+</div>
+<span class="font-mono font-bold text-[15px] tracking-tight"><span class="text-brand-500">&gt;_</span><span class="text-white">mcp</span><span class="text-neutral-400">builder</span></span>
+</a>
+<nav class="hidden lg:flex items-center gap-1">
+<a class="px-3.5 py-2 text-[13px] font-medium text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]" data-i18n="home" href="index.html">Home</a>
+<a class="px-3.5 py-2 text-[13px] font-medium text-brand-400 rounded-lg bg-brand-500/8" data-i18n="documentation" href="docs.html">Documentation</a>
+<a class="px-3.5 py-2 text-[13px] font-medium text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]" data-i18n="support" href="support.html">Support</a>
+</nav>
+<div class="flex items-center gap-2">
+<div data-lang-switcher></div>
+<a class="hidden sm:block px-3.5 py-2 text-[13px] font-medium text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]" data-i18n="support" href="support.html">Support</a>
+<a class="hidden sm:block px-3.5 py-2 text-[13px] font-medium text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]" data-i18n="legal" href="politics.html">Legal</a>
+</div>
+<button class="lg:hidden w-10 h-10 rounded-lg bg-white/[0.04] flex items-center justify-center hover:bg-white/[0.08] transition-colors" onclick="toggleMobileMenu()">
+<svg class="w-5 h-5 text-neutral-300" fill="none" id="menuIconOpen" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="w-5 h-5 text-neutral-300 hidden" fill="none" id="menuIconClose" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<div class="hidden lg:hidden border-t border-white/[0.04] bg-surface-900/95 backdrop-blur-xl" id="mobileMenu">
+<nav class="px-4 py-4 space-y-1">
+<a class="block px-4 py-3 text-[14px] font-medium text-neutral-300 hover:text-white hover:bg-white/[0.04] rounded-lg" data-i18n="home" href="index.html" onclick="closeMobileMenu()">Home</a>
+<a class="block px-4 py-3 text-[14px] font-medium text-brand-400 hover:bg-white/[0.04] rounded-lg" data-i18n="documentation" href="docs.html" onclick="closeMobileMenu()">Documentation</a>
+<a class="block px-4 py-3 text-[14px] font-medium text-neutral-300 hover:text-white hover:bg-white/[0.04] rounded-lg" data-i18n="support" href="support.html" onclick="closeMobileMenu()">Support</a>
+<a class="block px-4 py-3 text-[14px] font-medium text-neutral-300 hover:text-white hover:bg-white/[0.04] rounded-lg" data-i18n="legal" href="politics.html" onclick="closeMobileMenu()">Legal</a>
+</nav>
+</div>
+</header>
+<main class="pt-24 pb-16">
+<div class="max-w-7xl mx-auto px-4 sm:px-6">
+<div class="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-8">
+<!-- Sidebar -->
+<aside class="hidden lg:block">
+<nav class="sticky top-24 space-y-1 card rounded-xl p-3">
+<p class="px-3 py-2 text-[11px] font-semibold text-neutral-500 uppercase tracking-wider" data-i18n="guide">Guide</p>
+<a class="sidebar-link active block px-3 py-2 text-[13px] text-neutral-300 rounded-lg" data-i18n="getting-started" href="#getting-started">Getting started</a>
+<a class="sidebar-link block px-3 py-2 text-[13px] text-neutral-300 rounded-lg" data-i18n="installation" href="#installation">Installation</a>
+<a class="sidebar-link block px-3 py-2 text-[13px] text-neutral-300 rounded-lg" data-i18n="configuration" href="#configuration">Configuration</a>
+<p class="px-3 py-2 mt-4 text-[11px] font-semibold text-neutral-500 uppercase tracking-wider" data-i18n="types">Types</p>
+<a class="sidebar-link block px-3 py-2 text-[13px] text-neutral-300 rounded-lg" data-i18n="local-files-2" href="#local-files">Local Files</a>
+<a class="sidebar-link block px-3 py-2 text-[13px] text-neutral-300 rounded-lg" data-i18n="databases" href="#databases">Databases</a>
+<a class="sidebar-link block px-3 py-2 text-[13px] text-neutral-300 rounded-lg" data-i18n="external-apis" href="#external-apis">External APIs</a>
+<p class="px-3 py-2 mt-4 text-[11px] font-semibold text-neutral-500 uppercase tracking-wider" data-i18n="reference">Reference</p>
+<a class="sidebar-link block px-3 py-2 text-[13px] text-neutral-300 rounded-lg" data-i18n="troubleshooting" href="#troubleshooting">Troubleshooting</a>
+<a class="sidebar-link block px-3 py-2 text-[13px] text-neutral-300 rounded-lg" href="#faq">FAQ</a>
+</nav>
+</aside>
+<!-- Content -->
+<article class="prose prose-invert max-w-none">
+<!-- Getting Started -->
+<section class="mb-12" id="getting-started">
+<h1 class="text-3xl font-bold text-white mb-4" data-i18n="documentation">Documentation</h1>
+<p class="text-neutral-400 leading-relaxed mb-6" data-i18n="learn-how-to-generate-production-ready">Learn how to generate production-ready MCP (Model Context Protocol) servers in minutes, without writing code.</p>
+<h2 class="text-xl font-semibold text-white mb-3 mt-8" data-i18n="what-is-mcp-builder">What is MCP Builder?</h2>
+<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="mcp-builder-is-a-tool-that">MCP Builder is a tool that lets you generate production-ready MCP servers. You just configure what you want to connect, pay, and receive a .zip file with the complete server and installation documentation.</p>
+<div class="card rounded-xl p-5 mb-6">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-lg bg-brand-500/10 border border-brand-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+<svg class="w-4 h-4 text-brand-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<p class="text-[13px] font-semibold text-white mb-1" data-i18n="no-accounts-or-sign-ups">No accounts or sign-ups</p>
+<p class="text-[13px] text-neutral-400" data-i18n="the-flow-is-guest-only-you">The flow is guest-only. You pay, download, done. No user to create, no passwords.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Installation -->
+<section class="mb-12" id="installation">
+<h2 class="text-xl font-semibold text-white mb-4" data-i18n="installing-the-generated-server">Installing the generated server</h2>
+<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="once-you-download-the-zip-file">Once you download the .zip file, follow these steps:</p>
+<h3 class="text-[14px] font-semibold text-white mb-2 mt-6" data-i18n="1-extract-and-install-dependencies">1. Extract and install dependencies</h3>
+<pre class="code-block rounded-lg p-4 overflow-x-auto text-[13px] font-mono"><code><span class="text-neutral-500" data-i18n-nl="1" data-i18n-pre="extract-the-archive"># Extract the archive
+</span>unzip server.zip
+cd server
+
+<span class="text-neutral-500" data-i18n-nl="1" data-i18n-pre="install-dependencies"># Install dependencies
+</span>npm install</code></pre>
+<h3 class="text-[14px] font-semibold text-white mb-2 mt-6" data-i18n="2-configure-claude-desktop">2. Configure Claude Desktop</h3>
+<pre class="code-block rounded-lg p-4 overflow-x-auto text-[13px] font-mono"><code><span class="text-neutral-500" data-i18n-nl="1" data-i18n-pre="file-library-application-support-claude-claude"># File: ~/Library/Application Support/Claude/claude_desktop_config.json
+# On Windows: %APPDATA%\Claude\claude_desktop_config.json
+</span>{
+  <span class="text-blue-300">"mcpServers"</span>: {
+    <span class="text-blue-300">"my-server"</span>: {
+      <span class="text-blue-300">"command"</span>: <span class="text-green-300">"node"</span>,
+      <span class="text-blue-300">"args"</span>: [<span class="text-green-300">"./server/index.js"</span>]
+    }
+  }
+}</code></pre>
+<h3 class="text-[14px] font-semibold text-white mb-2 mt-6" data-i18n="3-restart-claude-desktop">3. Restart Claude Desktop</h3>
+<p class="text-neutral-400 text-[13px]" data-i18n="close-and-reopen-claude-desktop-the">Close and reopen Claude Desktop. The MCP server will appear automatically in the tools list.</p>
+</section>
+<!-- Configuration -->
+<section class="mb-12" id="configuration">
+<h2 class="text-xl font-semibold text-white mb-4" data-i18n="configuration-options">Configuration options</h2>
+<div class="card rounded-xl overflow-hidden">
+<table class="w-full text-[13px]">
+<thead class="bg-white/[0.03]">
+<tr>
+<th class="px-5 py-3 text-left font-semibold text-neutral-300" data-i18n="parameter">Parameter</th>
+<th class="px-5 py-3 text-left font-semibold text-neutral-300" data-i18n="type">Type</th>
+<th class="px-5 py-3 text-left font-semibold text-neutral-300" data-i18n="description">Description</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/[0.04]">
+<tr>
+<td class="px-5 py-3 font-mono text-brand-400">source</td>
+<td class="px-5 py-3 text-neutral-400">string</td>
+<td class="px-5 py-3 text-neutral-300" data-i18n="source-type-local-database-api">Source type: local, database, api</td>
+</tr>
+<tr>
+<td class="px-5 py-3 font-mono text-brand-400">tables</td>
+<td class="px-5 py-3 text-neutral-400">string[]</td>
+<td class="px-5 py-3 text-neutral-300" data-i18n="allowed-tables-database-only">Allowed tables (database only)</td>
+</tr>
+<tr>
+<td class="px-5 py-3 font-mono text-brand-400">permissions</td>
+<td class="px-5 py-3 text-neutral-400">string</td>
+<td class="px-5 py-3 text-neutral-300">read, write, full</td>
+</tr>
+<tr>
+<td class="px-5 py-3 font-mono text-brand-400">rules</td>
+<td class="px-5 py-3 text-neutral-400">string</td>
+<td class="px-5 py-3 text-neutral-300" data-i18n="custom-security-rules">Custom security rules</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Local Files -->
+<section class="mb-12" id="local-files">
+<h2 class="text-xl font-semibold text-white mb-4" data-i18n="local-files-2">Local Files</h2>
+<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="connect-your-ai-to-files-on">Connect your AI to files on your machine. Supports .csv, .json, .txt, .md.</p>
+<pre class="code-block rounded-lg p-4 overflow-x-auto text-[13px] font-mono"><code><span class="text-neutral-500" data-i18n-nl="1" data-i18n-pre="example-server-for-csv-files"># Example: server for CSV files
+</span><span class="text-blue-300">source</span>: local
+<span class="text-blue-300">path</span>: <span class="text-green-300">"./data"</span>
+<span class="text-blue-300">types</span>: [<span class="text-green-300">".csv"</span>, <span class="text-green-300">".json"</span>]</code></pre>
+</section>
+<!-- Databases -->
+<section class="mb-12" id="databases">
+<h2 class="text-xl font-semibold text-white mb-4" data-i18n="databases">Databases</h2>
+<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="postgresql-mysql-mariadb-sql-queries-generated">PostgreSQL, MySQL, MariaDB. SQL queries generated by the AI with security validation.</p>
+<pre class="code-block rounded-lg p-4 overflow-x-auto text-[13px] font-mono"><code><span class="text-neutral-500" data-i18n-nl="1" data-i18n-pre="example-postgresql-connection"># Example: PostgreSQL connection
+</span><span class="text-blue-300">source</span>: database
+<span class="text-blue-300">host</span>: <span class="text-green-300">"localhost:5432"</span>
+<span class="text-blue-300">database</span>: <span class="text-green-300">"my_db"</span>
+<span class="text-blue-300">tables</span>: [<span class="text-green-300">"users"</span>, <span class="text-green-300">"orders"</span>]
+<span class="text-blue-300">permissions</span>: <span class="text-green-300">"read"</span></code></pre>
+<div class="card rounded-xl p-5 mt-4 border-amber-500/20">
+<div class="flex items-start gap-3">
+<svg class="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" fill-rule="evenodd"></path></svg>
+<div>
+<p class="text-[13px] font-semibold text-amber-400 mb-1" data-i18n="security">Security</p>
+<p class="text-[13px] text-neutral-400" data-i18n="dangerous-queries-drop-delete-truncate-are">Dangerous queries (DROP, DELETE, TRUNCATE) are blocked by default. Permissions are configurable.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- External APIs -->
+<section class="mb-12" id="external-apis">
+<h2 class="text-xl font-semibold text-white mb-4" data-i18n="external-apis">External APIs</h2>
+<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="connect-your-ai-to-any-rest">Connect your AI to any REST or GraphQL API. Auth with API key, OAuth2 or Bearer token.</p>
+<pre class="code-block rounded-lg p-4 overflow-x-auto text-[13px] font-mono"><code><span class="text-neutral-500" data-i18n-nl="1" data-i18n-pre="example-rest-api-connection"># Example: REST API connection
+</span><span class="text-blue-300">source</span>: api
+<span class="text-blue-300">baseUrl</span>: <span class="text-green-300">"https://api.example.com"</span>
+<span class="text-blue-300">auth</span>: {
+  <span class="text-blue-300">"type"</span>: <span class="text-green-300">"bearer"</span>,
+  <span class="text-blue-300">"token"</span>: <span class="text-green-300">"your-token"</span>
+}
+<span class="text-blue-300">endpoints</span>: [<span class="text-green-300">"/products"</span>, <span class="text-green-300">"/orders"</span>]</code></pre>
+</section>
+<!-- Troubleshooting -->
+<section class="mb-12" id="troubleshooting">
+<h2 class="text-xl font-semibold text-white mb-4" data-i18n="troubleshooting">Troubleshooting</h2>
+<div class="space-y-3">
+<details class="card rounded-xl p-5 group">
+<summary class="text-[14px] font-medium text-white cursor-pointer flex items-center justify-between">
+                  <span data-i18n="the-server-does-not-appear-in">The server does not appear in Claude Desktop</span>
+                  <svg class="w-4 h-4 text-neutral-500 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</summary>
+<p class="mt-3 text-[13px] text-neutral-400 leading-relaxed" data-i18n="check-that-the-path-in-the">Check that the path in the configuration file is absolute. Fully restart Claude Desktop (quit it from the system tray, not just the window).</p>
+</details>
+<details class="card rounded-xl p-5 group">
+<summary class="text-[14px] font-medium text-white cursor-pointer flex items-center justify-between">
+                  <span data-i18n="database-connection-error">Database connection error</span>
+                  <svg class="w-4 h-4 text-neutral-500 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</summary>
+<p class="mt-3 text-[13px] text-neutral-400 leading-relaxed" data-i18n="check-that-the-database-accepts-connections">Check that the database accepts connections from your IP. Review the host, port, user and password in the configuration.</p>
+</details>
+<details class="card rounded-xl p-5 group">
+<summary class="text-[14px] font-medium text-white cursor-pointer flex items-center justify-between">
+                  <span data-i18n="the-external-api-does-not-respond">The external API does not respond</span>
+                  <svg class="w-4 h-4 text-neutral-500 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</summary>
+<p class="mt-3 text-[13px] text-neutral-400 leading-relaxed" data-i18n="check-that-the-base-url-is">Check that the base URL is correct and that the token or API key has the required permissions. The server includes detailed logs for debugging.</p>
+</details>
+</div>
+</section>
+<!-- FAQ -->
+<section class="mb-12" id="faq">
+<h2 class="text-xl font-semibold text-white mb-4" data-i18n="frequently-asked-questions">Frequently asked questions</h2>
+<div class="space-y-3">
+<div class="card rounded-xl p-5">
+<h3 class="text-[14px] font-semibold text-white mb-2" data-i18n="what-does-the-downloaded-file-include">What does the downloaded file include?</h3>
+<p class="text-[13px] text-neutral-400" data-i18n="the-zip-file-contains-an-mcp">The .zip file contains: an MCP server in TypeScript, a package.json with dependencies, a README with step-by-step instructions, and production-ready configuration.</p>
+</div>
+<div class="card rounded-xl p-5">
+<h3 class="text-[14px] font-semibold text-white mb-2" data-i18n="is-it-compatible-with-cursor-and">Is it compatible with Cursor and Windsurf?</h3>
+<p class="text-[13px] text-neutral-400" data-i18n="yes-the-generated-mcp-server-follows">Yes. The generated MCP server follows the MCP standard and works with any compatible client: Claude Desktop, Cursor, Windsurf and more.</p>
+</div>
+<div class="card rounded-xl p-5">
+<h3 class="text-[14px] font-semibold text-white mb-2" data-i18n="do-i-need-node-js-installed">Do I need Node.js installed?</h3>
+<p class="text-[13px] text-neutral-400" data-i18n="yes-node-js-18-is-required">Yes, Node.js 18+ is required to run the MCP server. You can download it from nodejs.org.</p>
+</div>
+</div>
+</section>
+</article>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="py-10 px-6 border-t border-white/[0.04]">
+<div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+<div class="flex items-center gap-4">
+<span class="font-mono font-bold text-[13px]"><span class="text-brand-500">&gt;_</span><span class="text-white">mcp</span><span class="text-neutral-500">builder</span></span>
+<span class="text-[11px] text-neutral-600">© 2026</span>
+<a class="text-[11px] text-neutral-500 hover:text-white transition-colors" href="https://github.com/Josequevedov08" target="_blank">@Josequevedov08</a>
+</div>
+<div class="flex flex-wrap items-center gap-4 md:gap-6 text-[12px] font-medium text-neutral-500">
+<a class="hover:text-white transition-colors" data-i18n="home" href="index.html">Home</a>
+<a class="hover:text-white transition-colors" data-i18n="support" href="support.html">Support</a>
+<a class="hover:text-white transition-colors" data-i18n="terms" href="politics.html">Terms</a>
+<a class="hover:text-white transition-colors" href="https://github.com/Josequevedov08" target="_blank">GitHub</a>
+</div>
+</div>
+</footer>
+<script>
+    // Mobile menu
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const iconOpen = document.getElementById('menuIconOpen');
+      const iconClose = document.getElementById('menuIconClose');
+      if (menu.classList.contains('hidden')) {
+        menu.classList.remove('hidden');
+        iconOpen.classList.add('hidden');
+        iconClose.classList.remove('hidden');
+      } else {
+        menu.classList.add('hidden');
+        iconOpen.classList.remove('hidden');
+        iconClose.classList.add('hidden');
+      }
+    }
+    function closeMobileMenu() {
+      document.getElementById('mobileMenu').classList.add('hidden');
+      document.getElementById('menuIconOpen').classList.remove('hidden');
+      document.getElementById('menuIconClose').classList.add('hidden');
+    }
+    // Sidebar active state
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+      link.addEventListener('click', function() {
+        document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

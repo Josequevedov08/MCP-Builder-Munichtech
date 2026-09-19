@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title data-i18n-doc-title="meta.index.title">MCP Builder - Production-ready MCP servers for your AI</title>
+<meta content="Generate production-ready MCP servers and connect Claude, Cursor or any AI to your data in minutes. No accounts, no friction, one-time payment per server." data-i18n-content="meta.index.desc" name="description"/>
+<link href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23DC2626'/%3E%3Cpath d='M11 11l4 4-4 4M19 19h3' stroke='white' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E" rel="icon" type="image/svg+xml"/>
+  <script src="i18n.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            surface: {
+              900: '#0A0A0A',
+              800: '#111111',
+              700: '#1A1A1A',
+              600: '#222222',
+              500: '#2A2A2A',
+            },
+            brand: {
+              50: '#FEE2E2',
+              100: '#FECACA',
+              200: '#FCA5A5',
+              300: '#F87171',
+              400: '#EF4444',
+              500: '#DC2626',
+              600: '#B91C1C',
+              700: '#991B1B',
+              800: '#7F1D1D',
+              900: '#450A0A',
+            },
+          },
+          animation: {
+            'fade-up': 'fadeUp 0.6s ease-out forwards',
+            'fade-in': 'fadeIn 0.4s ease-out forwards',
+            'scale-in': 'scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+            'slide-down': 'slideDown 0.3s ease-out forwards',
+            'pulse-slow': 'pulse 3s ease-in-out infinite',
+            'glow': 'glow 2s ease-in-out infinite alternate',
+            'marquee': 'marquee 28s linear infinite',
+          },
+          keyframes: {
+            fadeUp: {
+              '0%': { transform: 'translateY(24px)', opacity: '0' },
+              '100%': { transform: 'translateY(0)', opacity: '1' },
+            },
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            scaleIn: {
+              '0%': { transform: 'scale(0.8)', opacity: '0' },
+              '100%': { transform: 'scale(1)', opacity: '1' },
+            },
+            slideDown: {
+              '0%': { transform: 'translateY(-8px)', opacity: '0' },
+              '100%': { transform: 'translateY(0)', opacity: '1' },
+            },
+            glow: {
+              '0%': { boxShadow: '0 0 20px rgba(220, 38, 38, 0.2)' },
+              '100%': { boxShadow: '0 0 40px rgba(220, 38, 38, 0.4)' },
+            },
+            marquee: {
+              '0%': { transform: 'translateX(0)' },
+              '100%': { transform: 'translateX(-50%)' },
+            },
+          },
+        },
+      },
+    };
+  </script>
+<style>
+    body {
+      background: #0A0A0A;
+      color: #FAFAFA;
+      font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .bg-grid {
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 80px 80px;
+    }
+
+    .bg-radial {
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(220, 38, 38, 0.10) 0%, transparent 60%);
+    }
+
+    .text-gradient {
+      background: linear-gradient(135deg, #FAFAFA 0%, #A3A3A3 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .text-gradient-brand {
+      background: linear-gradient(135deg, #F87171 0%, #DC2626 50%, #991B1B 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .gradient-red {
+      background: linear-gradient(135deg, #EF4444 0%, #DC2626 60%, #991B1B 100%);
+    }
+
+    .card {
+      background: #111111;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      transition: all 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(220, 38, 38, 0.2);
+    }
+
+    .card-interactive:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(220, 38, 38, 0.1);
+    }
+
+    .input-field {
+      background: #0A0A0A;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #FAFAFA;
+      transition: all 0.15s ease;
+    }
+
+    .input-field::placeholder { color: #525252; }
+    .input-field:hover { border-color: rgba(255, 255, 255, 0.15); }
+    .input-field:focus {
+      border-color: #DC2626;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+    }
+
+    select.input-field {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='%23737373' d='M4.646 5.646a.5.5 0 01.708 0L8 8.293l2.646-2.647a.5.5 0 01.708.708l-3 3a.5.5 0 01-.708 0l-3-3a.5.5 0 010-.708z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 48px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(180deg, #EF4444 0%, #DC2626 100%);
+      transition: all 0.15s ease;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(180deg, #F87171 0%, #EF4444 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(220, 38, 38, 0.3);
+    }
+
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.15s ease;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .code-block {
+      background: #0D0D0D;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .code-block .comment { color: #737373; }
+    .code-block .keyword { color: #F87171; }
+    .code-block .string { color: #86EFAC; }
+    .code-block .property { color: #93C5FD; }
+    .code-block .punctuation { color: #A3A3A3; }
+
+    .step-indicator {
+      background: linear-gradient(135deg, rgba(220, 38, 38, 0.12) 0%, rgba(220, 38, 38, 0.04) 100%);
+      border: 1px solid rgba(220, 38, 38, 0.2);
+    }
+
+    .badge {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .expandable {
+      overflow: hidden;
+      transition: max-height 0.3s ease, opacity 0.3s ease, margin 0.3s ease;
+      max-height: 0;
+      opacity: 0;
+    }
+
+    .expandable.open {
+      max-height: 600px;
+      opacity: 1;
+    }
+
+    .modal-backdrop {
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(12px);
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.06) 50%, transparent 100%);
+    }
+
+    .stagger-1 { animation-delay: 0.1s; }
+    .stagger-2 { animation-delay: 0.2s; }
+    .stagger-3 { animation-delay: 0.3s; }
+    .stagger-4 { animation-delay: 0.4s; }
+    .stagger-5 { animation-delay: 0.5s; }
+
+    *:focus-visible {
+      outline: 2px solid #DC2626;
+      outline-offset: 2px;
+    }
+
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0A0A0A; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #444; }
+
+    .marquee-track {
+      animation: marquee 28s linear infinite;
+    }
+
+    .marquee-track:hover { animation-play-state: paused; }
+
+    .num-badge {
+      background: linear-gradient(135deg, rgba(220, 38, 38, 0.14) 0%, rgba(220, 38, 38, 0.03) 100%);
+      border: 1px solid rgba(220, 38, 38, 0.25);
+    }
+
+    .star {
+      color: #F59E0B;
+    }
+
+    /* Marquee edge fade */
+    .marquee-mask {
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Subtle hover lift for interactive rows */
+    .row-hover {
+      transition: background-color 0.15s ease, transform 0.15s ease;
+    }
+
+    .row-hover:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Chat bubbles */
+    .chat-scroll { scroll-behavior: smooth; }
+
+    .bubble-in {
+      animation: bubbleIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes bubbleIn {
+      0% { opacity: 0; transform: translateY(10px) scale(0.98); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .typing-dot {
+      animation: typingDot 1.2s ease-in-out infinite;
+    }
+    .typing-dot:nth-child(2) { animation-delay: 0.15s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes typingDot {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+      30% { transform: translateY(-3px); opacity: 1; }
+    }
+
+    .chip-btn {
+      transition: all 0.15s ease;
+    }
+    .chip-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(220, 38, 38, 0.35);
+      background: rgba(220, 38, 38, 0.08);
+    }
+
+    /* Demo modal terminal */
+    .demo-progress {
+      transition: width 0.1s linear;
+    }
+
+    .typing-cursor::after {
+      content: '\2588';
+      color: #F87171;
+      animation: cursorBlink 0.9s steps(1) infinite;
+    }
+
+    @keyframes cursorBlink {
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body class="bg-grid min-h-screen">
+<!-- ==================== ANNOUNCEMENT BAR ==================== -->
+<div class="fixed top-0 left-0 right-0 z-[60] bg-brand-700/90 backdrop-blur-sm border-b border-brand-500/30">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex items-center justify-center gap-2 text-center">
+<svg class="w-3.5 h-3.5 text-white flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<p class="text-[12px] sm:text-[13px] font-semibold text-white" data-i18n-html="launch-offer-20-off-your-first">Launch offer: 20% off your first MCP server with code <span class="font-mono">LAUNCH20</span></p>
+</div>
+</div>
+<!-- ==================== HEADER ==================== -->
+<header class="fixed top-9 left-0 right-0 z-50 bg-surface-900/80 backdrop-blur-xl border-b border-white/[0.04]">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+<!-- Logo -->
+<a class="flex items-center gap-2.5 group" href="index.html">
+<div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg shadow-brand-500/20 group-hover:shadow-brand-500/40 transition-shadow">
+<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</div>
+<span class="font-mono font-bold text-[15px] tracking-tight">
+<span class="text-brand-500">&gt;_</span><span class="text-white">mcp</span><span class="text-neutral-400">builder</span>
+</span>
+</a>
+<!-- Desktop Navigation -->
+<nav class="hidden lg:flex items-center gap-1">
+<a class="px-3.5 py-2 text-[13px] font-medium text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]" data-i18n="how-it-works" href="#how">How it works</a>
+<a class="px-3.5 py-2 text-[13px] font-medium text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]" data-i18n="features" href="#features">Features</a>
+<a class="px-3.5 py-2 text-[13px] font-medium text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]" data-i18n="pricing" href="#pricing">Pricing</a>
+<a class="px-3.5 py-2 text-[13px] font-medium text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]" data-i18n="customers" href="#testimonials">Customers</a>
+<a class="px-3.5 py-2 text-[13px] font-medium text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]" data-i18n="documentation" href="docs.html">Documentation</a>
+</nav>
+<!-- Desktop Actions -->
+<div class="hidden sm:flex items-center gap-3">
+<a class="px-3.5 py-2 text-[13px] font-medium text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]" data-i18n="support" href="support.html">Support</a>
+<a class="btn-primary px-4 py-2 rounded-lg text-white font-semibold text-[13px] shadow-md shadow-brand-500/20" data-i18n="buy-an-mcp-server" href="#generator">Buy an MCP server</a>
+</div>
+<!-- Mobile Menu Button -->
+<div data-lang-switcher></div>
+<button class="lg:hidden w-10 h-10 rounded-lg bg-white/[0.04] flex items-center justify-center hover:bg-white/[0.08] transition-colors" onclick="toggleMobileMenu()">
+<svg class="w-5 h-5 text-neutral-300" fill="none" id="menuIconOpen" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="w-5 h-5 text-neutral-300 hidden" fill="none" id="menuIconClose" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<!-- Mobile Menu -->
+<div class="hidden lg:hidden border-t border-white/[0.04] bg-surface-900/95 backdrop-blur-xl" id="mobileMenu">
+<nav class="px-4 py-4 space-y-1">
+<a class="block px-4 py-3 text-[14px] font-medium text-neutral-300 hover:text-white hover:bg-white/[0.04] rounded-lg" data-i18n="how-it-works" href="#how" onclick="closeMobileMenu()">How it works</a>
+<a class="block px-4 py-3 text-[14px] font-medium text-neutral-300 hover:text-white hover:bg-white/[0.04] rounded-lg" data-i18n="features" href="#features" onclick="closeMobileMenu()">Features</a>
+<a class="block px-4 py-3 text-[14px] font-medium text-neutral-300 hover:text-white hover:bg-white/[0.04] rounded-lg" data-i18n="pricing" href="#pricing" onclick="closeMobileMenu()">Pricing</a>
+<a class="block px-4 py-3 text-[14px] font-medium text-neutral-300 hover:text-white hover:bg-white/[0.04] rounded-lg" data-i18n="customers" href="#testimonials" onclick="closeMobileMenu()">Customers</a>
+<a class="block px-4 py-3 text-[14px] font-medium text-neutral-300 hover:text-white hover:bg-white/[0.04] rounded-lg" data-i18n="documentation" href="docs.html">Documentation</a>
+<a class="block px-4 py-3 text-[14px] font-medium text-neutral-300 hover:text-white hover:bg-white/[0.04] rounded-lg" data-i18n="support" href="support.html">Support</a>
+<a class="block px-4 py-3 text-[14px] font-semibold text-white bg-brand-600 rounded-lg text-center mt-2" data-i18n="buy-an-mcp-server" href="#generator" onclick="closeMobileMenu()">Buy an MCP server</a>
+</nav>
+</div>
+</header>
+<!-- ==================== HERO ==================== -->
+<section class="pt-48 pb-20 px-6 bg-radial relative overflow-hidden">
+<!-- Decorative elements -->
+<div class="absolute top-20 left-1/4 w-96 h-96 bg-brand-500/[0.04] rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute bottom-0 right-1/4 w-80 h-80 bg-brand-600/[0.03] rounded-full blur-3xl pointer-events-none"></div>
+<div class="max-w-6xl mx-auto relative grid lg:grid-cols-[1.15fr_0.85fr] gap-14 items-center">
+<div class="text-center lg:text-left">
+<!-- Main heading -->
+<h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-[64px] font-extrabold leading-[1.06] tracking-[-0.03em] mb-6 animate-fade-up" data-i18n-html="your-ai-still-can-t-see">Your AI still can't<br class="hidden lg:block"/> <span class="text-gradient-brand">see your data.</span><br class="hidden lg:block"/> <span class="text-gradient">We fix that.</span></h1>
+<!-- Subtitle -->
+<p class="text-base md:text-lg text-neutral-400 max-w-xl mx-auto lg:mx-0 mb-8 leading-relaxed animate-fade-up stagger-1 font-medium" data-i18n-html="we-build-configure-and-deliver-production">We build, configure and deliver production-ready <span class="text-white font-semibold">MCP</span> servers that connect Claude, Cursor or Windsurf to your databases, files and APIs. No developers, no weeks of waiting.</p>
+<!-- CTA buttons -->
+<div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 mb-10 animate-fade-up stagger-2">
+<a class="btn-primary px-7 py-3.5 rounded-xl text-white font-semibold text-[15px] flex items-center gap-2 shadow-lg shadow-brand-500/25 w-full sm:w-auto justify-center" href="#generator">
+            <span data-i18n="buy-my-mcp-server">Buy my MCP server</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+<a class="btn-secondary px-7 py-3.5 rounded-xl text-neutral-300 font-medium text-[15px] flex items-center gap-2 w-full sm:w-auto justify-center" href="#how">
+            <span data-i18n="how-it-works">How it works</span>
+            <svg class="w-4 h-4 text-neutral-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+</div>
+<!-- Demo trigger -->
+<button class="inline-flex items-center gap-2.5 mb-10 mx-auto lg:mx-0 group animate-fade-up stagger-2" onclick="openDemo()">
+<span class="w-9 h-9 rounded-full bg-white/[0.05] border border-white/[0.12] flex items-center justify-center group-hover:bg-brand-500/15 group-hover:border-brand-500/30 transition-all">
+<svg class="w-3.5 h-3.5 text-neutral-300 group-hover:text-brand-400 transition-colors" fill="currentColor" viewbox="0 0 20 20"><path d="M14.752 11.168l-6.197-3.567A1 1 0 007 8.467v7.066a1 1 0 001.555.833l6.197-3.567a1 1 0 000-1.632z"></path></svg>
+</span>
+<span class="text-[13px] font-medium text-neutral-400 group-hover:text-white transition-colors" data-i18n="watch-the-installation-demo-1-min">Watch the installation demo (1 min)</span>
+</button>
+<!-- Trust indicators -->
+<div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 animate-fade-up stagger-3">
+<div class="flex items-center gap-2 text-neutral-500">
+<svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] font-medium" data-i18n="no-account-or-password">No account or password</span>
+</div>
+<div class="w-px h-4 bg-white/10 hidden sm:block"></div>
+<div class="flex items-center gap-2 text-neutral-500">
+<svg class="w-4 h-4 text-blue-400" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] font-medium" data-i18n="your-data-never-leaves-your-machine">Your data never leaves your machine</span>
+</div>
+<div class="w-px h-4 bg-white/10 hidden sm:block"></div>
+<div class="flex items-center gap-2 text-neutral-500">
+<svg class="w-4 h-4 text-amber-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<span class="text-[13px] font-medium" data-i18n="delivery-in-minutes">Delivery in minutes</span>
+</div>
+</div>
+</div>
+<!-- Hero side panel: live-looking dashboard mock -->
+<div class="relative animate-fade-up stagger-2">
+<div class="absolute -inset-6 bg-brand-500/[0.06] blur-3xl rounded-full pointer-events-none"></div>
+<div class="card rounded-2xl p-6 shadow-2xl shadow-black/50 relative">
+<div class="flex items-center justify-between mb-5">
+<span class="text-[11px] font-mono text-neutral-500 uppercase tracking-wider" data-i18n="service-status">Service status</span>
+<span class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-400" data-i18n-html="operational"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Operational</span>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between rounded-xl bg-white/[0.02] border border-white/[0.06] px-4 py-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+<svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<p class="text-[13px] font-semibold text-white" data-i18n="database">Database</p>
+<p class="text-[11px] text-neutral-500" data-i18n="postgresql-connected">PostgreSQL connected</p>
+</div>
+</div>
+<svg class="w-4 h-4 text-emerald-400" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+</div>
+<div class="flex items-center justify-between rounded-xl bg-white/[0.02] border border-white/[0.06] px-4 py-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+<svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<p class="text-[13px] font-semibold text-white" data-i18n="shopify-api">Shopify API</p>
+<p class="text-[11px] text-neutral-500" data-i18n="4-endpoints-exposed">4 endpoints exposed</p>
+</div>
+</div>
+<svg class="w-4 h-4 text-emerald-400" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+</div>
+<div class="flex items-center justify-between rounded-xl bg-white/[0.02] border border-white/[0.06] px-4 py-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-neutral-500/10 border border-neutral-500/20 flex items-center justify-center">
+<svg class="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<p class="text-[13px] font-semibold text-white" data-i18n="local-files">Local files</p>
+<p class="text-[11px] text-neutral-500" data-i18n="1-204-documents-indexed">1,204 documents indexed</p>
+</div>
+</div>
+<svg class="w-4 h-4 text-emerald-400" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+</div>
+</div>
+<div class="divider my-5"></div>
+<div class="flex items-center justify-between">
+<div>
+<p class="text-[11px] text-neutral-500" data-i18n="average-delivery-time">Average delivery time</p>
+<p class="text-[18px] font-bold text-white" data-i18n="4-minutes">4 minutes</p>
+</div>
+<div class="text-right">
+<p class="text-[11px] text-neutral-500" data-i18n="servers-generated">Servers generated</p>
+<p class="text-[18px] font-bold text-white">1,800+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== LOGO / COMPATIBILITY STRIP ==================== -->
+<section class="py-10 border-y border-white/[0.04] overflow-hidden">
+<p class="text-center text-[11px] font-mono uppercase tracking-wider text-neutral-600 mb-6" data-i18n="works-with-the-ai-clients-you">Works with the AI clients you already use</p>
+<div class="relative flex overflow-hidden select-none marquee-mask">
+<div class="flex gap-16 marquee-track flex-shrink-0 items-center px-8">
+<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">Claude Desktop</span>
+<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">Cursor</span>
+<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">Windsurf</span>
+<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">VS Code + Copilot</span>
+<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">Zed</span>
+<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">Cline</span>
+</div>
+<div aria-hidden="true" class="flex gap-16 marquee-track flex-shrink-0 items-center px-8">
+<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">Claude Desktop</span>
+<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">Cursor</span>
+<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">Windsurf</span>
+<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">VS Code + Copilot</span>
+<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">Zed</span>
+<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">Cline</span>
+</div>
+</div>
+</section>
+<!-- ==================== STATS ==================== -->
+<section class="py-16 px-6">
+<div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+<div>
+<p class="text-3xl md:text-4xl font-extrabold text-white tracking-tight">1,800+</p>
+<p class="text-[13px] text-neutral-500 mt-1" data-i18n="servers-delivered">Servers delivered</p>
+</div>
+<div>
+<p class="text-3xl md:text-4xl font-extrabold text-white tracking-tight">4.9/5</p>
+<p class="text-[13px] text-neutral-500 mt-1" data-i18n="average-rating">Average rating</p>
+</div>
+<div>
+<p class="text-3xl md:text-4xl font-extrabold text-white tracking-tight" data-i18n="10-min">&lt; 10 min</p>
+<p class="text-[13px] text-neutral-500 mt-1" data-i18n="delivery-time">Delivery time</p>
+</div>
+<div>
+<p class="text-3xl md:text-4xl font-extrabold text-white tracking-tight">100%</p>
+<p class="text-[13px] text-neutral-500 mt-1" data-i18n="local-execution">Local execution</p>
+</div>
+</div>
+</section>
+<!-- ==================== HOW IT WORKS ==================== -->
+<section class="py-20 px-6" id="how">
+<div class="max-w-6xl mx-auto">
+<div class="text-center mb-14">
+<span class="step-indicator inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono font-semibold text-brand-400 uppercase tracking-wider mb-4" data-i18n="process">Process</span>
+<h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-3" data-i18n="from-idea-to-connected-ai-in">From idea to connected AI in 3 steps</h2>
+<p class="text-neutral-500 text-base max-w-lg mx-auto" data-i18n="no-hiring-developers-or-reading-technical">No hiring developers or reading technical documentation. You pick the source, we build the server.</p>
+</div>
+<div class="grid md:grid-cols-3 gap-6">
+<div class="card card-interactive reveal rounded-2xl p-7 relative">
+<span class="num-badge w-9 h-9 rounded-full flex items-center justify-center text-[13px] font-bold text-brand-400 mb-5">01</span>
+<h3 class="text-[17px] font-semibold text-white mb-2" data-i18n="you-choose-your-data-source">You choose your data source</h3>
+<p class="text-[13px] text-neutral-400 leading-relaxed" data-i18n="local-files-a-database-or-an">Local files, a database or an external API. Tell us what your AI should read and under which rules.</p>
+</div>
+<div class="card card-interactive reveal stagger-1 rounded-2xl p-7 relative">
+<span class="num-badge w-9 h-9 rounded-full flex items-center justify-center text-[13px] font-bold text-brand-400 mb-5">02</span>
+<h3 class="text-[17px] font-semibold text-white mb-2" data-i18n="we-build-your-mcp-server">We build your MCP server</h3>
+<p class="text-[13px] text-neutral-400 leading-relaxed" data-i18n="we-generate-production-ready-typescript-code">We generate production-ready TypeScript code with validation, permissions and error handling built in.</p>
+</div>
+<div class="card card-interactive reveal stagger-2 rounded-2xl p-7 relative">
+<span class="num-badge w-9 h-9 rounded-full flex items-center justify-center text-[13px] font-bold text-brand-400 mb-5">03</span>
+<h3 class="text-[17px] font-semibold text-white mb-2" data-i18n="you-connect-and-start-using-it">You connect and start using it</h3>
+<p class="text-[13px] text-neutral-400 leading-relaxed" data-i18n="download-the-file-follow-two-installation">Download the file, follow two installation steps and your AI can read your data securely.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== GENERATOR SECTION ==================== -->
+<section class="py-20 px-6" id="generator">
+<div class="max-w-3xl mx-auto">
+<!-- Section header -->
+<div class="text-center mb-12">
+<span class="step-indicator inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono font-semibold text-brand-400 uppercase tracking-wider mb-4" data-i18n-html="mcp-server-quote-builder"><span class="w-1.5 h-1.5 rounded-full bg-brand-500"></span> MCP server quote builder</span>
+<h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-3" data-i18n="configure-your-server-in-3-steps">Configure your server in 3 steps</h2>
+<p class="text-neutral-500 text-base" data-i18n="no-code-no-manual-setup-instant">No code. No manual setup. Instant quote.</p>
+<p class="text-[11px] font-mono text-neutral-600 mt-3" data-i18n="demo-environment-payments-do-not-process">Demo environment: payments do not process real charges.</p>
+</div>
+<!-- Generator card -->
+<div class="card rounded-2xl p-8 md:p-10 shadow-2xl shadow-black/40">
+<!-- Step 1: Data source -->
+<div class="mb-7">
+<div class="flex items-center gap-3 mb-3">
+<span class="w-7 h-7 rounded-lg bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-[11px] font-bold text-brand-400">1</span>
+<label class="text-[14px] font-semibold text-white" data-i18n="data-source">Data source</label>
+</div>
+<select class="input-field w-full px-4 py-3.5 rounded-xl text-[14px] cursor-pointer" id="sourceSelect" onchange="updateForm()">
+<option data-i18n="select-what-you-want-to-connect" disabled="" selected="" value="">Select what you want to connect...</option>
+<option data-i18n="local-files-5-00" value="local">Local Files - $5.00</option>
+<option data-i18n="database-postgresql-mysql-15-00" value="database">Database (PostgreSQL / MySQL) - $15.00</option>
+<option data-i18n="external-api-shopify-20-00" value="api">External API / Shopify - $20.00</option>
+</select>
+</div>
+<!-- Step 2: Dynamic fields -->
+<div class="expandable mb-7" id="step2">
+<div class="flex items-center gap-3 mb-3">
+<span class="w-7 h-7 rounded-lg bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-[11px] font-bold text-brand-400">2</span>
+<label class="text-[14px] font-semibold text-white" id="step2Label">Technical details</label>
+</div>
+<!-- Database fields -->
+<div class="hidden space-y-3" id="dbFields">
+<input class="input-field w-full px-4 py-3.5 rounded-xl text-[14px]" data-i18n-placeholder="host-e-g-localhost-5432" placeholder="Host (e.g. localhost:5432)" type="text"/>
+<input class="input-field w-full px-4 py-3.5 rounded-xl text-[14px]" data-i18n-placeholder="database-name" placeholder="Database name" type="text"/>
+<textarea class="input-field w-full px-4 py-3.5 rounded-xl resize-none text-[14px]" data-i18n-placeholder="which-tables-should-the-ai-read" placeholder="Which tables should the AI read? (e.g. users, sales, inventory)" rows="2"></textarea>
+</div>
+<!-- Local fields -->
+<div class="hidden space-y-3" id="localFields">
+<input class="input-field w-full px-4 py-3.5 rounded-xl text-[14px]" data-i18n-placeholder="folder-path-e-g-c-documents" placeholder="Folder path (e.g. C:/Documents/Company)" type="text"/>
+<input class="input-field w-full px-4 py-3.5 rounded-xl text-[14px]" data-i18n-placeholder="file-types-e-g-csv-json" placeholder="File types (e.g. .csv, .json, .txt)" type="text"/>
+</div>
+<!-- API fields -->
+<div class="hidden space-y-3" id="apiFields">
+<input class="input-field w-full px-4 py-3.5 rounded-xl text-[14px]" data-i18n-placeholder="api-base-url-e-g-https" placeholder="API base URL (e.g. https://api.shopify.com)" type="text"/>
+<input class="input-field w-full px-4 py-3.5 rounded-xl text-[14px]" data-i18n-placeholder="api-key-or-access-token" placeholder="API key or access token" type="text"/>
+<input class="input-field w-full px-4 py-3.5 rounded-xl text-[14px]" data-i18n-placeholder="endpoints-to-expose-e-g-products" placeholder="Endpoints to expose (e.g. /products, /orders)" type="text"/>
+</div>
+</div>
+<!-- Step 3: Custom instructions -->
+<div class="mb-8">
+<div class="flex items-center gap-3 mb-3">
+<span class="w-7 h-7 rounded-lg bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-[11px] font-bold text-brand-400">3</span>
+<label class="text-[14px] font-semibold text-white" data-i18n="instructions-for-the-ai">Instructions for the AI</label>
+<span class="text-[11px] font-mono text-neutral-600 bg-white/[0.03] px-2 py-0.5 rounded" data-i18n="optional">optional</span>
+</div>
+<textarea class="input-field w-full px-4 py-3.5 rounded-xl resize-none text-[14px]" data-i18n-placeholder="specific-rules-e-g-read-only" placeholder="Specific rules (e.g. read-only, block access to passwords, limit to 50 rows)" rows="3"></textarea>
+</div>
+<!-- Price & CTA -->
+<div class="rounded-xl bg-white/[0.02] border border-white/[0.06] p-5 mb-6">
+<div class="flex items-center justify-between">
+<div>
+<p class="text-[11px] font-medium text-neutral-500 uppercase tracking-wider mb-1" data-i18n="total">Total</p>
+<p class="text-2xl font-bold text-white tracking-tight" id="priceDisplay">$0.00</p>
+</div>
+<div class="text-right">
+<p class="text-[11px] text-neutral-500" data-i18n="instant-delivery">Instant delivery</p>
+<p class="text-[11px] text-neutral-500" data-i18n="server-zip-instructions">Server.zip + instructions</p>
+</div>
+</div>
+</div>
+<button class="btn-primary w-full py-4 rounded-xl text-white font-semibold text-[15px] flex items-center justify-center gap-2.5 shadow-lg shadow-brand-500/25" id="payButton" onclick="openCheckout()">
+<svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span id="ctaText">Generate MCP - $0.00</span>
+</button>
+<p class="text-center text-[11px] text-neutral-600 mt-4 font-mono flex items-center justify-center gap-1.5">
+<svg class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          <span data-i18n="secure-payment-with-stripe-one-payment">Secure payment with Stripe. One payment equals one MCP. No subscriptions</span>
+        </p>
+</div>
+</div>
+</section>
+<!-- ==================== FEATURES ==================== -->
+<section class="py-20 px-6" id="features">
+<div class="max-w-6xl mx-auto">
+<!-- Section header -->
+<div class="text-center mb-14">
+<span class="step-indicator inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono font-semibold text-brand-400 uppercase tracking-wider mb-4" data-i18n="features">Features</span>
+<h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-3" data-i18n="everything-a-business-needs-nothing-it">Everything a business needs, nothing it doesn't</h2>
+<p class="text-neutral-500 text-base max-w-lg mx-auto" data-i18n="built-for-teams-that-want-results">Built for teams that want results, not another technical project to maintain.</p>
+</div>
+<!-- Features grid -->
+<div class="grid md:grid-cols-3 gap-5">
+<!-- Feature 1 -->
+<div class="card card-interactive reveal rounded-xl p-7 group">
+<div class="w-11 h-11 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-5 group-hover:bg-emerald-500/15 transition-colors">
+<svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<h3 class="text-[16px] font-semibold text-white mb-2" data-i18n="100-local-and-private">100% local and private</h3>
+<p class="text-[13px] text-neutral-400 leading-relaxed" data-i18n="your-server-runs-on-your-machine">Your server runs on your machine. Your data never leaves your infrastructure. No intermediate cloud services.</p>
+</div>
+<!-- Feature 2 -->
+<div class="card card-interactive reveal stagger-1 rounded-xl p-7 group">
+<div class="w-11 h-11 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-5 group-hover:bg-blue-500/15 transition-colors">
+<svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<h3 class="text-[16px] font-semibold text-white mb-2" data-i18n="production-ready-code">Production-ready code</h3>
+<p class="text-[13px] text-neutral-400 leading-relaxed" data-i18n="typescript-error-handling-schema-validation-code">TypeScript, error handling, schema validation. Code you can extend, not a fragile prototype.</p>
+</div>
+<!-- Feature 3 -->
+<div class="card card-interactive reveal stagger-2 rounded-xl p-7 group">
+<div class="w-11 h-11 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mb-5 group-hover:bg-amber-500/15 transition-colors">
+<svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<h3 class="text-[16px] font-semibold text-white mb-2" data-i18n="ready-in-minutes">Ready in minutes</h3>
+<p class="text-[13px] text-neutral-400 leading-relaxed" data-i18n-html="npm-install-and-you-are-done"><code class="text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded text-[12px]">npm install</code> and you are done. Works with Claude Desktop, Cursor, Windsurf and any MCP client.</p>
+</div>
+<!-- Feature 4 -->
+<div class="card card-interactive reveal rounded-xl p-7 group">
+<div class="w-11 h-11 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center mb-5 group-hover:bg-brand-500/15 transition-colors">
+<svg class="w-5 h-5 text-brand-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<h3 class="text-[16px] font-semibold text-white mb-2" data-i18n="permissions-under-control">Permissions under control</h3>
+<p class="text-[13px] text-neutral-400 leading-relaxed" data-i18n="you-define-what-the-ai-can">You define what the AI can read, write or block. No full access to your database by default.</p>
+</div>
+<!-- Feature 5 -->
+<div class="card card-interactive reveal stagger-1 rounded-xl p-7 group">
+<div class="w-11 h-11 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mb-5 group-hover:bg-purple-500/15 transition-colors">
+<svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-4.13a4 4 0 11-8 0 4 4 0 018 0zm6 0a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<h3 class="text-[16px] font-semibold text-white mb-2" data-i18n="no-account-no-friction">No account, no friction</h3>
+<p class="text-[13px] text-neutral-400 leading-relaxed" data-i18n="buy-as-a-guest-pay-once">Buy as a guest, pay once and receive the file. No need to sign up or remember another password.</p>
+</div>
+<!-- Feature 6 -->
+<div class="card card-interactive reveal stagger-2 rounded-xl p-7 group">
+<div class="w-11 h-11 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-5 group-hover:bg-cyan-500/15 transition-colors">
+<svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h5v5m0-5L10 14" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<h3 class="text-[16px] font-semibold text-white mb-2" data-i18n="support-included">Support included</h3>
+<p class="text-[13px] text-neutral-400 leading-relaxed" data-i18n="if-something-goes-wrong-during-installation">If something goes wrong during installation, we help you by email at no extra cost until it works.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== COMPARISON ==================== -->
+<section class="py-20 px-6">
+<div class="max-w-5xl mx-auto">
+<div class="text-center mb-12">
+<span class="step-indicator inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono font-semibold text-brand-400 uppercase tracking-wider mb-4" data-i18n="comparison">Comparison</span>
+<h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-3" data-i18n="hire-a-developer-or-buy-your">Hire a developer or buy your server</h2>
+<p class="text-neutral-500 text-base max-w-lg mx-auto" data-i18n="the-difference-in-time-cost-and">The difference in time, cost and maintenance is why most of our customers choose MCP Builder.</p>
+</div>
+<div class="card reveal rounded-2xl overflow-hidden">
+<div class="grid grid-cols-3 text-center">
+<div class="p-5 border-b border-r border-white/[0.06]"></div>
+<div class="p-5 border-b border-r border-white/[0.06]">
+<p class="text-[13px] font-semibold text-neutral-400" data-i18n="freelance-developer">Freelance developer</p>
+</div>
+<div class="p-5 border-b border-white/[0.06] bg-brand-500/[0.04]">
+<p class="text-[13px] font-semibold text-brand-400">MCP Builder</p>
+</div>
+<div class="p-5 border-b border-r border-white/[0.06] text-left text-[13px] text-neutral-400" data-i18n="delivery-time">Delivery time</div>
+<div class="p-5 border-b border-r border-white/[0.06] text-[13px] text-neutral-500" data-i18n="1-to-3-weeks">1 to 3 weeks</div>
+<div class="p-5 border-b border-white/[0.06] text-[13px] font-semibold text-white bg-brand-500/[0.04]" data-i18n="minutes">Minutes</div>
+<div class="p-5 border-b border-r border-white/[0.06] text-left text-[13px] text-neutral-400" data-i18n="estimated-cost">Estimated cost</div>
+<div class="p-5 border-b border-r border-white/[0.06] text-[13px] text-neutral-500">$500 - $2,000</div>
+<div class="p-5 border-b border-white/[0.06] text-[13px] font-semibold text-white bg-brand-500/[0.04]" data-i18n="from-5">From $5</div>
+<div class="p-5 border-b border-r border-white/[0.06] text-left text-[13px] text-neutral-400" data-i18n="technical-knowledge-required">Technical knowledge required</div>
+<div class="p-5 border-b border-r border-white/[0.06] text-[13px] text-neutral-500" data-i18n="high">High</div>
+<div class="p-5 border-b border-white/[0.06] text-[13px] font-semibold text-white bg-brand-500/[0.04]" data-i18n="none">None</div>
+<div class="p-5 border-r border-white/[0.06] text-left text-[13px] text-neutral-400" data-i18n="data-exposed-to-third-parties">Data exposed to third parties</div>
+<div class="p-5 border-r border-white/[0.06] text-[13px] text-neutral-500" data-i18n="depends-on-the-provider">Depends on the provider</div>
+<div class="p-5 text-[13px] font-semibold text-white bg-brand-500/[0.04]" data-i18n="never">Never</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== PRICING SECTION ==================== -->
+<section class="py-20 px-6" id="pricing">
+<div class="max-w-6xl mx-auto">
+<!-- Section header -->
+<div class="text-center mb-14">
+<span class="step-indicator inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono font-semibold text-brand-400 uppercase tracking-wider mb-4" data-i18n="pricing">Pricing</span>
+<h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-3" data-i18n="simple-transparent-no-surprises">Simple, transparent, no surprises</h2>
+<p class="text-neutral-500 text-base max-w-lg mx-auto" data-i18n="one-time-payment-per-mcp-server">One-time payment per MCP server. Need 3 servers? You pay 3 times, based on the type of each one.</p>
+</div>
+<!-- Pricing grid -->
+<div class="grid md:grid-cols-3 gap-5 mb-12">
+<!-- Plan 1: Archivos Locales - $5 -->
+<div class="card card-interactive reveal rounded-xl p-7 flex flex-col relative group hover:border-brand-500/20 transition-all">
+<div class="mb-6">
+<div class="flex items-center justify-between mb-3">
+<span class="text-[11px] font-mono font-semibold text-neutral-500 uppercase tracking-wider">Starter</span>
+<div class="w-8 h-8 rounded-lg bg-neutral-500/10 border border-neutral-500/20 flex items-center justify-center">
+<svg class="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+</div>
+<h3 class="text-[22px] font-bold text-white mb-1" data-i18n="local-files-2">Local Files</h3>
+<p class="text-[13px] text-neutral-500 leading-relaxed" data-i18n="perfect-to-get-started-with-ai">Perfect to get started with AI and files on your machine.</p>
+</div>
+<div class="mb-6">
+<div class="flex items-baseline gap-1">
+<span class="text-[36px] font-extrabold text-white tracking-tight">$5</span>
+<span class="text-[14px] text-neutral-500 font-medium" data-i18n="mcp-generated">/ MCP generated</span>
+</div>
+</div>
+<ul class="space-y-3 mb-8 flex-1">
+<li class="flex items-start gap-3">
+<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] text-neutral-300" data-i18n="mcp-server-for-csv-json-txt">MCP server for .csv, .json, .txt, .md files</span>
+</li>
+<li class="flex items-start gap-3">
+<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] text-neutral-300" data-i18n="read-and-write-local-files">Read and write local files</span>
+</li>
+<li class="flex items-start gap-3">
+<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] text-neutral-300" data-i18n="semantic-indexing-with-embeddings">Semantic indexing with embeddings</span>
+</li>
+<li class="flex items-start gap-3">
+<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] text-neutral-300" data-i18n="search-by-content-and-metadata">Search by content and metadata</span>
+</li>
+<li class="flex items-start gap-3">
+<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] text-neutral-300" data-i18n="works-with-claude-cursor-and-windsurf">Works with Claude, Cursor and Windsurf</span>
+</li>
+<li class="flex items-start gap-3">
+<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] text-neutral-300" data-i18n="installation-documentation-included">Installation documentation included</span>
+</li>
+</ul>
+<button class="btn-secondary w-full py-3 rounded-xl text-neutral-300 font-medium text-[14px] text-center block cursor-pointer" data-i18n="get-started-for-5" onclick="openCheckout()">Get started for $5</button>
+</div>
+<!-- Plan 2: Base de Datos - $15 (Popular) -->
+<div class="card card-interactive reveal stagger-1 rounded-xl p-7 flex flex-col relative border-brand-500/30 shadow-lg shadow-brand-500/10">
+<div class="absolute -top-3 left-1/2 -translate-x-1/2">
+<span class="px-3 py-1 rounded-full gradient-red text-[11px] font-semibold text-white shadow-lg shadow-brand-500/30" data-i18n="most-popular">Most popular</span>
+</div>
+<div class="mb-6">
+<div class="flex items-center justify-between mb-3">
+<span class="text-[11px] font-mono font-semibold text-brand-400 uppercase tracking-wider" data-i18n="professional">Professional</span>
+<div class="w-8 h-8 rounded-lg bg-brand-500/10 border border-brand-500/20 flex items-center justify-center">
+<svg class="w-4 h-4 text-brand-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+</div>
+<h3 class="text-[22px] font-bold text-white mb-1" data-i18n="database-2">Database</h3>
+<p class="text-[13px] text-neutral-500 leading-relaxed" data-i18n="ideal-for-teams-that-need-ai">Ideal for teams that need AI connected to their database.</p>
+</div>
+<div class="mb-6">
+<div class="flex items-baseline gap-1">
+<span class="text-[36px] font-extrabold text-white tracking-tight">$15</span>
+<span class="text-[14px] text-neutral-500 font-medium" data-i18n="mcp-generated">/ MCP generated</span>
+</div>
+</div>
+<ul class="space-y-3 mb-8 flex-1">
+<li class="flex items-start gap-3">
+<svg class="w-4 h-4 text-brand-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] text-neutral-300" data-i18n-html="everything-in-local-files-plus">Everything in <span class="text-white font-medium">Local Files</span>, plus:</span>
+</li>
+<li class="flex items-start gap-3">
+<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] text-neutral-300" data-i18n="postgresql-mysql-mariadb-connection">PostgreSQL, MySQL, MariaDB connection</span>
+</li>
+<li class="flex items-start gap-3">
+<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] text-neutral-300" data-i18n="automatic-table-and-schema-mapping">Automatic table and schema mapping</span>
+</li>
+<li class="flex items-start gap-3">
+<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] text-neutral-300" data-i18n="sql-queries-generated-by-the-ai">SQL queries generated by the AI</span>
+</li>
+<li class="flex items-start gap-3">
+<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] text-neutral-300" data-i18n="configurable-read-and-write-permissions">Configurable read and write permissions</span>
+</li>
+<li class="flex items-start gap-3">
+<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] text-neutral-300" data-i18n="validation-of-dangerous-queries-drop-delete">Validation of dangerous queries (DROP, DELETE)</span>
+</li>
+<li class="flex items-start gap-3">
+<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] text-neutral-300" data-i18n="connection-and-timeout-handling">Connection and timeout handling</span>
+</li>
+</ul>
+<button class="btn-primary w-full py-3 rounded-xl text-white font-semibold text-[14px] text-center block shadow-lg shadow-brand-500/20 cursor-pointer" data-i18n="get-started-for-15" onclick="openCheckout()">Get started for $15</button>
+</div>
+<!-- Plan 3: API Externa - $20 -->
+<div class="card card-interactive reveal stagger-2 rounded-xl p-7 flex flex-col relative group hover:border-brand-500/20 transition-all">
+<div class="mb-6">
+<div class="flex items-center justify-between mb-3">
+<span class="text-[11px] font-mono font-semibold text-neutral-500 uppercase tracking-wider">Enterprise</span>
+<div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+<svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+</div>
+<h3 class="text-[22px] font-bold text-white mb-1" data-i18n="external-api">External API</h3>
+<p class="text-[13px] text-neutral-500 leading-relaxed" data-i18n="for-integrations-with-external-apis-and">For integrations with external APIs and SaaS.</p>
+</div>
+<div class="mb-6">
+<div class="flex items-baseline gap-1">
+<span class="text-[36px] font-extrabold text-white tracking-tight">$20</span>
+<span class="text-[14px] text-neutral-500 font-medium" data-i18n="mcp-generated">/ MCP generated</span>
+</div>
+</div>
+<ul class="space-y-3 mb-8 flex-1">
+<li class="flex items-start gap-3">
+<svg class="w-4 h-4 text-amber-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] text-neutral-300" data-i18n-html="everything-in-database-plus">Everything in <span class="text-white font-medium">Database</span>, plus:</span>
+</li>
+<li class="flex items-start gap-3">
+<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] text-neutral-300" data-i18n="connection-to-any-rest-or-graphql">Connection to any REST or GraphQL API</span>
+</li>
+<li class="flex items-start gap-3">
+<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] text-neutral-300" data-i18n="authentication-with-api-key-oauth2-or">Authentication with API key, OAuth2 or Bearer token</span>
+</li>
+<li class="flex items-start gap-3">
+<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] text-neutral-300" data-i18n="rate-limiting-and-smart-caching">Rate limiting and smart caching</span>
+</li>
+<li class="flex items-start gap-3">
+<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] text-neutral-300" data-i18n="mapping-of-endpoints-to-ai-tools">Mapping of endpoints to AI tools</span>
+</li>
+<li class="flex items-start gap-3">
+<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] text-neutral-300" data-i18n="converting-json-responses-to-text">Converting JSON responses to text</span>
+</li>
+<li class="flex items-start gap-3">
+<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] text-neutral-300" data-i18n="pagination-and-error-handling">Pagination and error handling</span>
+</li>
+</ul>
+<button class="btn-secondary w-full py-3 rounded-xl text-neutral-300 font-medium text-[14px] text-center block cursor-pointer" data-i18n="get-started-for-20" onclick="openCheckout()">Get started for $20</button>
+</div>
+</div>
+<!-- Trust footer -->
+<div class="flex flex-wrap items-center justify-center gap-6 text-neutral-500">
+<div class="flex items-center gap-2">
+<svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] font-medium" data-i18n="one-time-payment-no-subscriptions">One-time payment, no subscriptions</span>
+</div>
+<div class="w-px h-4 bg-white/10"></div>
+<div class="flex items-center gap-2">
+<svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] font-medium" data-i18n="instant-delivery">Instant delivery</span>
+</div>
+<div class="w-px h-4 bg-white/10"></div>
+<div class="flex items-center gap-2">
+<svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] font-medium" data-i18n="email-support">Email support</span>
+</div>
+<div class="w-px h-4 bg-white/10"></div>
+<div class="flex items-center gap-2">
+<svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+<span class="text-[13px] font-medium" data-i18n="free-updates">Free updates</span>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== TESTIMONIALS ==================== -->
+<section class="py-20 px-6" id="testimonials">
+<div class="max-w-6xl mx-auto">
+<div class="text-center mb-14">
+<span class="step-indicator inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono font-semibold text-brand-400 uppercase tracking-wider mb-4" data-i18n="customers">Customers</span>
+<h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-3" data-i18n="teams-that-already-connected-their-ai">Teams that already connected their AI to their data</h2>
+<p class="text-neutral-500 text-base max-w-lg mx-auto" data-i18n="stories-from-businesses-that-stopped-copying">Stories from businesses that stopped copying and pasting information between systems.</p>
+</div>
+<div class="grid md:grid-cols-3 gap-5">
+<div class="card card-interactive reveal rounded-xl p-7 flex flex-col">
+<div class="flex gap-0.5 mb-4">
+<svg class="w-4 h-4 star" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<svg class="w-4 h-4 star" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<svg class="w-4 h-4 star" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<svg class="w-4 h-4 star" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<svg class="w-4 h-4 star" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+</div>
+<p class="text-[14px] text-neutral-300 leading-relaxed mb-6 flex-1" data-i18n="we-ordered-the-server-for-our">We ordered the server for our inventory database and in less than half an hour Claude was already answering stock questions in real time.</p>
+<div class="flex items-center gap-3 pt-4 border-t border-white/[0.06]">
+<div class="w-9 h-9 rounded-full bg-brand-500/20 flex items-center justify-center text-[13px] font-bold text-brand-300">MR</div>
+<div>
+<p class="text-[13px] font-semibold text-white">Mariana Reyes</p>
+<p class="text-[11px] text-neutral-500" data-i18n="operations-retail-store">Operations, retail store</p>
+</div>
+</div>
+</div>
+<div class="card card-interactive reveal stagger-1 rounded-xl p-7 flex flex-col">
+<div class="flex gap-0.5 mb-4">
+<svg class="w-4 h-4 star" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<svg class="w-4 h-4 star" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<svg class="w-4 h-4 star" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<svg class="w-4 h-4 star" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<svg class="w-4 h-4 star" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+</div>
+<p class="text-[14px] text-neutral-300 leading-relaxed mb-6 flex-1" data-i18n="what-i-value-most-is-that">What I value most is that everything runs locally. Our legal team did not allow sending customer data to external services, and with this it was not a problem.</p>
+<div class="flex items-center gap-3 pt-4 border-t border-white/[0.06]">
+<div class="w-9 h-9 rounded-full bg-blue-500/20 flex items-center justify-center text-[13px] font-bold text-blue-300">DC</div>
+<div>
+<p class="text-[13px] font-semibold text-white">Diego Cárdenas</p>
+<p class="text-[11px] text-neutral-500" data-i18n="founder-software-studio">Founder, software studio</p>
+</div>
+</div>
+</div>
+<div class="card card-interactive reveal stagger-2 rounded-xl p-7 flex flex-col">
+<div class="flex gap-0.5 mb-4">
+<svg class="w-4 h-4 star" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<svg class="w-4 h-4 star" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<svg class="w-4 h-4 star" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<svg class="w-4 h-4 star" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<svg class="w-4 h-4 text-neutral-700" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+</div>
+<p class="text-[14px] text-neutral-300 leading-relaxed mb-6 flex-1" data-i18n="the-purchase-process-was-straightforward-with">The purchase process was straightforward, with no accounts or endless forms. We received the API server for Shopify and it worked on the first try.</p>
+<div class="flex items-center gap-3 pt-4 border-t border-white/[0.06]">
+<div class="w-9 h-9 rounded-full bg-emerald-500/20 flex items-center justify-center text-[13px] font-bold text-emerald-300">LT</div>
+<div>
+<p class="text-[13px] font-semibold text-white">Laura Torres</p>
+<p class="text-[11px] text-neutral-500" data-i18n="e-commerce-fashion-brand">E-commerce, fashion brand</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== CODE PREVIEW ==================== -->
+<section class="py-20 px-6">
+<div class="max-w-4xl mx-auto">
+<div class="grid md:grid-cols-2 gap-8 items-center">
+<!-- Text -->
+<div>
+<h2 class="text-2xl md:text-3xl font-bold tracking-tight mb-4" data-i18n-html="don-t-let-anyone-tell-youit">Don't let anyone tell you<br/><span class="text-gradient-brand">it's hard.</span></h2>
+<p class="text-neutral-400 text-[15px] leading-relaxed mb-6" data-i18n="with-two-lines-of-configuration-your">With two lines of configuration, your favorite AI can read your production data. No intermediate APIs, no third-party services.</p>
+<div class="space-y-3">
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
+<svg class="w-3 h-3 text-emerald-400" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+</div>
+<span class="text-[13px] text-neutral-300" data-i18n="no-credential-exposure">No credential exposure</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
+<svg class="w-3 h-3 text-emerald-400" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+</div>
+<span class="text-[13px] text-neutral-300" data-i18n="no-dependence-on-a-single-vendor">No dependence on a single vendor</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
+<svg class="w-3 h-3 text-emerald-400" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+</div>
+<span class="text-[13px] text-neutral-300" data-i18n="full-control-over-permissions">Full control over permissions</span>
+</div>
+</div>
+</div>
+<!-- Code preview -->
+<div class="code-block rounded-xl overflow-hidden">
+<div class="flex items-center gap-1.5 px-4 py-3 border-b border-white/[0.04]">
+<div class="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-amber-500/80"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></div>
+<span class="ml-auto text-[10px] font-mono text-neutral-600">config.json</span>
+</div>
+<pre class="p-5 overflow-x-auto"><code><span class="punctuation">{</span>
+  <span class="property">"mcpServers"</span><span class="punctuation">: {</span>
+    <span class="property">"my-database"</span><span class="punctuation">: {</span>
+      <span class="property">"command"</span><span class="punctuation">: </span><span class="string">"node"</span><span class="punctuation">,</span>
+      <span class="property">"args"</span><span class="punctuation">: [</span>
+        <span class="string">"./server/index.js"</span>
+      <span class="punctuation">]</span>
+    <span class="punctuation">}</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span></code></pre>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== CTA SECTION ==================== -->
+<section class="py-20 px-6">
+<div class="max-w-4xl mx-auto">
+<div class="card reveal rounded-2xl p-10 md:p-14 text-center relative overflow-hidden">
+<!-- Background decoration -->
+<div class="absolute inset-0 bg-gradient-to-br from-brand-500/[0.04] via-transparent to-brand-600/[0.02] pointer-events-none"></div>
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-32 bg-brand-500/[0.06] blur-3xl pointer-events-none"></div>
+<div class="relative">
+<h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4" data-i18n-html="ready-to-connectyour-ai-to-your">Ready to connect<br/>your AI to your data?</h2>
+<p class="text-neutral-400 text-base mb-8 max-w-md mx-auto" data-i18n="no-sign-ups-or-contracts-choose">No sign-ups or contracts. Choose your data source and get your MCP server in minutes.</p>
+<a class="btn-primary inline-flex items-center gap-2 px-8 py-4 rounded-xl text-white font-semibold text-[15px] shadow-lg shadow-brand-500/25" href="#generator">
+            <span data-i18n="buy-my-mcp-server">Buy my MCP server</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== FAQ (CHAT) ==================== -->
+<section class="py-20 px-6" id="faq">
+<div class="max-w-xl mx-auto">
+<div class="text-center mb-10">
+<span class="step-indicator inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono font-semibold text-brand-400 uppercase tracking-wider mb-4" data-i18n="frequently-asked-questions">Frequently asked questions</span>
+<h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-3" data-i18n="before-you-buy">Before you buy</h2>
+<p class="text-neutral-500 text-base" data-i18n="tap-a-question-and-see-the">Tap a question and see the answer as in a chat.</p>
+</div>
+<div class="card reveal rounded-2xl overflow-hidden shadow-2xl shadow-black/40">
+<!-- Chat header -->
+<div class="flex items-center gap-3 px-5 py-4 bg-white/[0.02] border-b border-white/[0.06]">
+<div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-[13px] font-bold text-white flex-shrink-0">MB</div>
+<div class="flex-1 min-w-0">
+<p class="text-[14px] font-semibold text-white" data-i18n="mcp-builder-support">MCP Builder Support</p>
+<p class="text-[11px] text-emerald-400 flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+              <span data-i18n="online">Online,</span> <span class="font-mono" id="chatClock"></span>
+</p>
+</div>
+</div>
+<!-- Messages -->
+<div class="chat-scroll px-4 py-5 space-y-3 overflow-y-auto" id="chatMessages" style="max-height: 380px;"></div>
+<!-- Quick reply chips -->
+<div class="px-4 py-4 border-t border-white/[0.06] bg-white/[0.01]">
+<div class="flex flex-wrap gap-2" id="faqChips"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== FOOTER ==================== -->
+<footer class="py-14 px-6 border-t border-white/[0.04]">
+<div class="max-w-6xl mx-auto">
+<div class="grid md:grid-cols-4 gap-10 mb-10">
+<div class="md:col-span-1">
+<a class="flex items-center gap-2.5 mb-4" href="index.html">
+<div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg shadow-brand-500/20">
+<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</div>
+<span class="font-mono font-bold text-[15px] tracking-tight">
+<span class="text-brand-500">&gt;_</span><span class="text-white">mcp</span><span class="text-neutral-400">builder</span>
+</span>
+</a>
+<p class="text-[13px] text-neutral-500 leading-relaxed" data-i18n="custom-mcp-servers-to-connect-your">Custom MCP servers to connect your AI to your data, with no friction and without leaving your infrastructure.</p>
+</div>
+<div>
+<p class="text-[11px] font-mono uppercase tracking-wider text-neutral-600 mb-4" data-i18n="product">Product</p>
+<div class="flex flex-col gap-3 text-[13px] text-neutral-400">
+<a class="hover:text-white transition-colors" data-i18n="how-it-works" href="#how">How it works</a>
+<a class="hover:text-white transition-colors" data-i18n="features" href="#features">Features</a>
+<a class="hover:text-white transition-colors" data-i18n="pricing" href="#pricing">Pricing</a>
+<a class="hover:text-white transition-colors" data-i18n="customers" href="#testimonials">Customers</a>
+</div>
+</div>
+<div>
+<p class="text-[11px] font-mono uppercase tracking-wider text-neutral-600 mb-4" data-i18n="resources">Resources</p>
+<div class="flex flex-col gap-3 text-[13px] text-neutral-400">
+<a class="hover:text-white transition-colors" data-i18n="documentation" href="docs.html">Documentation</a>
+<a class="hover:text-white transition-colors" data-i18n="support" href="support.html">Support</a>
+<a class="hover:text-white transition-colors" data-i18n="frequently-asked-questions" href="#faq">Frequently asked questions</a>
+</div>
+</div>
+<div>
+<p class="text-[11px] font-mono uppercase tracking-wider text-neutral-600 mb-4" data-i18n="legal">Legal</p>
+<div class="flex flex-col gap-3 text-[13px] text-neutral-400">
+<a class="hover:text-white transition-colors" data-i18n="terms" href="politics.html">Terms</a>
+<a class="hover:text-white transition-colors" data-i18n="privacy" href="politics.html#privacy">Privacy</a>
+</div>
+</div>
+</div>
+<div class="divider mb-8"></div>
+<div class="flex flex-col md:flex-row items-center justify-between gap-4">
+<span class="text-[12px] text-neutral-600"><span data-i18n="2026-mcp-builder-all-rights-reserved">© 2026 MCP Builder. All rights reserved.</span> <a class="hover:text-neutral-400 transition-colors" data-i18n="admin-panel-demo" href="admin.html">Admin panel (demo)</a></span>
+<a class="text-[12px] text-neutral-500 hover:text-white transition-colors flex items-center gap-1.5" href="https://github.com/Josequevedov08" target="_blank">
+<svg class="w-3.5 h-3.5" fill="currentColor" viewbox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path></svg>
+          @Josequevedov08
+        </a>
+</div>
+</div>
+</footer>
+<!-- ==================== MODAL: CHECKOUT / STRIPE REDIRECT ==================== -->
+<div class="fixed inset-0 z-[100] hidden items-center justify-center modal-backdrop p-4" id="checkoutModal">
+<div class="w-full max-w-md card rounded-2xl p-0 relative animate-scale-in shadow-2xl overflow-hidden">
+<!-- Header -->
+<div class="px-6 pt-6 pb-4 border-b border-white/[0.06]">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-lg gradient-red flex items-center justify-center">
+<svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
+</div>
+<span class="text-[13px] font-semibold text-white" data-i18n="secure-checkout-with-stripe">Secure checkout with Stripe</span>
+</div>
+<button class="w-7 h-7 rounded-lg bg-white/[0.04] flex items-center justify-center hover:bg-white/[0.08] transition-colors" onclick="closeCheckout()">
+<svg class="w-3.5 h-3.5 text-neutral-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<!-- Order summary -->
+<div class="rounded-lg bg-white/[0.02] border border-white/[0.06] p-4">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[13px] text-neutral-300" id="checkoutItem">MCP server - Local Files</span>
+<span class="text-[13px] font-semibold text-white" id="checkoutPrice">$5.00</span>
+</div>
+<div class="flex items-center justify-between text-[11px] text-neutral-500 mb-3">
+<span data-i18n="no-subscription-one-time-payment">No subscription, one-time payment</span>
+<span data-i18n="instant-delivery">Instant delivery</span>
+</div>
+<div class="hidden items-center justify-between text-[11px] font-medium text-emerald-400 pt-2 border-t border-white/[0.06]" id="discountRow">
+<span><span data-i18n="code">Code</span> <span class="font-mono" id="discountCodeLabel"></span> <span data-i18n="applied">applied</span></span>
+<span id="discountAmount">-20%</span>
+</div>
+</div>
+<!-- Promo code -->
+<div class="mt-3">
+<div class="flex gap-2">
+<input class="input-field flex-1 px-4 py-2.5 rounded-lg text-[13px] font-mono uppercase" data-i18n-placeholder="promo-code" id="promoInput" placeholder="Promo code" type="text"/>
+<button class="btn-secondary px-4 py-2.5 rounded-lg text-[12px] font-semibold text-neutral-300 whitespace-nowrap" id="promoBtn" onclick="applyPromo()" type="button">Apply</button>
+</div>
+<p class="text-[11px] mt-1.5 hidden" id="promoMessage"></p>
+</div>
+</div>
+<!-- Payment form -->
+<div class="px-6 py-5">
+<!-- Tabs -->
+<div class="flex gap-2 mb-5">
+<button class="flex-1 py-2.5 rounded-lg text-[12px] font-semibold transition-all bg-brand-500/10 border border-brand-500/30 text-brand-400 flex items-center justify-center gap-2" id="tabCard" onclick="setPaymentMethod('card')">
+<svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><rect height="13" rx="2" width="19" x="2.5" y="5.5"></rect><path d="M2.5 9.5h19" stroke-linecap="round"></path></svg>
+<span data-i18n="card">Card</span>
+</button>
+<button class="flex-1 py-2.5 rounded-lg text-[12px] font-semibold transition-all bg-white/[0.02] border border-white/[0.08] text-neutral-400 hover:text-neutral-300 flex items-center justify-center gap-2" id="tabPaypal" onclick="setPaymentMethod('paypal')">
+<span>PayPal</span>
+</button>
+</div>
+<!-- Card form -->
+<div class="space-y-4" id="cardForm">
+<!-- Email -->
+<div>
+<label class="text-[11px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block" data-i18n="email-to-send-you-the-receipt">Email (to send you the receipt)</label>
+<input class="input-field w-full px-4 py-3 rounded-xl text-[14px]" data-i18n-placeholder="you-email-com" id="emailInput" placeholder="you@email.com" type="email"/>
+</div>
+<!-- Card number -->
+<div>
+<label class="text-[11px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block" data-i18n="card-number">Card number</label>
+<div class="relative">
+<input class="input-field w-full px-4 py-3 pr-16 rounded-xl text-[14px] font-mono" id="cardNumber" maxlength="19" oninput="formatCardNumber(this)" placeholder="4242 4242 4242 4242" type="text"/>
+<div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+<div class="w-9 h-6 rounded bg-gradient-to-r from-blue-500 to-blue-700 flex items-center justify-center shadow-sm">
+<span class="text-[9px] font-extrabold text-white italic tracking-wide">VISA</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Expiry & CVC -->
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="text-[11px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block" data-i18n="expiry">Expiry</label>
+<input class="input-field w-full px-4 py-3 rounded-xl text-[14px] font-mono" data-i18n-placeholder="mm-yy" id="cardExpiry" maxlength="5" oninput="formatExpiry(this)" placeholder="MM/YY" type="text"/>
+</div>
+<div>
+<label class="text-[11px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block">CVC</label>
+<input class="input-field w-full px-4 py-3 rounded-xl text-[14px] font-mono" id="cardCvc" maxlength="4" placeholder="123" type="text"/>
+</div>
+</div>
+<!-- Cardholder -->
+<div>
+<label class="text-[11px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block" data-i18n="name-on-card">Name on card</label>
+<input class="input-field w-full px-4 py-3 rounded-xl text-[14px]" data-i18n-placeholder="as-it-appears-on-the-card" id="cardName" placeholder="As it appears on the card" type="text"/>
+</div>
+</div>
+<!-- PayPal form (hidden) -->
+<div class="hidden text-center py-6" id="paypalForm">
+<div class="w-14 h-14 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mx-auto mb-4">
+<span class="text-[16px] font-bold text-blue-400">PP</span>
+</div>
+<p class="text-[13px] text-neutral-400 mb-1" data-i18n="pay-with-paypal">Pay with PayPal</p>
+<p class="text-[11px] text-neutral-500" data-i18n="you-will-be-redirected-to-paypal">You will be redirected to PayPal to complete the payment</p>
+</div>
+<!-- Test mode banner -->
+<div class="mt-4 rounded-lg bg-amber-500/[0.06] border border-amber-500/15 px-3 py-2 flex items-center gap-2">
+<svg class="w-3.5 h-3.5 text-amber-400 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" fill-rule="evenodd"></path></svg>
+<span class="text-[10px] font-medium text-amber-400/90" data-i18n="test-mode-use-any-data-no">TEST MODE. Use any data, no real charge will be made</span>
+</div>
+</div>
+<!-- Footer -->
+<div class="px-6 pb-6">
+<button class="btn-primary w-full py-3.5 rounded-xl text-white font-semibold text-[14px] flex items-center justify-center gap-2 shadow-lg shadow-brand-500/25" id="payButton" onclick="processPayment()">
+<span id="payButtonText">Pay $5.00</span>
+<svg class="w-4 h-4" fill="none" id="payButtonIcon" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="w-4 h-4 animate-spin hidden" fill="none" id="payButtonSpinner" viewbox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path></svg>
+</button>
+<p class="text-center text-[10px] text-neutral-600 mt-3 font-mono flex items-center justify-center gap-1.5">
+<svg class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          <span data-i18n="payment-processed-by-stripe-256-bit">Payment processed by Stripe. 256-bit SSL encryption</span>
+        </p>
+</div>
+</div>
+</div>
+<!-- ==================== MODAL: SUCCESS ==================== -->
+<div class="fixed inset-0 z-[100] hidden items-center justify-center modal-backdrop p-4" id="successModal">
+<div class="w-full max-w-lg card rounded-2xl p-8 md:p-10 relative animate-scale-in shadow-2xl">
+<!-- Close -->
+<button class="absolute top-4 right-4 w-8 h-8 rounded-lg bg-white/[0.04] flex items-center justify-center hover:bg-white/[0.08] transition-colors" onclick="closeSuccess()">
+<svg class="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<!-- Success icon -->
+<div class="flex justify-center mb-6">
+<div class="w-16 h-16 rounded-full bg-emerald-500/10 border-2 border-emerald-500/30 flex items-center justify-center animate-scale-in">
+<svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
+</div>
+</div>
+<h3 class="text-xl font-bold text-center mb-1.5" data-i18n="payment-successful">Payment successful</h3>
+<p class="text-neutral-400 text-center text-[13px] mb-2" data-i18n="your-mcp-server-was-generated-successfully">Your MCP server was generated successfully.</p>
+<p class="text-neutral-500 text-center text-[11px] mb-8"><span data-i18n="order-id">Order ID:</span> <span class="font-mono text-neutral-400" id="orderId">#MB-XXXX</span></p>
+<!-- Download button -->
+<button class="btn-primary w-full py-3.5 rounded-xl text-white font-semibold text-[14px] flex items-center justify-center gap-2 mb-6 shadow-lg shadow-brand-500/25">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+        <span data-i18n="download-server-zip">Download server.zip</span>
+      </button>
+<!-- Install instructions -->
+<div class="rounded-xl overflow-hidden">
+<div class="flex items-center justify-between px-4 py-2.5 bg-white/[0.03] border-b border-white/[0.04]">
+<span class="text-[11px] font-mono text-neutral-500" data-i18n="installation">Installation</span>
+<span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded" data-i18n="2-steps">2 steps</span>
+</div>
+<pre class="code-block p-4 overflow-x-auto text-[12px]"><code><span class="comment" data-i18n-pre="1-install-dependencies"># 1. Install dependencies</span>
+<span class="keyword">npm install</span>
+
+<span class="comment" data-i18n-pre="2-add-to-claude-desktop"># 2. Add to Claude Desktop</span>
+<span class="comment" data-i18n-pre="paste-this-path-into-your-config"># Paste this path into your config.json:</span>
+<span class="punctuation">{</span> <span class="property">"command"</span><span class="punctuation">: </span><span class="string">"node"</span><span class="punctuation">, </span><span class="property">"args"</span><span class="punctuation">: [</span><span class="string">"./server/index.js"</span><span class="punctuation">] }</span></code></pre>
+</div>
+<p class="text-center text-[11px] text-neutral-600 mt-6">
+        <span data-i18n="need-help-check-the">Need help? Check the</span> <a class="text-brand-400 hover:text-brand-300 transition-colors" data-i18n="documentation-2" href="#">documentation</a>
+</p>
+</div>
+</div>
+<!-- ==================== MODAL: DEMO DE INSTALACIÓN ==================== -->
+<div class="fixed inset-0 z-[100] hidden items-center justify-center modal-backdrop p-4" id="demoModal">
+<div class="w-full max-w-xl relative animate-scale-in">
+<button class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-white/[0.08] border border-white/[0.12] flex items-center justify-center hover:bg-white/[0.14] transition-colors z-10" onclick="closeDemo()">
+<svg class="w-4 h-4 text-neutral-300" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="code-block rounded-2xl overflow-hidden shadow-2xl">
+<!-- Player top bar -->
+<div class="flex items-center gap-1.5 px-4 py-3 border-b border-white/[0.06] bg-white/[0.02]">
+<div class="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-amber-500/80"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></div>
+<span class="ml-auto text-[10px] font-mono text-neutral-500" data-i18n="installation-demo-sh-animated-preview">installation-demo.sh - animated preview</span>
+</div>
+<!-- Simulated terminal -->
+<div class="p-6 min-h-[220px]">
+<pre class="text-[13px] leading-relaxed font-mono text-neutral-200 whitespace-pre-wrap" id="demoTerminal"></pre>
+</div>
+<!-- Caption + progress -->
+<div class="px-6 pb-5">
+<p class="text-[12px] text-neutral-500 mb-3 font-medium" id="demoCaption">Starting demo...</p>
+<div class="h-1 rounded-full bg-white/[0.06] overflow-hidden">
+<div class="demo-progress h-full gradient-red" id="demoProgress" style="width: 0%"></div>
+</div>
+</div>
+</div>
+<p class="text-center text-[11px] text-neutral-500 mt-4" data-i18n="simulation-of-the-real-installation-process">Simulation of the real installation process. The final file includes your exact configuration.</p>
+</div>
+</div>
+<!-- ==================== JAVASCRIPT ==================== -->
+<script>
+    const prices = {
+      local: { amount: 5.00, label: '$5.00' },
+      database: { amount: 15.00, label: '$15.00' },
+      api: { amount: 20.00, label: '$20.00' }
+    };
+
+    let currentPaymentMethod = 'card';
+
+    function updateForm() {
+      const source = document.getElementById('sourceSelect').value;
+      const step2 = document.getElementById('step2');
+      const dbFields = document.getElementById('dbFields');
+      const localFields = document.getElementById('localFields');
+      const apiFields = document.getElementById('apiFields');
+      const priceDisplay = document.getElementById('priceDisplay');
+      const ctaText = document.getElementById('ctaText');
+
+      dbFields.classList.add('hidden');
+      localFields.classList.add('hidden');
+      apiFields.classList.add('hidden');
+
+      if (!source) {
+        step2.classList.remove('open');
+        priceDisplay.textContent = '$0.00';
+        document.getElementById('step2Label').textContent = I18N.t('form.step2.default');
+        ctaText.textContent = I18N.t('cta.generate', { price: '$0.00' });
+        return;
+      }
+
+      step2.classList.add('open');
+
+      if (source === 'database') {
+        dbFields.classList.remove('hidden');
+        document.getElementById('step2Label').textContent = I18N.t('form.step2.db');
+      } else if (source === 'local') {
+        localFields.classList.remove('hidden');
+        document.getElementById('step2Label').textContent = I18N.t('form.step2.local');
+      } else if (source === 'api') {
+        apiFields.classList.remove('hidden');
+        document.getElementById('step2Label').textContent = I18N.t('form.step2.api');
+      }
+
+      const price = prices[source];
+      priceDisplay.textContent = price.label;
+      ctaText.textContent = I18N.t('cta.generate', { price: price.label });
+    }
+
+    function openCheckout() {
+      const source = document.getElementById('sourceSelect').value;
+      if (!source) {
+        const select = document.getElementById('sourceSelect');
+        select.style.borderColor = '#DC2626';
+        select.style.boxShadow = '0 0 0 3px rgba(220, 38, 38, 0.2)';
+        select.focus();
+        setTimeout(() => {
+          select.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+          select.style.boxShadow = 'none';
+        }, 2000);
+        return;
+      }
+
+      const price = prices[source];
+      document.getElementById('checkoutItem').textContent = I18N.t('checkout.item', { name: I18N.t('plan.' + source) });
+      resetPromo();
+      refreshCheckoutTotal();
+
+      const modal = document.getElementById('checkoutModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeCheckout() {
+      const modal = document.getElementById('checkoutModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function closeSuccess() {
+      const modal = document.getElementById('successModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function setPaymentMethod(method) {
+      currentPaymentMethod = method;
+      const tabCard = document.getElementById('tabCard');
+      const tabPaypal = document.getElementById('tabPaypal');
+      const cardForm = document.getElementById('cardForm');
+      const paypalForm = document.getElementById('paypalForm');
+
+      if (method === 'card') {
+        tabCard.className = 'flex-1 py-2.5 rounded-lg text-[12px] font-semibold transition-all bg-brand-500/10 border border-brand-500/30 text-brand-400';
+        tabPaypal.className = 'flex-1 py-2.5 rounded-lg text-[12px] font-semibold transition-all bg-white/[0.02] border border-white/[0.08] text-neutral-400 hover:text-neutral-300';
+        cardForm.classList.remove('hidden');
+        paypalForm.classList.add('hidden');
+      } else {
+        tabCard.className = 'flex-1 py-2.5 rounded-lg text-[12px] font-semibold transition-all bg-white/[0.02] border border-white/[0.08] text-neutral-400 hover:text-neutral-300';
+        tabPaypal.className = 'flex-1 py-2.5 rounded-lg text-[12px] font-semibold transition-all bg-blue-500/10 border border-blue-500/30 text-blue-400';
+        cardForm.classList.add('hidden');
+        paypalForm.classList.remove('hidden');
+      }
+    }
+
+    function formatCardNumber(input) {
+      let value = input.value.replace(/\D/g, '');
+      let formatted = '';
+      for (let i = 0; i < value.length && i < 16; i++) {
+        if (i > 0 && i % 4 === 0) formatted += ' ';
+        formatted += value[i];
+      }
+      input.value = formatted;
+    }
+
+    function formatExpiry(input) {
+      let value = input.value.replace(/\D/g, '');
+      if (value.length >= 2) {
+        value = value.substring(0, 2) + '/' + value.substring(2, 4);
+      }
+      input.value = value;
+    }
+
+    function processPayment() {
+      const btn = document.getElementById('payButton');
+      const btnText = document.getElementById('payButtonText');
+      const btnIcon = document.getElementById('payButtonIcon');
+      const btnSpinner = document.getElementById('payButtonSpinner');
+
+      btn.disabled = true;
+      btnText.textContent = I18N.t('checkout.processing');
+      btnIcon.classList.add('hidden');
+      btnSpinner.classList.remove('hidden');
+      btn.classList.add('opacity-80', 'cursor-not-allowed');
+
+      setTimeout(() => {
+        closeCheckout();
+        showSuccess();
+        btn.disabled = false;
+        btnText.textContent = I18N.t('checkout.pay', { price: document.getElementById('checkoutPrice').textContent });
+        btnIcon.classList.remove('hidden');
+        btnSpinner.classList.add('hidden');
+        btn.classList.remove('opacity-80', 'cursor-not-allowed');
+      }, 2200);
+    }
+
+    function showSuccess() {
+      const orderId = 'MB-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+      window.location.href = 'success.html?order=' + orderId;
+    }
+
+    // Close modals on outside click
+    document.getElementById('checkoutModal').addEventListener('click', function(e) {
+      if (e.target === this) closeCheckout();
+    });
+    document.getElementById('successModal').addEventListener('click', function(e) {
+      if (e.target === this) closeSuccess();
+    });
+
+    // Close modals on Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeCheckout();
+        closeSuccess();
+      }
+    });
+
+    // Mobile menu
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const iconOpen = document.getElementById('menuIconOpen');
+      const iconClose = document.getElementById('menuIconClose');
+
+      if (menu.classList.contains('hidden')) {
+        menu.classList.remove('hidden');
+        iconOpen.classList.add('hidden');
+        iconClose.classList.remove('hidden');
+      } else {
+        menu.classList.add('hidden');
+        iconOpen.classList.remove('hidden');
+        iconClose.classList.add('hidden');
+      }
+    }
+
+    function closeMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const iconOpen = document.getElementById('menuIconOpen');
+      const iconClose = document.getElementById('menuIconClose');
+
+      menu.classList.add('hidden');
+      iconOpen.classList.remove('hidden');
+      iconClose.classList.add('hidden');
+    }
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // ==================== SCROLL REVEAL ====================
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ==================== PROMO CODE ====================
+    const PROMO_CODES = { LAUNCH20: 0.20 };
+    let appliedDiscountRate = 0;
+    let appliedDiscountCode = '';
+
+    function getBaseAmount() {
+      const source = document.getElementById('sourceSelect').value;
+      return prices[source] ? prices[source].amount : 0;
+    }
+
+    function refreshCheckoutTotal() {
+      const base = getBaseAmount();
+      const finalAmount = base * (1 - appliedDiscountRate);
+      const label = '$' + finalAmount.toFixed(2);
+      document.getElementById('checkoutPrice').textContent = label;
+      document.getElementById('payButtonText').textContent = I18N.t('checkout.pay', { price: label });
+
+      const discountRow = document.getElementById('discountRow');
+      if (appliedDiscountRate > 0) {
+        discountRow.classList.remove('hidden');
+        discountRow.classList.add('flex');
+        document.getElementById('discountCodeLabel').textContent = appliedDiscountCode;
+        document.getElementById('discountAmount').textContent = '-' + Math.round(appliedDiscountRate * 100) + '%';
+      } else {
+        discountRow.classList.add('hidden');
+        discountRow.classList.remove('flex');
+      }
+    }
+
+    let promoMessageState = null;
+
+    function showPromoMessage(key, vars, colorClasses) {
+      promoMessageState = { key, vars, colorClasses };
+      const msg = document.getElementById('promoMessage');
+      msg.textContent = I18N.t(key, vars);
+      msg.className = 'text-[11px] mt-1.5 ' + colorClasses;
+    }
+
+    function applyPromo() {
+      const input = document.getElementById('promoInput');
+      const code = input.value.trim().toUpperCase();
+
+      if (!code) {
+        showPromoMessage('promo.empty', {}, 'text-neutral-500');
+        return;
+      }
+
+      if (PROMO_CODES[code]) {
+        appliedDiscountRate = PROMO_CODES[code];
+        appliedDiscountCode = code;
+        showPromoMessage('promo.success', { code, pct: Math.round(appliedDiscountRate * 100) }, 'text-emerald-400 font-medium');
+        input.disabled = true;
+        const btn = document.getElementById('promoBtn');
+        btn.textContent = I18N.t('promo.applied');
+        btn.disabled = true;
+        btn.classList.add('opacity-60', 'cursor-not-allowed');
+        refreshCheckoutTotal();
+      } else {
+        showPromoMessage('promo.invalid', {}, 'text-red-400 font-medium');
+      }
+    }
+
+    function resetPromo() {
+      appliedDiscountRate = 0;
+      appliedDiscountCode = '';
+      const input = document.getElementById('promoInput');
+      input.value = '';
+      input.disabled = false;
+      const btn = document.getElementById('promoBtn');
+      btn.textContent = I18N.t('promo.apply');
+      btn.disabled = false;
+      btn.classList.remove('opacity-60', 'cursor-not-allowed');
+      promoMessageState = null;
+      document.getElementById('promoMessage').classList.add('hidden');
+      document.getElementById('discountRow').classList.add('hidden');
+      document.getElementById('discountRow').classList.remove('flex');
+    }
+
+    // ==================== FAQ CHAT ====================
+    const FAQ_COUNT = 5;
+
+    function nowLabel() {
+      return new Date().toLocaleTimeString(I18N.locale(), { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function renderChips() {
+      const wrap = document.getElementById('faqChips');
+      wrap.innerHTML = '';
+      Array.from({ length: FAQ_COUNT }, (_, i) => i).forEach((i) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'chip-btn px-3.5 py-2 rounded-full bg-white/[0.03] border border-white/[0.08] text-[12px] font-medium text-neutral-300 text-left';
+        btn.textContent = I18N.t('faq.q' + (i + 1));
+        btn.onclick = () => askFaq(i);
+        wrap.appendChild(btn);
+      });
+    }
+
+    function scrollChatToBottom() {
+      const box = document.getElementById('chatMessages');
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function askFaq(index) {
+      const item = { q: I18N.t('faq.q' + (index + 1)), a: I18N.t('faq.a' + (index + 1)) };
+      const box = document.getElementById('chatMessages');
+      const sendTime = nowLabel();
+
+      // User bubble (sent)
+      const userWrap = document.createElement('div');
+      userWrap.className = 'flex items-end justify-end gap-2 bubble-in';
+      const tickId = 'tick-' + Date.now();
+      userWrap.innerHTML = `
+        <div class="max-w-[80%]">
+          <div class="bg-brand-600 rounded-2xl rounded-br-sm px-4 py-2.5">
+            <p class="text-[13px] text-white leading-relaxed">${item.q}</p>
+          </div>
+          <p class="text-[10px] text-neutral-600 mt-1 mr-1 text-right flex items-center justify-end gap-1">
+            ${sendTime}
+            <svg id="${tickId}" class="w-3.5 h-3.5 text-neutral-600 transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2 12l4 4L14 8"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 12l4 4L20 8"/></svg>
+          </p>
+        </div>`;
+      box.appendChild(userWrap);
+      scrollChatToBottom();
+
+      // Typing indicator
+      const typingWrap = document.createElement('div');
+      typingWrap.className = 'flex items-end gap-2 bubble-in';
+      typingWrap.id = 'typingIndicator';
+      typingWrap.innerHTML = `
+        <div class="w-7 h-7 rounded-full bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-[10px] font-bold text-white flex-shrink-0">MB</div>
+        <div class="bg-white/[0.05] border border-white/[0.06] rounded-2xl rounded-bl-sm px-4 py-3 flex items-center gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-neutral-400 typing-dot"></span>
+          <span class="w-1.5 h-1.5 rounded-full bg-neutral-400 typing-dot"></span>
+          <span class="w-1.5 h-1.5 rounded-full bg-neutral-400 typing-dot"></span>
+        </div>`;
+
+      setTimeout(() => {
+        box.appendChild(typingWrap);
+        scrollChatToBottom();
+
+        setTimeout(() => {
+          typingWrap.remove();
+
+          const botWrap = document.createElement('div');
+          botWrap.className = 'flex items-end gap-2 bubble-in';
+          botWrap.innerHTML = `
+            <div class="w-7 h-7 rounded-full bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-[10px] font-bold text-white flex-shrink-0">MB</div>
+            <div class="max-w-[80%]">
+              <div class="bg-white/[0.05] border border-white/[0.06] rounded-2xl rounded-bl-sm px-4 py-2.5">
+                <p class="text-[13px] text-neutral-200 leading-relaxed">${item.a}</p>
+              </div>
+              <p class="text-[10px] text-neutral-600 mt-1 ml-1">${nowLabel()}</p>
+            </div>`;
+          box.appendChild(botWrap);
+          scrollChatToBottom();
+
+          const tick = document.getElementById(tickId);
+          if (tick) tick.classList.replace('text-neutral-600', 'text-sky-400');
+        }, 900);
+      }, 350);
+    }
+
+    function tickChatClock() {
+      const el = document.getElementById('chatClock');
+      if (el) el.textContent = nowLabel();
+    }
+
+    // ==================== DEMO MODAL ====================
+    function getDemoSteps() {
+      const t = I18N.t;
+      return [
+        { caption: t('demo.s1.caption'), lines: ['$ mcp-builder init', t('demo.s1.l2'), t('demo.s1.l3')] },
+        { caption: t('demo.s2.caption'), lines: ['$ mcp-builder generate --source=database', t('demo.s2.l2'), t('demo.s2.l3'), t('demo.s2.l4')] },
+        { caption: t('demo.s3.caption'), lines: ['$ npm install', '$ code claude_desktop_config.json', t('demo.s3.l3'), t('demo.s3.l4')] }
+      ];
+    }
+
+    let demoTimeouts = [];
+    let demoProgressInterval = null;
+
+    function clearDemoTimers() {
+      demoTimeouts.forEach(t => clearTimeout(t));
+      demoTimeouts = [];
+      if (demoProgressInterval) clearInterval(demoProgressInterval);
+      demoProgressInterval = null;
+    }
+
+    function openDemo() {
+      const modal = document.getElementById('demoModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      runDemoSequence();
+    }
+
+    function closeDemo() {
+      const modal = document.getElementById('demoModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      clearDemoTimers();
+    }
+
+    function runDemoSequence() {
+      clearDemoTimers();
+      const terminal = document.getElementById('demoTerminal');
+      const caption = document.getElementById('demoCaption');
+      const progress = document.getElementById('demoProgress');
+      terminal.textContent = '';
+      progress.style.width = '0%';
+
+      const demoSteps = getDemoSteps();
+      const stepDuration = 2600;
+      const totalDuration = demoSteps.length * stepDuration;
+
+      demoSteps.forEach((step, sIndex) => {
+        const baseDelay = sIndex * stepDuration;
+        demoTimeouts.push(setTimeout(() => {
+          caption.textContent = step.caption;
+          terminal.textContent = '';
+          step.lines.forEach((line, lIndex) => {
+            demoTimeouts.push(setTimeout(() => {
+              terminal.textContent += (lIndex > 0 ? '\n' : '') + line;
+            }, lIndex * 420));
+          });
+        }, baseDelay));
+      });
+
+      let elapsed = 0;
+      demoProgressInterval = setInterval(() => {
+        elapsed += 100;
+        const pct = Math.min(100, (elapsed / totalDuration) * 100);
+        progress.style.width = pct + '%';
+        if (elapsed >= totalDuration) {
+          clearInterval(demoProgressInterval);
+          demoTimeouts.push(setTimeout(runDemoSequence, 1200));
+        }
+      }, 100);
+    }
+
+    document.getElementById('demoModal').addEventListener('click', function(e) {
+      if (e.target === this) closeDemo();
+    });
+
+    // ==================== LANGUAGE ====================
+    function resetChat() {
+      const box = document.getElementById('chatMessages');
+      box.innerHTML = `
+        <div class="flex items-end gap-2 bubble-in">
+          <div class="w-7 h-7 rounded-full bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-[10px] font-bold text-white flex-shrink-0">MB</div>
+          <div class="max-w-[80%]">
+            <div class="bg-white/[0.05] border border-white/[0.06] rounded-2xl rounded-bl-sm px-4 py-2.5">
+              <p class="text-[13px] text-neutral-200 leading-relaxed">${I18N.t('chat.welcome')}</p>
+            </div>
+            <p class="text-[10px] text-neutral-600 mt-1 ml-1">${nowLabel()}</p>
+          </div>
+        </div>`;
+    }
+
+    // Re-render every piece of text that page scripts generate whenever the language changes.
+    document.addEventListener('langchange', () => {
+      updateForm();
+      const source = document.getElementById('sourceSelect').value;
+      if (source) {
+        document.getElementById('checkoutItem').textContent = I18N.t('checkout.item', { name: I18N.t('plan.' + source) });
+      }
+      refreshCheckoutTotal();
+      const promoBtn = document.getElementById('promoBtn');
+      promoBtn.textContent = I18N.t(promoBtn.disabled ? 'promo.applied' : 'promo.apply');
+      if (promoMessageState) showPromoMessage(promoMessageState.key, promoMessageState.vars, promoMessageState.colorClasses);
+      renderChips();
+      resetChat();
+      tickChatClock();
+      if (document.getElementById('demoModal').classList.contains('hidden')) {
+        document.getElementById('demoCaption').textContent = I18N.t('demo.starting');
+      } else {
+        runDemoSequence();
+      }
+    });
+
+    // ==================== INIT ====================
+    document.addEventListener('DOMContentLoaded', () => {
+      tickChatClock();
+      setInterval(tickChatClock, 1000);
+    });
+  </script>
+</body>
+</html>
