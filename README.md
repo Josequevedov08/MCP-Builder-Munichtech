@@ -4,6 +4,7 @@ MCP Builder generates Model Context Protocol (MCP) servers from a short configur
 
 Built for the MunichTech EXPO Hackathon.
 
+
 ## Table of contents
 
 - [Inspiration](#inspiration)
@@ -21,6 +22,8 @@ Built for the MunichTech EXPO Hackathon.
 - [Team](#team)
 - [Hackathon and technology partners](#hackathon-and-technology-partners)
 
+=======
+
 ## Inspiration
 
 Connecting corporate data to AI agents through MCP is slow and error-prone. A developer has to learn the SDK, write tool definitions, wire credentials safely and repeat the process for every data source. Small teams in Europe often skip it because the setup cost is higher than the first benefit.
@@ -34,13 +37,18 @@ Accessibility is a second gap. Build tools report progress through terminals and
 - Validates the model output before returning it, then returns the files and the schema to the client.
 - Generates a spoken notification with ElevenLabs when a build succeeds and when it fails, available as an MP3 endpoint.
 - Returns the same message as plain text (`spoken_summary`) so screen readers and ARIA live regions can use it directly.
+
 - Ships a static marketing site in English, German and Spanish, with a simulated checkout, an installation demo and a demo admin panel with sample metrics.
+=======
+- Ships a static marketing site with a simulated checkout, an installation demo and a demo admin panel with sample metrics.
+
 
 ## How we built it
 
 Backend: Python with FastAPI. Routes are asynchronous, request and response bodies are validated with Pydantic v2, and configuration comes from environment variables loaded with python-dotenv.
 
 Inference: a client for the Featherless.ai chat completions API, which is OpenAI compatible. The default model is `Qwen/Qwen2.5-Coder-32B-Instruct` and it can be changed with an environment variable. When no API key is set, a deterministic template generator produces valid output so the full flow can be demonstrated offline.
+
 
 Voice and accessibility: a notifier service calls the ElevenLabs text-to-speech API. It runs as a background task after the build outcome is decided, in English or Spanish, and stores the audio so clients can fetch it later.
 
@@ -83,10 +91,34 @@ Generated at runtime and excluded from version control: `.env`, `.venv/`, `__pyc
 Inside `main.py` the code is organized in these sections, in order: settings, domain errors, Pydantic schemas, credential vault and build store, Featherless.ai client, ElevenLabs voice notifier, application wiring and routes.
 
 ## API reference
+=======
+Voice and accessibility: a notifier service calls the ElevenLabs text-to-speech API. It runs as a background task after the build response is decided, in English or Spanish, and stores the audio so clients can fetch it later.
+
+Credentials: secrets are encrypted with Fernet as soon as they reach the server. Only the variable names are ever sent to the model, and the generated `.env.example` contains names without values.
+
+Frontend: static HTML with Tailwind CSS. It includes the landing page, documentation, support and legal pages, and a demo admin panel.
+
+Repository layout:
+
+```
+main.py            FastAPI application and services
+requirements.txt   Python dependencies
+.env.example       Environment variable template
+index.html         Landing page and demo checkout
+admin.html         Demo admin panel (sample data)
+docs.html          Documentation
+support.html       Support page
+politics.html      Terms and privacy
+success.html       Post-purchase page
+```
+
+API summary:
+>>>>>>> acb0ec5780e8b49dcea49b914b5c7546d30dfbdd
 
 | Method | Path | Purpose |
 | --- | --- | --- |
 | POST | `/build-mcp` | Generate an MCP server from a configuration |
+
 | GET | `/build-mcp/{build_id}` | Build status and audio status |
 | GET | `/build-mcp/{build_id}/audio` | Spoken notification as `audio/mpeg` |
 | GET | `/health` | Service and integration status |
@@ -151,6 +183,12 @@ Accessibility is the main differentiator of the project.
 - Never commit your `.env` file. `.gitignore` blocks `.env` and its variants, private keys, certificates, credential files and generated audio, and keeps only `.env.example`.
 - Only the `site/` folder is published to GitHub Pages, so backend code, planning notes and local files are never served publicly.
 
+=======
+| GET | `/build-mcp/{build_id}` | Build and audio status |
+| GET | `/build-mcp/{build_id}/audio` | Spoken notification as `audio/mpeg` |
+| GET | `/health` | Service and integration status |
+
+
 ## Challenges we ran into
 
 Unreliable model output. Language models wrap JSON in markdown fences or add prose. We extract the JSON object defensively and validate it against a Pydantic model, and we reject file paths that are absolute or contain `..` so a bad response cannot describe files outside the project folder.
@@ -163,7 +201,10 @@ Announcing failures. FastAPI drops background tasks attached to a request that e
 
 Demo without credentials. Both external services have a fallback (template generator for the model, disabled audio for voice) so the project runs on a clean machine.
 
+
 A multilingual static site without a build step. The interface is translated at runtime from a single dictionary file, with English written directly in the HTML so the page never flashes another language before the script loads.
+
+=======
 
 ## Accomplishments
 
@@ -171,6 +212,7 @@ A multilingual static site without a build step. The interface is translated at 
 - Spoken build status for both success and failure, with a text equivalent for screen readers.
 - Credential handling designed so that secret values never reach the model or the logs.
 - Verified end to end with automated calls against a mocked ElevenLabs endpoint: successful build, request validation errors, upstream failure and audio retrieval.
+
 - A landing page in three languages with a working promo code flow, an interactive FAQ and an installation demo.
 
 ## Roadmap
@@ -183,6 +225,11 @@ Current limits and next steps:
 - Package the generated files as a downloadable `.zip` and add automatic deployment of the generated server.
 - Add German to the spoken notifications, matching the languages of the site.
 - Add an automated test suite to the repository and run it in continuous integration.
+=======
+- A polished landing page with a working promo code flow, an interactive FAQ and an installation demo.
+
+Current limits: the landing page generator and checkout are simulated and are not yet connected to `/build-mcp`, build records are stored in memory, and automatic deployment of the generated server is not implemented.
+
 
 ## Local setup
 
@@ -192,7 +239,11 @@ Requirements: Python 3.10 or newer.
 
 ```bash
 git clone <repository-url>
+
 cd <repository-folder>
+=======
+cd "MCP Builder"
+
 ```
 
 2. Create and activate a virtual environment.
@@ -224,8 +275,11 @@ cp .env.example .env             # Windows: copy .env.example .env
 | `ELEVENLABS_VOICE_ID` | Voice used for notifications |
 | `CREDENTIALS_ENCRYPTION_KEY` | Fernet key. If empty, an ephemeral key is generated at startup |
 | `ALLOWED_ORIGINS` | Comma separated list of allowed CORS origins |
+
 | `AUDIO_OUTPUT_DIR` | Folder where synthesized audio is stored. Defaults to `audio_out` |
 | `HOST` and `PORT` | Address used when running `python main.py`. Default `127.0.0.1:8000` |
+=======
+
 
 Generate an encryption key with:
 
@@ -239,11 +293,22 @@ python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().d
 uvicorn main:app --reload --port 8000
 ```
 
+
 Check that it is running at `http://127.0.0.1:8000/health`, then try the endpoints at `http://127.0.0.1:8000/docs`.
+=======
+Open `http://127.0.0.1:8000/docs` to try the endpoints in the interactive documentation. An example request:
+
+```bash
+curl -X POST http://127.0.0.1:8000/build-mcp \
+  -H "Content-Type: application/json" \
+  -d '{"server_name":"shop-db","source_type":"database","db_engine":"postgresql","resources":["orders","customers"],"credentials":{"DB_PASSWORD":"example"},"language":"en"}'
+```
+
 
 6. Serve the static site in a second terminal.
 
 ```bash
+
 cd site
 python -m http.server 5500
 ```
@@ -268,6 +333,12 @@ Set the environment variables from the table above in the hosting dashboard, and
 | --- | --- | --- |
 | [Jose Quevedo](https://github.com/Josequevedov08) | Lead Developer and Technical Architect | Backend with FastAPI, AI integrations with Featherless.ai, MCP server architecture |
 | [Nolayita](https://github.com/NOLAYITA) | Product Strategy, Documentation and Internationalization Lead | Product strategy, official documentation, English adaptation of the interface, content management |
+=======
+python -m http.server 5500
+```
+
+Then open `http://127.0.0.1:5500/index.html`.
+
 
 ## Hackathon and technology partners
 
