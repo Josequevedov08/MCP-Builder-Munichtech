@@ -20,8 +20,9 @@ import json
 import logging
 import os
 import re
+import time
 import uuid
-from collections import OrderedDict
+from collections import OrderedDict, deque
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from enum import Enum
@@ -90,6 +91,11 @@ class Settings:
         # Security and storage
         self.encryption_key = os.getenv("CREDENTIALS_ENCRYPTION_KEY", "")
         self.max_stored_builds = int(os.getenv("MAX_STORED_BUILDS", "500"))
+
+        # Abuse protection for a public deployment (per client IP and per process).
+        self.rate_limit_builds = int(os.getenv("RATE_LIMIT_BUILDS_PER_MINUTE", "5"))
+        self.rate_limit_voice = int(os.getenv("RATE_LIMIT_VOICE_PER_MINUTE", "20"))
+        self.max_concurrent_builds = int(os.getenv("MAX_CONCURRENT_BUILDS", "3"))
 
         # HTTP
         self.allowed_origins = [
@@ -629,6 +635,36 @@ class VoiceService:
 
 
 # ---------------------------------------------------------------------------
+# Rate limiting
+# ---------------------------------------------------------------------------
+class RateLimiter:
+    """Sliding-window limiter keyed by client identifier, kept in memory."""
+
+    def __init__(self, limit: int, window_seconds: int = 60) -> None:
+        self._limit = limit
+        self._window = window_seconds
+        self._hits: dict[str, deque[float]] = {}
+
+    def check(self, key: str) -> None:
+        now = time.monotonic()
+        hits = self._hits.setdefault(key, deque())
+        while hits and now - hits[0] > self._window:
+            hits.popleft()
+        if len(hits) >= self._limit:
+            raise ApiError(
+                429, "rate_limited", "Too many requests. Please wait a moment and try again."
+            )
+        hits.append(now)
+        if len(self._hits) > 10_000:
+            self._hits = {k: v for k, v in self._hits.items() if v and now - v[-1] <= self._window}
+
+
+def client_id(request: Request) -> str:
+    """Client address. Behind a proxy, run uvicorn with --proxy-headers to get the real one."""
+    return request.client.host if request.client else "unknown"
+
+
+# ---------------------------------------------------------------------------
 # Application wiring
 # ---------------------------------------------------------------------------
 @dataclass
@@ -638,6 +674,9 @@ class Services:
     voice: VoiceService
     vault: CredentialVault
     store: BuildStore
+    build_limiter: RateLimiter
+    voice_limiter: RateLimiter
+    build_slots: asyncio.Semaphore
 
 
 @asynccontextmanager
@@ -649,6 +688,9 @@ async def lifespan(app: FastAPI):
         voice=VoiceService(settings, http),
         vault=CredentialVault(settings.encryption_key),
         store=BuildStore(settings.max_stored_builds),
+        build_limiter=RateLimiter(settings.rate_limit_builds),
+        voice_limiter=RateLimiter(settings.rate_limit_voice),
+        build_slots=asyncio.Semaphore(settings.max_concurrent_builds),
     )
     logger.info(
         "Started (llm=%s, voice=%s)",
@@ -739,11 +781,17 @@ async def health() -> dict[str, Any]:
 @app.post("/api/build-mcp", response_model=BuildResponse)
 async def build_mcp(payload: BuildRequest, request: Request) -> BuildResponse:
     services = get_services(request)
+    services.build_limiter.check(client_id(request))
+    if services.build_slots.locked():
+        raise ApiError(
+            429, "model_busy", "The code generation service is busy. Please retry shortly."
+        )
     try:
         record = services.store.create(payload.server_name)
         # Credentials are encrypted immediately; the model only sees variable names.
         record.encrypted_credentials = services.vault.encrypt(payload.credentials)
-        generated = await services.llm.generate(payload)
+        async with services.build_slots:
+            generated = await services.llm.generate(payload)
     except ApiError:
         raise
     except Exception:
@@ -772,6 +820,7 @@ async def build_mcp(payload: BuildRequest, request: Request) -> BuildResponse:
 )
 async def voice_status(payload: VoiceStatusRequest, request: Request) -> Response:
     services = get_services(request)
+    services.voice_limiter.check(client_id(request))
     try:
         text = compose_voice_message(
             payload.status,

@@ -64,6 +64,7 @@ MCP Builder Munichtech/
   main.py                      FastAPI application, services and routes
   requirements.txt             Python dependencies
   .env.example                 Environment variable template
+  render.yaml                  Deployment blueprint for the API on Render
   .gitignore                   Files excluded from version control
   prompts.txt                  Internal planning notes and prompt drafts
   .github/workflows/deploy.yml GitHub Pages deployment (publishes only site/)
@@ -76,6 +77,7 @@ MCP Builder Munichtech/
     politics.html              Terms, privacy, refunds and license
     i18n.js                    Translations (en, de, es) and language switcher
     api.js                     Client for the MCP Builder API
+    config.js                  Production API address, selected by hostname
 ```
 
 Excluded from version control: `.env`, `.venv/`, `__pycache__/` and other local files.
@@ -179,6 +181,7 @@ Accessibility is the main differentiator of the project.
 - Generated code is returned to the client and is never executed by the server.
 - API keys are read from environment variables only. They are not part of the source code or the frontend.
 - Error responses are generic and validation errors never echo submitted values.
+- Requests are rate limited per client IP and the number of simultaneous generations is capped, which protects the model and voice quotas of a public deployment.
 - CORS is limited to the origins listed in `ALLOWED_ORIGINS`.
 - Never commit your `.env` file. `.gitignore` blocks `.env` and its variants, private keys, certificates, credential files and other local files, and keeps only `.env.example`.
 - Only the `site/` folder is published to GitHub Pages, so backend code, planning notes and local files are never served publicly.
@@ -263,6 +266,9 @@ cp .env.example .env             # Windows: copy .env.example .env
 | `CREDENTIALS_ENCRYPTION_KEY` | Fernet key. If empty, an ephemeral key is generated at startup |
 | `ALLOWED_ORIGINS` | Comma separated list of allowed CORS origins |
 | `SERVE_SITE` | Serve the `site/` folder from the API process. Defaults to `true` |
+| `RATE_LIMIT_BUILDS_PER_MINUTE` | Build requests allowed per client IP each minute. Defaults to `5` |
+| `RATE_LIMIT_VOICE_PER_MINUTE` | Voice requests allowed per client IP each minute. Defaults to `20` |
+| `MAX_CONCURRENT_BUILDS` | Generations that may run at the same time. Defaults to `3` |
 | `HOST` and `PORT` | Address used when running `python main.py`. Default `127.0.0.1:8000` |
 
 Generate an encryption key with:
@@ -283,21 +289,52 @@ To serve the site separately, run `python -m http.server 5500` inside `site/`. T
 
 ## Deployment
 
-Static site: `.github/workflows/deploy.yml` publishes only the `site/` folder to GitHub Pages on every push to `main`. Enable Pages in the repository settings and select GitHub Actions as the source. Everything outside `site/`, including `main.py`, `prompts.txt` and any local file, stays out of the published site.
+The project runs as two pieces: the static site on GitHub Pages and the API on a Python host. The examples use the domain `quevedojose.com`. Replace the names to use your own.
 
-API: GitHub Pages cannot run Python. Deploy `main.py` to any host that runs ASGI applications, for example Railway or Koyeb, with this start command:
+| Piece | Address | Host |
+| --- | --- | --- |
+| Website | `mcp.quevedojose.com` | GitHub Pages |
+| API | `mcp-api.quevedojose.com` | Render |
+
+### 1. API on Render
+
+1. In Render, create a new Blueprint from this repository. It reads `render.yaml`.
+2. Enter the two secret values when asked: `FEATHERLESS_API_KEY` and `ELEVENLABS_API_KEY`. The other variables are already defined in the blueprint.
+3. After the first deploy, open `https://<your-service>.onrender.com/api/health` and check that it reports `"status": "ok"`.
+4. In the service settings, add the custom domain `mcp-api.quevedojose.com`. Render shows the DNS target to use.
+
+The free plan puts the service to sleep after a period without traffic, so the first request can take about a minute. Use a paid plan for a live demo, or open the health URL a few minutes before presenting.
+
+### 2. Website on GitHub Pages
+
+`.github/workflows/deploy.yml` publishes only the `site/` folder on every push to `main`.
+
+1. In the repository, open Settings, Pages, and select GitHub Actions as the source.
+2. In the same page, set the custom domain to `mcp.quevedojose.com`, save, and enable Enforce HTTPS once the certificate is ready. A `CNAME` file is not needed because the site is published with a workflow.
+
+### 3. DNS records
+
+Create these records where the domain's DNS is managed:
+
+| Type | Name | Value |
+| --- | --- | --- |
+| CNAME | `mcp` | `<github-user>.github.io` |
+| CNAME | `mcp-api` | the target shown by Render |
+
+Only subdomain records are added, so the existing records of the main domain are not affected. DNS changes can take from a few minutes to a few hours.
+
+### 4. Connect the two pieces
+
+- `site/config.js` maps the hostname of the website to the address of the API. If you use other names, edit that file.
+- `ALLOWED_ORIGINS` on the API must contain the public address of the website. The blueprint sets it to `https://mcp.quevedojose.com` and to the `github.io` address.
+
+To run the API on another host, use this start command and set the same environment variables:
 
 ```bash
-uvicorn main:app --host 0.0.0.0 --port $PORT
+uvicorn main:app --host 0.0.0.0 --port $PORT --proxy-headers --forwarded-allow-ips="*"
 ```
 
-Set the environment variables from the table above in the hosting dashboard, and add the public URL of the static site to `ALLOWED_ORIGINS`.
-
-Then point the site at the deployed API by adding this line before the `api.js` script tag in `site/index.html` and `site/success.html`:
-
-```html
-<script>window.MCP_API_BASE = 'https://your-api.example.com';</script>
-```
+Alternatively, a single host can serve both the API and the website. Leave `SERVE_SITE=true` and point one domain at that host. In that case `config.js` and the Pages workflow are not needed.
 
 ## Team
 

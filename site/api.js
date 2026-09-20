@@ -13,6 +13,7 @@
     invalid_request: 'error.invalid_request',
     model_timeout: 'error.model_timeout',
     model_busy: 'error.model_busy',
+    rate_limited: 'error.model_busy',
     model_unavailable: 'error.model_unavailable',
     model_not_configured: 'error.model_unavailable',
     model_bad_output: 'error.model_bad_output'

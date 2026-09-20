@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: mcp-builder-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT --proxy-headers --forwarded-allow-ips="*"
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: SERVE_SITE
+        value: "false"
+      - key: ALLOWED_ORIGINS
+        value: https://mcp.quevedojose.com,https://josequevedov08.github.io
+      - key: FEATHERLESS_MODEL
+        value: zai-org/GLM-5.2
+      - key: FEATHERLESS_API_KEY
+        sync: false
+      - key: ELEVENLABS_API_KEY
+        sync: false
+      - key: ELEVENLABS_VOICE_ID
+        value: Xb7hH8MSUJpSbSDYk0k2
