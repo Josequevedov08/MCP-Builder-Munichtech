@@ -57,6 +57,15 @@ Real Stripe test mode, tests against live PostgreSQL and MySQL for the generated
 
 Payment runs in test mode and the legal text is a template. Generation, the AI step, the voice report, the download, the receipt email (with the server .zip attached), the support form and the usage page are real, and the usage page counts real events. The README lists this in detail.
 
+## Testing instructions for the judges
+
+1. Open https://mcpbuilder.quevedojose.com. The status card shows the live service and the real number of servers generated.
+2. Build a server (for example a Database source with "read only, never show emails"). In the demo checkout click "Fill in test card". Payment is in test mode: nothing is charged.
+3. On the result page: listen to the spoken report, read the rules the AI derived, download the .zip, and check the receipt email if you typed your address.
+4. Open https://mcpbuilder.quevedojose.com/admin.html. Every number is a real event on the server, including the purchase you just made.
+5. Support: send a message from the Support page and note your ticket number. The counters and the activity list on the usage page change. The support inbox itself is private by design because it contains personal data, so it needs an admin token.
+6. The first request can take about a minute if the free server was asleep.
+
 ## Built with
 
 Python, FastAPI, Pydantic, httpx, Featherless.ai (zai-org/GLM-5.2), ElevenLabs, TypeScript, Model Context Protocol SDK, Node.js, Tailwind CSS, JavaScript, pytest, GitHub Actions, GitHub Pages, Render

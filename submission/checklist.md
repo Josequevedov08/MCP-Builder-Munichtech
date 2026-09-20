@@ -20,6 +20,7 @@ Deadline: submit before 9:30. Hard limit about 11:00.
 - [ ] If the Resend domain is not verified, remember the test sender only delivers to the account owner's address
 - [ ] Render environment: `DATABASE_URL` (free Render PostgreSQL, so the usage numbers survive restarts), `ADMIN_TOKEN` and `SUPPORT_TO` are set, and `/api/health` shows `"metrics_persistent": true`
 - [ ] Usage page: open `/admin.html`, make a test purchase, download the .zip and send a support message, and check that the numbers and the inbox change
+- [ ] Devpost: paste the "Testing instructions for the judges" from `devpost-text.md` in the private testing field. Do not put the admin token in the README, the code or the website
 - [ ] Render: the service is awake right before submitting (open the health URL)
 
 ## Devpost

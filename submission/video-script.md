@@ -19,5 +19,6 @@ Before recording: open the API health URL so the server is awake, open the site 
 Tips
 
 - If the build is slow, cut the waiting in the edit rather than talking over it.
+- Optional 10 second shot: after the purchase, open `/admin.html` and show the numbers you just created. Say: "These numbers are real events. The support inbox is private on purpose because it holds personal data."
 - Do not claim things that are demo. The judges' page and README already say which parts are simulated.
 - Optional: show Windows Narrator reading the result page for five seconds, to prove the screen reader path.

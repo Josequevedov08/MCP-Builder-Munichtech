@@ -34,6 +34,8 @@ Built for the MunichTech EXPO Hackathon.
 3. Click the generate button. In the demo checkout, click "Fill in test card" (test card `4242 4242 4242 4242`, any future date, any CVC). Nothing is charged.
 4. On the result page, press "Listen" to hear the spoken build report, read the rules the AI derived from your instruction, preview any generated file and press "Download server.zip".
 5. Unzip it and run `npm install` and `npm run build`. The README inside the zip shows how to connect it to Claude Desktop.
+6. Open `/admin.html` (Live usage in the footer). The numbers are real events: your purchase, download and voice report just appeared there.
+7. Support: send a message from the Support page. You get a ticket number, and the support counter and the activity list on the usage page change. The inbox with the message texts is private on purpose, because it holds personal data (names, emails, messages), and it needs an admin token.
 
 The first request to the API can take about a minute if the free Render plan was asleep. Open the health URL above a few minutes before testing.
 
