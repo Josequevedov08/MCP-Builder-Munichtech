@@ -14,6 +14,9 @@
     model_timeout: 'error.model_timeout',
     model_busy: 'error.model_busy',
     rate_limited: 'error.model_busy',
+    voice_unavailable: 'error.voice',
+    voice_not_configured: 'error.voice',
+    voice_timeout: 'error.voice',
     model_unavailable: 'error.model_unavailable',
     model_not_configured: 'error.model_unavailable',
     model_bad_output: 'error.model_bad_output'
@@ -70,6 +73,22 @@
     await currentAudio.play();
   }
 
+  // GET /api/health. The deadline is long because a sleeping free-tier host needs time to wake up.
+  async function health(timeoutMs) {
+    var controller = new AbortController();
+    var timer = setTimeout(function () { controller.abort(); }, timeoutMs || 75000);
+    try {
+      var response = await fetch(API_BASE + '/api/health', { signal: controller.signal });
+      if (!response.ok) throw new ApiClientError('internal_error', '', response.status);
+      return await response.json();
+    } catch (error) {
+      if (error instanceof ApiClientError) throw error;
+      throw new ApiClientError('network', 'Network error', 0);
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
   // Turns free text such as "Shop DB" into "shop-db".
   function slugify(value) {
     return String(value || '')
@@ -94,6 +113,7 @@
 
   window.McpApi = {
     buildMcp: buildMcp,
+    health: health,
     speakStatus: speakStatus,
     slugify: slugify,
     isValidServerName: isValidServerName,
