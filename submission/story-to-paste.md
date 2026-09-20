@@ -1,17 +1,3 @@
-# Devpost project text
-
-Copy each block into the matching Devpost field. The story goes in "About the project" (Markdown).
-
-## Project name
-
-MCP Builder
-
-## Elevator pitch (under 200 characters)
-
-Describe in plain words what your AI may access and get a tested MCP server as a .zip. Every build is read aloud, so blind and low-vision developers can use it too.
-
-## About the project (paste this)
-
 ## Inspiration
 
 Connecting company data to AI assistants through the Model Context Protocol (MCP) is slow and error-prone. A developer has to learn the SDK, write tool definitions, wire credentials safely and repeat it for every data source. Small teams in Europe often skip it because the setup costs more than the first benefit.
@@ -86,21 +72,3 @@ Payment runs in test mode and the legal text is a template. Generation, the AI s
 4. Open https://mcpbuilder.quevedojose.com/admin.html. Every number is a real event on the server, including the purchase you just made.
 5. Support: send a message from the Support page and note your ticket number. The counters and the activity list on the usage page change. The support inbox itself is private by design because it contains personal data, so it needs an admin token.
 6. The first request can take about a minute if the free server was asleep.
-
-## Built with (tags)
-
-featherless-ai, elevenlabs, model-context-protocol, mcp, fastapi, python, typescript, node-js, postgresql, tailwindcss, github-pages, render, github-actions, pytest, accessibility, screen-reader
-
-## Try it out links
-
-- https://mcpbuilder.quevedojose.com
-- https://github.com/Josequevedov08/MCP-Builder-Munichtech
-- https://mcpbuilder-api.quevedojose.com/api/health
-
-## Images
-
-Thumbnail: `site/brand/devpost-project-image-1800x1200.png`. Gallery: the same image plus screenshots of the home page with the live status card, the result page with the rules, and the usage page (3:2 ratio if possible).
-
-## Prize tracks
-
-Keep "MunichTech EXPO Grand Challenge Award" selected.
