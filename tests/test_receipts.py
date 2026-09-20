@@ -193,3 +193,8 @@ def test_resend_errors_are_mapped_without_leaking(client, monkeypatch, status, c
     response = client.post("/api/send-receipt", json=receipt(build(client)))
     assert response.status_code == http_status and response.json()["error"]["code"] == code
     assert "re_secret_key" not in response.text
+
+
+def test_the_address_is_lowercased_before_sending(client, sent):
+    client.post("/api/send-receipt", json=receipt(build(client), email="Judge.Name@Example.COM"))
+    assert sent[0]["to"] == "judge.name@example.com"

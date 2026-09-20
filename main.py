@@ -307,6 +307,12 @@ class ReceiptRequest(BaseModel):
     discount_code: str | None = Field(default=None, max_length=20, pattern=r"^[A-Za-z0-9]*$")
     language: Literal["en", "de", "es"] = "en"
 
+    @field_validator("email")
+    @classmethod
+    def lowercase_email(cls, value: str) -> str:
+        # Mail providers treat addresses as case-insensitive, and some compare them literally.
+        return value.lower()
+
 
 # ---------------------------------------------------------------------------
 # Spoken messages
