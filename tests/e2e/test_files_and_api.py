@@ -3,7 +3,6 @@
 import json
 import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from pathlib import Path
 
 import pytest
 
@@ -101,6 +100,10 @@ def test_api_server_calls_only_allowed_endpoints(tmp_path, api_server):
             {"tool": "call_endpoint", "args": {"path": "http://example.com/steal"}, "error": True},
             {"tool": "call_endpoint", "args": {"path": "/products/../admin"}, "error": True},
             {"tool": "call_endpoint", "args": {"path": "//example.com/products"}, "error": True},
+            # Encoded characters that the API could decode into another path.
+            {"tool": "call_endpoint", "args": {"path": "/products/..%2fadmin"}, "error": True},
+            {"tool": "call_endpoint", "args": {"path": "/products%2F..%2Fadmin"}, "error": True},
+            {"tool": "call_endpoint", "args": {"path": "/products/%00admin"}, "error": True},
         ],
     }
     result = run_scenario(project, scenario)

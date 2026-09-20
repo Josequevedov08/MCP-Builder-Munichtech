@@ -110,7 +110,7 @@ function describeError(error: unknown): string {
 // ---- SQL guard -------------------------------------------------------------
 
 const FORBIDDEN_KEYWORDS =
-  /\b(insert|update|delete|drop|alter|create|truncate|grant|revoke|copy|call|merge|replace|lock|execute|vacuum|reindex|attach|detach|into|outfile|dumpfile|load_file|set_config|dblink\w*|lo_\w+|pg_\w+|sleep|benchmark)\b/i;
+  /\b(insert|update|delete|drop|alter|create|truncate|grant|revoke|copy|call|merge|replace|lock|execute|vacuum|reindex|attach|detach|into|outfile|dumpfile|load_file|set_config|dblink\w*|lo_\w+|pg_\w+|sleep|benchmark|nextval|setval|currval|lastval|to_json|to_jsonb|row_to_json|json_agg|jsonb_agg)\b/i;
 
 // Removes string literals and comments so that keyword and table scans ignore them.
 function stripLiteralsAndComments(sql: string): string {
@@ -122,6 +122,64 @@ const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\
 function normalizeTable(reference: string): string {
   const last = reference.split(".").pop() ?? reference;
   return last.replace(/[`"\[\]]/g, "").toLowerCase();
+}
+
+const CLAUSE_END = new Set(["where", "group", "order", "having", "limit", "offset", "union", "intersect", "except", "window", "fetch", "for", "returning"]);
+const JOIN_WORDS = new Set(["join", "inner", "left", "right", "full", "cross", "natural", "lateral", "outer"]);
+const NOT_ALIASES = new Set([...CLAUSE_END, ...JOIN_WORDS, "on", "using", "as", "select", "from", "and", "or", "not", "is", "in", "distinct"]);
+
+const tokenize = (sql: string): string[] => sql.match(/"[^"]*"|`[^`]*`|[A-Za-z_][\w$]*|\d+(?:\.\d+)?|::|[(),.*]|\S/g) ?? [];
+const bare = (token: string): string => token.replace(/^["`]|["`]$/g, "").toLowerCase();
+
+// Rules that a plain keyword scan cannot express: which tables are read, and how rows are returned.
+function checkStructure(tokens: string[], names: Set<string>): void {
+  const lower = tokens.map((token) => token.toLowerCase());
+
+  // FROM lists: no subqueries, no comma joins (they would skip the table check) and no table functions.
+  for (let i = 0; i < lower.length; i++) {
+    if (lower[i] !== "from" || lower[i - 1] === "distinct") continue;
+    let depth = 0;
+    let inOn = false;
+    for (let j = i + 1; j < lower.length; j++) {
+      const token = lower[j];
+      const previous = lower[j - 1];
+      if (token === "(") {
+        if (depth === 0 && (previous === "from" || JOIN_WORDS.has(previous))) {
+          throw new Error("Subqueries in FROM are not allowed. Use WITH instead.");
+        }
+        depth++;
+      } else if (token === ")") {
+        depth--;
+        if (depth < 0) break;
+      } else if (depth === 0) {
+        if (CLAUSE_END.has(token)) break;
+        if (token === ",") throw new Error("Comma-separated tables are not allowed. Use JOIN instead.");
+        if (token === "on") inOn = true;
+        else if (JOIN_WORDS.has(token)) inOn = false;
+        else if (!inOn && lower[j + 1] === "(" && !NOT_ALIASES.has(token)) throw new Error("Functions in FROM are not allowed.");
+      }
+    }
+  }
+
+  // Select lists: a whole row (for example "SELECT p FROM patients p" or "to_json(p)") would carry blocked columns inside one value.
+  for (let i = 0; i < lower.length; i++) {
+    if (lower[i] !== "select") continue;
+    let depth = 0;
+    for (let j = i + 1; j < lower.length; j++) {
+      const token = lower[j];
+      if (token === "(") depth++;
+      else if (token === ")") {
+        depth--;
+        if (depth < 0) break;
+      } else if (depth === 0 && token === "from") break;
+      if (!/^["`A-Za-z_]/.test(tokens[j]) || !names.has(bare(token)) || lower[j - 1] === "." || lower[j - 1] === "as") continue;
+      if (lower[j + 1] === ".") {
+        if (lower[j + 2] === "*" && depth > 0) throw new Error("A table followed by .* is only allowed at the top level of the select list.");
+      } else if (lower[j + 1] !== "(") {
+        throw new Error("Whole-row references are not allowed. Select the columns you need by name.");
+      }
+    }
+  }
 }
 
 // Accepts a single read-only SELECT that only touches the allowed tables and columns.
@@ -142,29 +200,46 @@ function validateQuery(rawSql: string): string {
     }
   }
 
-  if (allowedTables.size > 0) {
-    const ctes = new Set<string>();
-    for (const match of cleaned.matchAll(
-      /\bwith\s+(?:recursive\s+)?([\w$]+)\s+as\b|,\s*([\w$]+)\s+as\s*(?:not\s+materialized\s*|materialized\s*)?\(/gi,
-    )) {
-      ctes.add((match[1] ?? match[2]).toLowerCase());
-    }
-    const withoutFunctions = cleaned.replace(/\b(extract|substring|trim|overlay|position)\s*\((?:[^()]|\([^()]*\))*\)/gi, " fn() ");
-    for (const match of withoutFunctions.matchAll(
-      /\b(?:from|join)\s+([`"\[]?[\w$]+[`"\]]?(?:\.[`"\[]?[\w$]+[`"\]]?)*)/gi,
-    )) {
-      const table = normalizeTable(match[1]);
-      if (!ctes.has(table) && !allowedTables.has(table)) {
-        throw new Error(`The table "${table}" is not in the allowed list: ${[...allowedTables].join(", ")}.`);
-      }
+  if (/\brow\s*\(/i.test(cleaned)) throw new Error("The keyword \"row\" is not allowed in queries.");
+
+  const ctes = new Set<string>();
+  for (const match of cleaned.matchAll(
+    /\bwith\s+(?:recursive\s+)?([\w$]+)\s+as\b|,\s*([\w$]+)\s+as\s*(?:not\s+materialized\s*|materialized\s*)?\(/gi,
+  )) {
+    ctes.add((match[1] ?? match[2]).toLowerCase());
+  }
+  const withoutFunctions = cleaned.replace(/\b(extract|substring|trim|overlay|position)\s*\((?:[^()]|\([^()]*\))*\)/gi, " fn() ");
+  const names = new Set<string>([...allowedTables, ...ctes]);
+  for (const match of withoutFunctions.matchAll(
+    /\b(?:from|join)\s+([`"\[]?[\w$]+[`"\]]?(?:\.[`"\[]?[\w$]+[`"\]]?)*)(?:\s+(?:as\s+)?([a-z_][\w$]*))?/gi,
+  )) {
+    const table = normalizeTable(match[1]);
+    names.add(table);
+    if (match[2] && !NOT_ALIASES.has(match[2].toLowerCase())) names.add(match[2].toLowerCase());
+    if (allowedTables.size > 0 && !ctes.has(table) && !allowedTables.has(table)) {
+      throw new Error(`The table "${table}" is not in the allowed list: ${[...allowedTables].join(", ")}.`);
     }
   }
+  checkStructure(tokenize(withoutFunctions), names);
   return sql;
+}
+
+// Removes blocked columns from a row, and blocked keys from any JSON value inside it.
+function scrub(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(scrub);
+  if (value !== null && typeof value === "object" && !(value instanceof Date) && !Buffer.isBuffer(value)) {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>)
+        .filter(([name]) => !blockedColumns.includes(name.toLowerCase()))
+        .map(([name, item]) => [name, scrub(item)]),
+    );
+  }
+  return value;
 }
 
 function stripBlocked(row: Row): Row {
   if (blockedColumns.length === 0) return row;
-  return Object.fromEntries(Object.entries(row).filter(([name]) => !blockedColumns.includes(name.toLowerCase())));
+  return scrub(row) as Row;
 }
 
 function tableAllowed(table: string): boolean {

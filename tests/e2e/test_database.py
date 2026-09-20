@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from conftest import NPM, Policy, _run, build_project, default_policy, render_project, run_scenario
+from conftest import Policy, build_project, default_policy, render_project, run_scenario
 
 pytestmark = pytest.mark.e2e
 
@@ -128,6 +128,22 @@ def test_postgres_server_is_read_only_and_guarded(pg_project):
             {"tool": "run_query", "args": {"sql": 'SELECT "email" FROM customers'}, "error": True},
             {"tool": "run_query", "args": {"sql": "SELECT pg_read_file('/etc/passwd')"}, "error": True},
             {"tool": "run_query", "args": {"sql": "SELECT pg_sleep(30)"}, "error": True},
+            # A whole row, or a JSON copy of it, would carry blocked columns inside one value.
+            {"tool": "run_query", "args": {"sql": "SELECT c FROM customers c"}, "error": True},
+            {"tool": "run_query", "args": {"sql": "SELECT customers FROM customers"}, "error": True},
+            {"tool": "run_query", "args": {"sql": "SELECT to_json(c) FROM customers c"}, "error": True},
+            {"tool": "run_query", "args": {"sql": "SELECT row_to_json(c) FROM customers c"}, "error": True},
+            {"tool": "run_query", "args": {"sql": "SELECT concat(c.*) FROM customers c"}, "error": True},
+            {"tool": "run_query", "args": {"sql": "SELECT c::text FROM customers c"}, "error": True},
+            {"tool": "run_query", "args": {"sql": "SELECT row(c.*) FROM customers c"}, "error": True},
+            # Other ways around the table list: comma joins, subqueries and table functions.
+            {"tool": "run_query", "args": {"sql": "SELECT * FROM customers c, secrets_vault s"}, "error": True},
+            {"tool": "run_query", "args": {"sql": "SELECT * FROM (SELECT id FROM customers) t"}, "error": True},
+            {"tool": "run_query", "args": {"sql": "SELECT * FROM generate_series(1, 3)"}, "error": True},
+            {"tool": "run_query", "args": {"sql": "SELECT nextval('s')"}, "error": True},
+            # Normal queries keep working, including semicolons and comment marks inside text.
+            {"tool": "run_query", "args": {"sql": "SELECT id FROM customers WHERE name = 'a;b'"}, "contains": ["Ana"]},
+            {"tool": "run_query", "args": {"sql": "SELECT count(*) AS total FROM customers c JOIN orders o ON o.id = c.id"}, "contains": ["Ana"]},
         ],
     }
     result = run_scenario(pg_project, scenario)

@@ -251,3 +251,11 @@ def test_a_database_that_fails_later_does_not_break_reads(monkeypatch):
         assert summary["builds"]["total"] == 1 and summary["persistent"] is False
 
     asyncio.run(scenario())
+
+
+def test_odd_direction_characters_are_removed_from_support_text(client, monkeypatch):
+    monkeypatch.setattr(main.settings, "admin_token", "secret-token")
+    payload = {"name": "‮evil", "email": "a@example.com", "topic": "other", "message": "text ‮ reversed ⁦ here"}
+    assert client.post("/api/support", json=payload).status_code == 200
+    ticket = client.get("/api/admin/support", headers={"X-Admin-Token": "secret-token"}).json()["tickets"][0]
+    assert not any(ch in ticket["name"] + ticket["message"] for ch in ("‮", "⁦"))

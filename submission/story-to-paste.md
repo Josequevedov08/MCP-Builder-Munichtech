@@ -31,7 +31,7 @@ What the generated servers enforce:
 
 Architecture: a static site in HTML and Tailwind (GitHub Pages) with a runtime translation engine, a FastAPI backend (Render), PostgreSQL for real usage numbers, Featherless.ai (zai-org/GLM-5.2) for the policy, ElevenLabs text-to-speech in a separate endpoint with a backup key, and Resend for receipt emails. Errors use one JSON envelope, requests are rate limited per IP, and CORS is restricted.
 
-Quality: 64 automated tests, including end-to-end tests that compile each generated server and drive it through the official MCP client. axe-core reports zero accessibility violations on every page in the three languages.
+Quality: 87 automated tests, including end-to-end tests that compile each generated server and drive it through the official MCP client. axe-core reports zero accessibility violations on every page in the three languages.
 
 ## Challenges we ran into
 

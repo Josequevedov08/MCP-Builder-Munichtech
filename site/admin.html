@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
+<meta content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self' blob:; connect-src 'self' https://mcpbuilder-api.quevedojose.com http://localhost:8000 http://127.0.0.1:8000; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'" http-equiv="Content-Security-Policy"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title data-i18n-doc-title="meta.admin.title">Admin panel - MCP Builder</title>
 <link href="brand/logo.svg" rel="icon" type="image/svg+xml"/>
@@ -141,7 +142,7 @@
 <label class="block text-[11px] font-medium text-neutral-400 uppercase tracking-wider mb-1.5" data-i18n="admin.inbox.token" for="adminToken">Admin token</label>
 <input autocomplete="off" class="w-full px-4 py-2.5 rounded-lg text-[14px] bg-[#0A0A0A] border border-white/10 text-white font-mono" id="adminToken" type="password"/>
 </div>
-<button class="px-4 py-2.5 rounded-lg bg-brand-500 hover:bg-brand-400 text-[13px] font-semibold text-white transition-colors" data-i18n="admin.inbox.unlock" type="submit">Unlock</button>
+<button class="px-4 py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-[13px] font-semibold text-white transition-colors" data-i18n="admin.inbox.unlock" type="submit">Unlock</button>
 </form>
 <p aria-live="polite" class="text-[13px] text-neutral-300 mb-3" id="inboxStatus" role="status"></p>
 <ul class="space-y-3" id="inboxList"></ul>

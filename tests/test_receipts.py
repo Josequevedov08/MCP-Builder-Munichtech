@@ -198,3 +198,21 @@ def test_resend_errors_are_mapped_without_leaking(client, monkeypatch, status, c
 def test_the_address_is_lowercased_before_sending(client, sent):
     client.post("/api/send-receipt", json=receipt(build(client), email="Judge.Name@Example.COM"))
     assert sent[0]["to"] == "judge.name@example.com"
+
+
+def test_one_address_cannot_be_flooded_with_receipts(client, sent, monkeypatch):
+    monkeypatch.setattr(main.settings, "receipts_per_address_per_hour", 2)
+    client.app.state.services.recipient_limiter = main.RateLimiter(2, 3600)
+    statuses = []
+    for _ in range(4):
+        statuses.append(client.post("/api/send-receipt", json=receipt(build(client), email="victim@example.com")).status_code)
+    assert statuses == [200, 200, 429, 429]
+    assert len(sent) == 2
+    assert client.post("/api/send-receipt", json=receipt(build(client), email="someone.else@example.com")).status_code == 200
+
+
+def test_receipts_have_a_daily_ceiling(client, sent):
+    client.app.state.services.daily_receipts = main.DailyCap(1)
+    assert client.post("/api/send-receipt", json=receipt(build(client), email="a@example.com")).status_code == 200
+    second = client.post("/api/send-receipt", json=receipt(build(client), email="b@example.com"))
+    assert second.status_code == 429 and second.json()["error"]["code"] == "daily_limit"

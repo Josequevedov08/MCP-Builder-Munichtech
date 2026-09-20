@@ -280,6 +280,9 @@ Every error uses the same JSON envelope and never includes internal details or s
 - Error responses are generic and validation errors never echo submitted values.
 - Requests are rate limited per client IP and simultaneous generations are capped, which protects the model and voice quotas of a public deployment.
 - CORS is limited to the origins listed in `ALLOWED_ORIGINS`.
+- The caller address is taken only from the entries that our own proxy adds (`TRUSTED_PROXY_HOPS`), so a forged `X-Forwarded-For` header cannot reset the per-IP limits. On top of that there are ceilings for everyone together (per minute, and per day for builds, voice and receipt emails), a cache for repeated voice sentences, a limit of receipt emails per address, and a maximum request size.
+- Every API answer carries `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy` and HSTS, and the pages declare a Content Security Policy that only allows the site itself, the Tailwind and font hosts and the API.
+- The generated database server refuses whole-row references, JSON copies of a row, comma joins, subqueries in FROM and table functions, because each of them could get around the column and table lists. Blocked columns are also removed from JSON values. The list is a second layer: the real protection is a database user that can only read the tables it needs, ideally with column-level grants.
 - Never commit your `.env` file. `.gitignore` blocks `.env` and its variants, private keys and certificates, and keeps only `.env.example`.
 - Only the `site/` folder is published to GitHub Pages.
 
@@ -358,6 +361,10 @@ Fill in the keys you have in `.env`:
 | `RATE_LIMIT_BUILDS_PER_MINUTE` | Build requests per client IP each minute. Defaults to `5` |
 | `RATE_LIMIT_VOICE_PER_MINUTE` | Voice requests per client IP each minute. Defaults to `20` |
 | `MAX_CONCURRENT_BUILDS` | Generations that may run at the same time. Defaults to `3` |
+| `TRUSTED_PROXY_HOPS` | How many proxies in front of the app add an entry to `X-Forwarded-For`. Defaults to `1` on Render and `0` elsewhere |
+| `MAX_BODY_BYTES` | Largest request body. Defaults to `262144` |
+| `DAILY_BUILDS`, `DAILY_VOICE_CALLS`, `DAILY_RECEIPTS` | Daily ceilings for everyone together. Defaults `300`, `400` and `80` |
+| `RECEIPTS_PER_ADDRESS_PER_HOUR` | Receipt emails to one address each hour. Defaults to `2` |
 | `HOST` and `PORT` | Address used by `python main.py`. Default `127.0.0.1:8000` |
 
 Generate an encryption key with:

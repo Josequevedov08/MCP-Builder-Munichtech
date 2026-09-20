@@ -14,6 +14,8 @@
     model_timeout: 'error.model_timeout',
     model_busy: 'error.model_busy',
     rate_limited: 'error.model_busy',
+    daily_limit: 'error.model_busy',
+    payload_too_large: 'error.invalid_request',
     voice_unavailable: 'error.voice',
     voice_not_configured: 'error.voice',
     voice_timeout: 'error.voice',

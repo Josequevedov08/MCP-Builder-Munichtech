@@ -24,7 +24,9 @@ import re
 import smtplib
 import time
 import uuid
+from urllib.parse import unquote
 from collections import OrderedDict, deque
+from datetime import datetime, timezone
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from enum import Enum
@@ -118,6 +120,15 @@ class Settings:
         self.database_url = os.getenv("DATABASE_URL", "")
         self.admin_token = os.getenv("ADMIN_TOKEN", "")
         self.support_to = os.getenv("SUPPORT_TO", "")
+
+        # Caps that do not depend on the caller address, because that address can be forged.
+        # Hops: how many proxies in front of the app add an entry to X-Forwarded-For (Render adds one).
+        self.trusted_proxy_hops = int(os.getenv("TRUSTED_PROXY_HOPS", "1" if os.getenv("RENDER") else "0"))
+        self.max_body_bytes = int(os.getenv("MAX_BODY_BYTES", "262144"))
+        self.daily_builds = int(os.getenv("DAILY_BUILDS", "300"))
+        self.daily_voice_calls = int(os.getenv("DAILY_VOICE_CALLS", "400"))
+        self.daily_receipts = int(os.getenv("DAILY_RECEIPTS", "80"))
+        self.receipts_per_address_per_hour = int(os.getenv("RECEIPTS_PER_ADDRESS_PER_HOUR", "2"))
 
         # Security and storage
         self.encryption_key = os.getenv("CREDENTIALS_ENCRYPTION_KEY", "")
@@ -357,12 +368,12 @@ class SupportRequest(BaseModel):
     @field_validator("name")
     @classmethod
     def clean_name(cls, value: str) -> str:
-        return re.sub(r"[\x00-\x1f\x7f]", " ", value).strip()
+        return re.sub(r"[\x00-\x1f\x7f\u202a-\u202e\u2066-\u2069]", " ", value).strip()
 
     @field_validator("message")
     @classmethod
     def clean_message(cls, value: str) -> str:
-        return re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]", " ", value).strip()
+        return re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f\u202a-\u202e\u2066-\u2069]", " ", value).strip()
 
 
 class DownloadEvent(BaseModel):
@@ -595,6 +606,9 @@ class VoiceService:
         self._cfg = cfg
         self._http = http
         self._active = 0  # index of the key that worked last, so a spent key is not retried first
+        # The spoken sentences repeat, so identical requests are answered from memory and cost no credits.
+        self._cache: OrderedDict[str, bytes] = OrderedDict()
+        self._daily = DailyCap(cfg.daily_voice_calls)
 
     async def _request(self, api_key: str, text: str) -> httpx.Response:
         response = await self._http.post(
@@ -617,6 +631,11 @@ class VoiceService:
             raise ApiError(
                 503, "voice_unavailable", "Voice notifications are not enabled on this server."
             )
+        cached = self._cache.get(text)
+        if cached is not None:
+            self._cache.move_to_end(text)
+            return cached
+        self._daily.hit()
         # Start with the key that worked last, then try the others.
         order = [(self._active + i) % len(keys) for i in range(len(keys))]
         response: httpx.Response | None = None
@@ -649,6 +668,9 @@ class VoiceService:
                 ) from None
         if response is None or not response.content:
             raise ApiError(502, "voice_unavailable", "The voice service returned no audio.")
+        self._cache[text] = response.content
+        while len(self._cache) > 60:
+            self._cache.popitem(last=False)
         return response.content
 
 
@@ -677,8 +699,29 @@ class RateLimiter:
             self._hits = {k: v for k, v in self._hits.items() if v and now - v[-1] <= self._window}
 
 
+class DailyCap:
+    """A ceiling per UTC day that no caller address can get around."""
+
+    def __init__(self, limit: int) -> None:
+        self._limit = limit
+        self._day = None
+        self._count = 0
+
+    def hit(self) -> None:
+        today = datetime.now(timezone.utc).date()
+        if today != self._day:
+            self._day, self._count = today, 0
+        if self._count >= self._limit:
+            raise ApiError(429, "daily_limit", "The daily limit of this demo was reached. Please try again tomorrow.")
+        self._count += 1
+
+
 def client_id(request: Request) -> str:
-    """Client address. Behind a proxy, run uvicorn with --proxy-headers to get the real one."""
+    """Address of the caller. Only the entries added by our own proxies are trusted, never the ones a caller writes."""
+    hops = settings.trusted_proxy_hops
+    forwarded = [part.strip() for part in request.headers.get("x-forwarded-for", "").split(",") if part.strip()]
+    if hops > 0 and len(forwarded) >= hops:
+        return forwarded[-hops][:64]
     return request.client.host if request.client else "unknown"
 
 
@@ -699,6 +742,10 @@ class Services:
     events_limiter: RateLimiter
     admin_limiter: RateLimiter
     metrics: usage.Metrics
+    caps: dict[str, RateLimiter]
+    recipient_limiter: RateLimiter
+    daily_builds: DailyCap
+    daily_receipts: DailyCap
     build_slots: asyncio.Semaphore
 
 
@@ -718,6 +765,18 @@ async def lifespan(app: FastAPI):
         events_limiter=RateLimiter(settings.rate_limit_events),
         admin_limiter=RateLimiter(10),
         metrics=usage.Metrics(settings.database_url),
+        # Ceilings for everyone together: a forged address cannot get past these.
+        caps={
+            "build": RateLimiter(60),
+            "voice": RateLimiter(120),
+            "support": RateLimiter(12),
+            "receipt": RateLimiter(12),
+            "events": RateLimiter(600),
+            "admin": RateLimiter(60),
+        },
+        recipient_limiter=RateLimiter(settings.receipts_per_address_per_hour, 3600),
+        daily_builds=DailyCap(settings.daily_builds),
+        daily_receipts=DailyCap(settings.daily_receipts),
         build_slots=asyncio.Semaphore(settings.max_concurrent_builds),
     )
     await app.state.services.metrics.start()
@@ -740,6 +799,31 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+ENVELOPE_413 = {"error": {"code": "payload_too_large", "message": "The request is too large."}}
+
+
+@app.middleware("http")
+async def guard_requests(request: Request, call_next):
+    """Refuses oversized bodies and null bytes, and adds the security headers to every answer."""
+    if "\x00" in unquote(request.url.path):
+        response: Response = JSONResponse(status_code=404, content=error_body("http_error", "Resource not found."))
+    elif request.method in ("POST", "PUT", "PATCH") and not (request.headers.get("content-length") or "").isdigit():
+        response = JSONResponse(status_code=411, content=error_body("length_required", "A Content-Length header is required."))
+    elif request.method in ("POST", "PUT", "PATCH") and int(request.headers["content-length"]) > settings.max_body_bytes:
+        response = JSONResponse(status_code=413, content=ENVELOPE_413)
+    else:
+        response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "no-referrer"
+    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    if request.headers.get("x-forwarded-proto", request.url.scheme) == "https":
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+    if request.url.path.startswith("/api/"):
+        response.headers.setdefault("Cache-Control", "no-store")
+    return response
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins,
@@ -759,8 +843,8 @@ def get_services(request: Request) -> Services:
 async def handle_api_error(request: Request, exc: ApiError) -> JSONResponse:
     try:
         request.app.state.services.metrics.record("error", {"code": exc.code})
-    except Exception:
-        pass
+    except Exception:  # counting an error must never hide the error itself
+        logger.debug("Could not count an error", exc_info=True)
     return JSONResponse(status_code=exc.status_code, content=error_body(exc.code, exc.message))
 
 
@@ -802,7 +886,7 @@ async def handle_unexpected_error(_: Request, exc: Exception) -> JSONResponse:
 # ---------------------------------------------------------------------------
 # Routes
 # ---------------------------------------------------------------------------
-@app.get("/api/health")
+@app.api_route("/api/health", methods=["GET", "HEAD"])
 async def health(request: Request) -> dict[str, Any]:
     return {
         "status": "ok",
@@ -810,6 +894,8 @@ async def health(request: Request) -> dict[str, Any]:
         "voice_enabled": settings.voice_enabled,
         "email_enabled": settings.email_enabled,
         "metrics_persistent": get_services(request).metrics.persistent,
+        "proxy_hops": settings.trusted_proxy_hops,
+        "forwarded_entries": len([p for p in request.headers.get("x-forwarded-for", "").split(",") if p.strip()]),
     }
 
 
@@ -817,6 +903,8 @@ async def health(request: Request) -> dict[str, Any]:
 async def build_mcp(payload: BuildRequest, request: Request) -> BuildResponse:
     services = get_services(request)
     services.build_limiter.check(client_id(request))
+    services.caps["build"].check("*")
+    services.daily_builds.hit()
     if services.build_slots.locked():
         raise ApiError(
             429, "model_busy", "The service is busy. Please retry shortly."
@@ -890,6 +978,7 @@ async def build_mcp(payload: BuildRequest, request: Request) -> BuildResponse:
 async def voice_status(payload: VoiceStatusRequest, request: Request) -> Response:
     services = get_services(request)
     services.voice_limiter.check(client_id(request))
+    services.caps["voice"].check("*")
     try:
         text = compose_voice_message(
             payload.status,
@@ -963,6 +1052,7 @@ async def deliver_email(
 async def send_receipt(payload: ReceiptRequest, request: Request) -> dict[str, bool]:
     services = get_services(request)
     services.receipt_limiter.check(client_id(request))
+    services.caps["receipt"].check("*")
     if not settings.email_enabled:
         raise ApiError(503, "email_unavailable", "Receipt emails are not enabled on this server.")
     record = services.store.get(payload.build_id)
@@ -971,6 +1061,9 @@ async def send_receipt(payload: ReceiptRequest, request: Request) -> dict[str, b
     if record.receipt_sent:
         # One receipt per build, so the endpoint cannot be used to send repeated mail.
         return {"sent": True, "already_sent": True}
+    # A third party's address cannot be flooded, and the daily quota of the mail service is protected.
+    services.recipient_limiter.check(payload.email)
+    services.daily_receipts.hit()
     subject, body = receipts.compose_receipt(
         payload.language, record.server_name, record.source_type, payload.order_id, payload.discount_code
     )
@@ -990,6 +1083,7 @@ async def stats(request: Request) -> dict[str, Any]:
     """Public numbers about real usage. Personal data is never included."""
     services = get_services(request)
     services.events_limiter.check(client_id(request))
+    services.caps["events"].check("*")
     return await services.metrics.summary()
 
 
@@ -997,6 +1091,7 @@ async def stats(request: Request) -> dict[str, Any]:
 async def download_event(payload: DownloadEvent, request: Request) -> dict[str, bool]:
     services = get_services(request)
     services.events_limiter.check(client_id(request))
+    services.caps["events"].check("*")
     record = services.store.get(payload.build_id)
     if record is None:
         raise ApiError(404, "build_not_found", "This build is no longer available.")
@@ -1008,6 +1103,7 @@ async def download_event(payload: DownloadEvent, request: Request) -> dict[str, 
 async def support(payload: SupportRequest, request: Request) -> dict[str, Any]:
     services = get_services(request)
     services.support_limiter.check(client_id(request))
+    services.caps["support"].check("*")
     ticket = "SUP-" + uuid.uuid4().hex[:6].upper()
     services.metrics.record(
         "support",
@@ -1041,6 +1137,7 @@ async def admin_support(request: Request) -> dict[str, Any]:
     """The support inbox. Protected with the ADMIN_TOKEN header."""
     services = get_services(request)
     services.admin_limiter.check(client_id(request))
+    services.caps["admin"].check("*")
     if not settings.admin_token:
         raise ApiError(503, "admin_disabled", "The admin inbox is not enabled on this server.")
     supplied = request.headers.get("x-admin-token", "")

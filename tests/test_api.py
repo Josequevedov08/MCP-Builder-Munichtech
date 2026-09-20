@@ -149,9 +149,9 @@ def test_voice_switches_to_the_backup_key_when_the_main_one_fails(client, monkey
     assert first.status_code == 200 and first.content == b"ID3audio"
     assert used == ["main-key", "backup-key"]
 
-    # The working key is remembered, so the spent one is not tried first again.
+    # The working key is remembered, so the spent one is not tried first again (new sentence, so no cache hit).
     used.clear()
-    assert client.post("/api/voice-status", json={"status": "success"}).status_code == 200
+    assert client.post("/api/voice-status", json={"status": "success", "server_name": "other-name"}).status_code == 200
     assert used == ["backup-key"]
 
 
@@ -219,3 +219,75 @@ def test_reasonable_resources_are_accepted(client):
     ]
     for body in good:
         assert client.post("/api/build-mcp", json=body).status_code == 200, body
+
+
+def test_identical_voice_sentences_are_served_from_memory(client, monkeypatch):
+    monkeypatch.setattr(main.settings, "voice_enabled", True)
+    monkeypatch.setattr(main.settings, "elevenlabs_api_keys", ["test-key"])
+    calls = []
+    client.app.state.services.http._transport = httpx.MockTransport(lambda request: (calls.append(1), httpx.Response(200, content=b"ID3audio"))[1])
+    for _ in range(3):
+        assert client.post("/api/voice-status", json={"status": "success", "server_name": "shop-db"}).status_code == 200
+    assert len(calls) == 1
+
+
+def test_the_voice_service_has_a_daily_ceiling(client, monkeypatch):
+    monkeypatch.setattr(main.settings, "voice_enabled", True)
+    monkeypatch.setattr(main.settings, "elevenlabs_api_keys", ["test-key"])
+    client.app.state.services.http._transport = httpx.MockTransport(lambda request: httpx.Response(200, content=b"ID3audio"))
+    client.app.state.services.voice._daily = main.DailyCap(2)
+    statuses = [client.post("/api/voice-status", json={"status": "success", "server_name": f"srv-{i}x"}).status_code for i in range(4)]
+    assert statuses == [200, 200, 429, 429]
+
+
+def test_a_forged_forwarded_address_does_not_reset_the_rate_limit(client, monkeypatch):
+    monkeypatch.setattr(main.settings, "trusted_proxy_hops", 1)
+    client.app.state.services.support_limiter = main.RateLimiter(2)
+    payload = {"name": "Ana", "email": "ana@example.com", "topic": "other", "message": "hello there"}
+    statuses = [
+        client.post("/api/support", json=payload, headers={"X-Forwarded-For": f"9.9.9.{i}, 203.0.113.7"}).status_code
+        for i in range(5)
+    ]
+    assert statuses == [200, 200, 429, 429, 429]
+    other = client.post("/api/support", json=payload, headers={"X-Forwarded-For": "9.9.9.1, 198.51.100.9"})
+    assert other.status_code == 200
+
+
+def test_the_forwarded_header_is_ignored_when_no_proxy_is_trusted(client, monkeypatch):
+    monkeypatch.setattr(main.settings, "trusted_proxy_hops", 0)
+    client.app.state.services.support_limiter = main.RateLimiter(1)
+    payload = {"name": "Ana", "email": "ana@example.com", "topic": "other", "message": "hello there"}
+    first = client.post("/api/support", json=payload, headers={"X-Forwarded-For": "1.1.1.1"})
+    second = client.post("/api/support", json=payload, headers={"X-Forwarded-For": "2.2.2.2"})
+    assert (first.status_code, second.status_code) == (200, 429)
+
+
+def test_oversized_and_unsized_bodies_are_refused(client, monkeypatch):
+    monkeypatch.setattr(main.settings, "max_body_bytes", 1000)
+    big = client.post("/api/build-mcp", content='{"a":"' + "x" * 2000 + '"}', headers={"Content-Type": "application/json"})
+    assert big.status_code == 413 and big.json()["error"]["code"] == "payload_too_large"
+    ok = client.post("/api/build-mcp", json=BUILD)
+    assert ok.status_code == 200
+
+
+def test_security_headers_and_health_head(client):
+    response = client.get("/api/health")
+    assert response.headers["x-content-type-options"] == "nosniff"
+    assert response.headers["x-frame-options"] == "DENY"
+    assert response.headers["referrer-policy"] == "no-referrer"
+    assert response.headers["cache-control"] == "no-store"
+    assert client.head("/api/health").status_code == 200
+    secure = client.get("/api/health", headers={"X-Forwarded-Proto": "https"})
+    assert "max-age" in secure.headers["strict-transport-security"]
+
+
+def test_null_bytes_in_the_path_are_a_plain_404(client):
+    response = client.get("/api/%00health")
+    assert response.status_code == 404 and response.json()["error"]["code"] == "http_error"
+
+
+def test_the_daily_build_ceiling_answers_with_a_clear_error(client):
+    client.app.state.services.daily_builds = main.DailyCap(1)
+    assert client.post("/api/build-mcp", json=BUILD).status_code == 200
+    second = client.post("/api/build-mcp", json=BUILD)
+    assert second.status_code == 429 and second.json()["error"]["code"] == "daily_limit"
