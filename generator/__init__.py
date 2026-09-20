@@ -123,28 +123,84 @@ def default_policy() -> Policy:
     return Policy()
 
 
-def describe_rules(source: str, policy: Policy) -> list[str]:
-    """Plain-language list of the rules that the generated server enforces."""
-    if source == "files":
-        return [
+_RULES = {
+    "files": {
+        "en": [
             "Reads only inside the folders you allow, symbolic links are ignored",
-            f"Readable file types: {', '.join(policy.allowed_extensions)}",
-            f"Files larger than {policy.max_file_bytes:,} bytes are refused",
-            f"At most {policy.max_results} results per listing or search",
-        ]
-    if source == "database":
-        return [
+            "Readable file types: {ext}",
+            "Files larger than {bytes} bytes are refused",
+            "At most {n} results per listing or search",
+        ],
+        "de": [
+            "Liest nur in den von Ihnen erlaubten Ordnern, symbolische Links werden ignoriert",
+            "Lesbare Dateitypen: {ext}",
+            "Dateien über {bytes} Bytes werden abgelehnt",
+            "Höchstens {n} Ergebnisse pro Auflistung oder Suche",
+        ],
+        "es": [
+            "Lee solo dentro de las carpetas que permites, los enlaces simbólicos se ignoran",
+            "Tipos de archivo legibles: {ext}",
+            "Se rechazan los archivos de más de {bytes} bytes",
+            "Como máximo {n} resultados por listado o búsqueda",
+        ],
+    },
+    "database": {
+        "en": [
             "Read-only: a single SELECT statement, run in a read-only transaction",
-            f"At most {policy.max_rows} rows per query, {policy.statement_timeout_ms // 1000} second time limit",
-            f"Blocked columns: {', '.join(policy.blocked_columns)}",
+            "At most {rows} rows per query, {seconds} second time limit",
+            "Blocked columns: {cols}",
             "Only the tables you listed can be queried",
-        ]
-    return [
-        "Read-only: GET requests to the paths you listed",
-        f"Removed from every response: {', '.join(policy.blocked_fields)}",
-        f"Responses are cut at {policy.max_response_chars:,} characters",
-        "Redirects and full addresses are refused",
-    ]
+        ],
+        "de": [
+            "Nur Lesen: eine einzelne SELECT-Anweisung, ausgeführt in einer schreibgeschützten Transaktion",
+            "Höchstens {rows} Zeilen pro Abfrage, Zeitlimit {seconds} Sekunden",
+            "Gesperrte Spalten: {cols}",
+            "Nur die von Ihnen aufgelisteten Tabellen können abgefragt werden",
+        ],
+        "es": [
+            "Solo lectura: una única sentencia SELECT, ejecutada en una transacción de solo lectura",
+            "Máximo {rows} filas por consulta, límite de {seconds} segundos",
+            "Columnas bloqueadas: {cols}",
+            "Solo se pueden consultar las tablas que indicaste",
+        ],
+    },
+    "api": {
+        "en": [
+            "Read-only: GET requests to the paths you listed",
+            "Removed from every response: {fields}",
+            "Responses are cut at {chars} characters",
+            "Redirects and full addresses are refused",
+        ],
+        "de": [
+            "Nur Lesen: GET-Anfragen an die von Ihnen aufgelisteten Pfade",
+            "Aus jeder Antwort entfernt: {fields}",
+            "Antworten werden bei {chars} Zeichen abgeschnitten",
+            "Weiterleitungen und vollständige Adressen werden abgelehnt",
+        ],
+        "es": [
+            "Solo lectura: peticiones GET a las rutas que indicaste",
+            "Se elimina de cada respuesta: {fields}",
+            "Las respuestas se cortan a {chars} caracteres",
+            "Se rechazan las redirecciones y las direcciones completas",
+        ],
+    },
+}
+
+
+def describe_rules(source: str, policy: Policy, language: str = "en") -> list[str]:
+    """Plain-language list of the rules that the generated server enforces."""
+    values = {
+        "ext": ", ".join(policy.allowed_extensions),
+        "bytes": f"{policy.max_file_bytes:,}",
+        "n": policy.max_results,
+        "rows": policy.max_rows,
+        "seconds": policy.statement_timeout_ms // 1000,
+        "cols": ", ".join(policy.blocked_columns),
+        "fields": ", ".join(policy.blocked_fields),
+        "chars": f"{policy.max_response_chars:,}",
+    }
+    templates = _RULES[source].get(language, _RULES[source]["en"])
+    return [template.format(**values) for template in templates]
 
 
 def env_schema(source: str, db_engine: str | None) -> dict[str, Any]:

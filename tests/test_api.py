@@ -104,7 +104,7 @@ def test_voice_is_unavailable_without_a_key(client):
 
 def test_voice_returns_audio_in_the_requested_language(client, monkeypatch):
     monkeypatch.setattr(main.settings, "voice_enabled", True)
-    monkeypatch.setattr(main.settings, "elevenlabs_api_key", "test-key")
+    monkeypatch.setattr(main.settings, "elevenlabs_api_keys", ["test-key"])
     seen = {}
 
     def handler(request: httpx.Request) -> httpx.Response:
@@ -125,11 +125,57 @@ def test_voice_returns_audio_in_the_requested_language(client, monkeypatch):
 
 def test_voice_errors_never_expose_the_key(client, monkeypatch):
     monkeypatch.setattr(main.settings, "voice_enabled", True)
-    monkeypatch.setattr(main.settings, "elevenlabs_api_key", "sk_secret_value")
+    monkeypatch.setattr(main.settings, "elevenlabs_api_keys", ["sk_secret_value"])
     client.app.state.services.http._transport = httpx.MockTransport(lambda request: httpx.Response(401, text="invalid key sk_secret_value"))
     response = client.post("/api/voice-status", json={"status": "success"})
     assert response.status_code == 503
     assert "sk_secret_value" not in response.text
+
+
+@pytest.mark.parametrize("failure", [401, 402, 429])
+def test_voice_switches_to_the_backup_key_when_the_main_one_fails(client, monkeypatch, failure):
+    monkeypatch.setattr(main.settings, "voice_enabled", True)
+    monkeypatch.setattr(main.settings, "elevenlabs_api_keys", ["main-key", "backup-key"])
+    used = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        used.append(request.headers["xi-api-key"])
+        if request.headers["xi-api-key"] == "main-key":
+            return httpx.Response(failure, text="quota")
+        return httpx.Response(200, content=b"ID3audio")
+
+    client.app.state.services.http._transport = httpx.MockTransport(handler)
+    first = client.post("/api/voice-status", json={"status": "success"})
+    assert first.status_code == 200 and first.content == b"ID3audio"
+    assert used == ["main-key", "backup-key"]
+
+    # The working key is remembered, so the spent one is not tried first again.
+    used.clear()
+    assert client.post("/api/voice-status", json={"status": "success"}).status_code == 200
+    assert used == ["backup-key"]
+
+
+def test_voice_fails_cleanly_when_both_keys_fail(client, monkeypatch):
+    monkeypatch.setattr(main.settings, "voice_enabled", True)
+    monkeypatch.setattr(main.settings, "elevenlabs_api_keys", ["main-key", "backup-key"])
+    client.app.state.services.http._transport = httpx.MockTransport(lambda request: httpx.Response(429, text="quota main-key backup-key"))
+    response = client.post("/api/voice-status", json={"status": "success"})
+    assert response.status_code == 502
+    assert "main-key" not in response.text and "backup-key" not in response.text
+
+
+def test_voice_does_not_retry_on_timeouts(client, monkeypatch):
+    monkeypatch.setattr(main.settings, "voice_enabled", True)
+    monkeypatch.setattr(main.settings, "elevenlabs_api_keys", ["main-key", "backup-key"])
+    calls = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls.append(1)
+        raise httpx.ReadTimeout("slow", request=request)
+
+    client.app.state.services.http._transport = httpx.MockTransport(handler)
+    assert client.post("/api/voice-status", json={"status": "success"}).status_code == 504
+    assert len(calls) == 1
 
 
 def test_rate_limit(client, monkeypatch):

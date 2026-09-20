@@ -50,7 +50,7 @@
 </head>
 <body class="min-h-screen">
 <!-- Demo banner -->
-<div class="bg-amber-500/10 border-b border-amber-500/20 px-6 py-2.5 text-center">
+<div aria-label="Demo notice" class="bg-amber-500/10 border-b border-amber-500/20 px-6 py-2.5 text-center" data-i18n-aria-label="a11y.demo.notice" role="region">
 <p class="text-[12px] font-medium text-amber-400" data-i18n="demo-panel-all-data-shown-is">Demo panel. All data shown is simulated and does not represent real activity.</p>
 </div>
 <!-- Header -->
@@ -73,13 +73,13 @@
 <main class="max-w-6xl mx-auto px-6 py-10">
 <div class="mb-8">
 <h1 class="text-2xl font-bold tracking-tight mb-1" data-i18n="usage-metrics">Usage metrics</h1>
-<p class="text-[13px] text-neutral-500" data-i18n="simulated-data-from-the-last-30">Simulated data from the last 30 days for demonstration purposes.</p>
+<p class="text-[13px] text-neutral-400" data-i18n="simulated-data-from-the-last-30">Simulated data from the last 30 days for demonstration purposes.</p>
 </div>
 <!-- KPI cards -->
 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
 <div class="card rounded-xl p-5">
 <div class="flex items-center justify-between mb-3">
-<span class="text-[11px] font-mono uppercase tracking-wider text-neutral-500" data-i18n="downloads">Downloads</span>
+<span class="text-[11px] font-mono uppercase tracking-wider text-neutral-400" data-i18n="downloads">Downloads</span>
 <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 <p class="text-2xl font-extrabold text-white">1,842</p>
@@ -87,7 +87,7 @@
 </div>
 <div class="card rounded-xl p-5">
 <div class="flex items-center justify-between mb-3">
-<span class="text-[11px] font-mono uppercase tracking-wider text-neutral-500" data-i18n="revenue">Revenue</span>
+<span class="text-[11px] font-mono uppercase tracking-wider text-neutral-400" data-i18n="revenue">Revenue</span>
 <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V6m0 12v-2m0-8c-1.11 0-2.08.402-2.599 1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 <p class="text-2xl font-extrabold text-white">$18,540</p>
@@ -95,19 +95,19 @@
 </div>
 <div class="card rounded-xl p-5">
 <div class="flex items-center justify-between mb-3">
-<span class="text-[11px] font-mono uppercase tracking-wider text-neutral-500" data-i18n="support-contacts">Support contacts</span>
+<span class="text-[11px] font-mono uppercase tracking-wider text-neutral-400" data-i18n="support-contacts">Support contacts</span>
 <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 <p class="text-2xl font-extrabold text-white">63</p>
-<p class="text-[11px] text-neutral-500 mt-1" data-i18n="response-time-4h">Response time: 4h</p>
+<p class="text-[11px] text-neutral-400 mt-1" data-i18n="response-time-4h">Response time: 4h</p>
 </div>
 <div class="card rounded-xl p-5">
 <div class="flex items-center justify-between mb-3">
-<span class="text-[11px] font-mono uppercase tracking-wider text-neutral-500" data-i18n="refunds">Refunds</span>
+<span class="text-[11px] font-mono uppercase tracking-wider text-neutral-400" data-i18n="refunds">Refunds</span>
 <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 10h10a5 5 0 015 5v0a5 5 0 01-5 5H8m0 0l3-3m-3 3l3 3M3 10l3-3m-3 3l3 3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 <p class="text-2xl font-extrabold text-white">4</p>
-<p class="text-[11px] text-neutral-500 mt-1" data-i18n="0-2-of-orders">0.2% of orders</p>
+<p class="text-[11px] text-neutral-400 mt-1" data-i18n="0-2-of-orders">0.2% of orders</p>
 </div>
 </div>
 <div class="grid lg:grid-cols-3 gap-6 mb-10">
@@ -118,21 +118,21 @@
 <div>
 <div class="flex items-center justify-between text-[12px] mb-1.5">
 <span class="text-neutral-400" data-i18n="local-files-2">Local Files</span>
-<span class="text-neutral-500 font-mono">612</span>
+<span class="text-neutral-400 font-mono">612</span>
 </div>
 <div class="h-2 rounded-full bar-track overflow-hidden"><div class="h-full bar-fill rounded-full" style="width: 45%"></div></div>
 </div>
 <div>
 <div class="flex items-center justify-between text-[12px] mb-1.5">
 <span class="text-neutral-400" data-i18n="database-2">Database</span>
-<span class="text-neutral-500 font-mono">981</span>
+<span class="text-neutral-400 font-mono">981</span>
 </div>
 <div class="h-2 rounded-full bar-track overflow-hidden"><div class="h-full bar-fill rounded-full" style="width: 72%"></div></div>
 </div>
 <div>
 <div class="flex items-center justify-between text-[12px] mb-1.5">
 <span class="text-neutral-400" data-i18n="external-api">External API</span>
-<span class="text-neutral-500 font-mono">249</span>
+<span class="text-neutral-400 font-mono">249</span>
 </div>
 <div class="h-2 rounded-full bar-track overflow-hidden"><div class="h-full bar-fill rounded-full" style="width: 28%"></div></div>
 </div>
@@ -142,12 +142,12 @@
 <div class="card rounded-xl overflow-hidden lg:col-span-2">
 <div class="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between">
 <p class="text-[13px] font-semibold text-white" data-i18n="recent-activity">Recent activity</p>
-<span class="text-[10px] font-mono text-neutral-600 uppercase" data-i18n="simulated-data">Simulated data</span>
+<span class="text-[10px] font-mono text-neutral-400 uppercase" data-i18n="simulated-data">Simulated data</span>
 </div>
 <div class="overflow-x-auto">
 <table class="w-full text-left">
 <thead>
-<tr class="text-[11px] font-mono uppercase tracking-wider text-neutral-600">
+<tr class="text-[11px] font-mono uppercase tracking-wider text-neutral-400">
 <th class="px-6 py-3 font-medium" data-i18n="order">Order</th>
 <th class="px-6 py-3 font-medium" data-i18n="plan">Plan</th>
 <th class="px-6 py-3 font-medium" data-i18n="amount">Amount</th>
@@ -161,35 +161,35 @@
 <td class="px-6 py-3 text-neutral-300" data-i18n="database-2">Database</td>
 <td class="px-6 py-3 text-white font-medium">$15.00</td>
 <td class="px-6 py-3"><span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[11px] font-medium" data-i18n="paid">Paid</span></td>
-<td class="px-6 py-3 text-neutral-500" data-i18n="sep-14-2026">Sep 14, 2026</td>
+<td class="px-6 py-3 text-neutral-400" data-i18n="sep-14-2026">Sep 14, 2026</td>
 </tr>
 <tr class="border-t border-white/[0.05]">
 <td class="px-6 py-3 font-mono text-neutral-400">#MB-91BC</td>
 <td class="px-6 py-3 text-neutral-300" data-i18n="external-api">External API</td>
 <td class="px-6 py-3 text-white font-medium">$20.00</td>
 <td class="px-6 py-3"><span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[11px] font-medium" data-i18n="paid">Paid</span></td>
-<td class="px-6 py-3 text-neutral-500" data-i18n="sep-14-2026">Sep 14, 2026</td>
+<td class="px-6 py-3 text-neutral-400" data-i18n="sep-14-2026">Sep 14, 2026</td>
 </tr>
 <tr class="border-t border-white/[0.05]">
 <td class="px-6 py-3 font-mono text-neutral-400">#MB-3E09</td>
 <td class="px-6 py-3 text-neutral-300" data-i18n="local-files-2">Local Files</td>
 <td class="px-6 py-3 text-white font-medium">$5.00</td>
 <td class="px-6 py-3"><span class="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 text-[11px] font-medium" data-i18n="refunded">Refunded</span></td>
-<td class="px-6 py-3 text-neutral-500" data-i18n="sep-13-2026">Sep 13, 2026</td>
+<td class="px-6 py-3 text-neutral-400" data-i18n="sep-13-2026">Sep 13, 2026</td>
 </tr>
 <tr class="border-t border-white/[0.05]">
 <td class="px-6 py-3 font-mono text-neutral-400">#MB-6D41</td>
 <td class="px-6 py-3 text-neutral-300" data-i18n="database-2">Database</td>
 <td class="px-6 py-3 text-white font-medium">$15.00</td>
 <td class="px-6 py-3"><span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[11px] font-medium" data-i18n="paid">Paid</span></td>
-<td class="px-6 py-3 text-neutral-500" data-i18n="sep-13-2026">Sep 13, 2026</td>
+<td class="px-6 py-3 text-neutral-400" data-i18n="sep-13-2026">Sep 13, 2026</td>
 </tr>
 <tr class="border-t border-white/[0.05]">
 <td class="px-6 py-3 font-mono text-neutral-400">#MB-2A77</td>
 <td class="px-6 py-3 text-neutral-300" data-i18n="local-files-2">Local Files</td>
 <td class="px-6 py-3 text-white font-medium">$5.00</td>
 <td class="px-6 py-3"><span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[11px] font-medium" data-i18n="paid">Paid</span></td>
-<td class="px-6 py-3 text-neutral-500" data-i18n="sep-12-2026">Sep 12, 2026</td>
+<td class="px-6 py-3 text-neutral-400" data-i18n="sep-12-2026">Sep 12, 2026</td>
 </tr>
 </tbody>
 </table>
@@ -206,7 +206,7 @@
 </div>
 <div>
 <p class="text-[16px] font-bold text-white">28</p>
-<p class="text-[12px] text-neutral-500" data-i18n="installation-problems">Installation problems</p>
+<p class="text-[12px] text-neutral-400" data-i18n="installation-problems">Installation problems</p>
 </div>
 </div>
 <div class="flex items-center gap-3">
@@ -215,7 +215,7 @@
 </div>
 <div>
 <p class="text-[16px] font-bold text-white">19</p>
-<p class="text-[12px] text-neutral-500" data-i18n="questions-before-buying">Questions before buying</p>
+<p class="text-[12px] text-neutral-400" data-i18n="questions-before-buying">Questions before buying</p>
 </div>
 </div>
 <div class="flex items-center gap-3">
@@ -224,14 +224,14 @@
 </div>
 <div>
 <p class="text-[16px] font-bold text-white">16</p>
-<p class="text-[12px] text-neutral-500" data-i18n="refund-requests">Refund requests</p>
+<p class="text-[12px] text-neutral-400" data-i18n="refund-requests">Refund requests</p>
 </div>
 </div>
 </div>
 </div>
 </main>
 <footer class="border-t border-white/[0.06] px-6 py-6 text-center">
-<p class="text-[11px] text-neutral-600" data-i18n="demo-admin-panel-not-connected-to">Demo admin panel. Not connected to real production data.</p>
+<p class="text-[11px] text-neutral-400" data-i18n="demo-admin-panel-not-connected-to">Demo admin panel. Not connected to real production data.</p>
 </footer>
 </body>
 </html>

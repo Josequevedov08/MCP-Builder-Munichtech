@@ -142,7 +142,7 @@
       transition: all 0.15s ease;
     }
 
-    .input-field::placeholder { color: #525252; }
+    .input-field::placeholder { color: #8A8A8A; }
     .input-field:hover { border-color: rgba(255, 255, 255, 0.15); }
     .input-field:focus {
       border-color: #DC2626;
@@ -331,13 +331,20 @@
     @keyframes cursorBlink {
       50% { opacity: 0; }
     }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+      .reveal { opacity: 1 !important; transform: none !important; }
+      .marquee-track { animation: none !important; }
+    }
   </style>
 </head>
 <body class="bg-grid min-h-screen">
+<a class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-white focus:text-black focus:font-semibold" data-i18n="a11y.skip" href="#main">Skip to main content</a>
 <!-- ==================== ANNOUNCEMENT BAR ==================== -->
-<div class="fixed top-0 left-0 right-0 z-[60] bg-brand-700/90 backdrop-blur-sm border-b border-brand-500/30">
+<div class="fixed top-0 left-0 right-0 z-[60] bg-brand-700/90 backdrop-blur-sm border-b border-brand-500/30" aria-label="Announcement" data-i18n-aria-label="a11y.announcement" role="region">
 <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex items-center justify-center gap-2 text-center">
-<svg class="w-3.5 h-3.5 text-white flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<svg aria-hidden="true" class="w-3.5 h-3.5 text-white flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
 <p class="text-[12px] sm:text-[13px] font-semibold text-white" data-i18n-html="launch-offer-20-off-your-first">Demo tip: use the code <span class="font-mono">LAUNCH20</span> at checkout for 20% off</p>
 </div>
 </div>
@@ -347,7 +354,7 @@
 <!-- Logo -->
 <a class="flex items-center gap-2.5 group" href="index.html">
 <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg shadow-brand-500/20 group-hover:shadow-brand-500/40 transition-shadow">
-<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<svg aria-hidden="true" class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 <path d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
 </svg>
 </div>
@@ -356,7 +363,7 @@
 </span>
 </a>
 <!-- Desktop Navigation -->
-<nav class="hidden lg:flex items-center gap-1">
+<nav aria-label="Main navigation" class="hidden lg:flex items-center gap-1" data-i18n-aria-label="nav.main">
 <a class="px-3.5 py-2 text-[13px] font-medium text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]" data-i18n="how-it-works" href="#how">How it works</a>
 <a class="px-3.5 py-2 text-[13px] font-medium text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]" data-i18n="features" href="#features">Features</a>
 <a class="px-3.5 py-2 text-[13px] font-medium text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]" data-i18n="nav.accessibility" href="#accessibility">Accessibility</a>
@@ -371,14 +378,14 @@
 </div>
 <!-- Mobile Menu Button -->
 <div data-lang-switcher></div>
-<button class="lg:hidden w-10 h-10 rounded-lg bg-white/[0.04] flex items-center justify-center hover:bg-white/[0.08] transition-colors" onclick="toggleMobileMenu()">
-<svg class="w-5 h-5 text-neutral-300" fill="none" id="menuIconOpen" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-<svg class="w-5 h-5 text-neutral-300 hidden" fill="none" id="menuIconClose" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<button class="lg:hidden w-10 h-10 rounded-lg bg-white/[0.04] flex items-center justify-center hover:bg-white/[0.08] transition-colors" onclick="toggleMobileMenu()" aria-controls="mobileMenu" aria-expanded="false" aria-label="Menu" data-i18n-aria-label="nav.menu" id="menuButton">
+<svg aria-hidden="true" class="w-5 h-5 text-neutral-300" fill="none" id="menuIconOpen" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg aria-hidden="true" class="w-5 h-5 text-neutral-300 hidden" fill="none" id="menuIconClose" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </button>
 </div>
 <!-- Mobile Menu -->
 <div class="hidden lg:hidden border-t border-white/[0.04] bg-surface-900/95 backdrop-blur-xl" id="mobileMenu">
-<nav class="px-4 py-4 space-y-1">
+<nav aria-label="Mobile navigation" class="px-4 py-4 space-y-1" data-i18n-aria-label="nav.mobile">
 <a class="block px-4 py-3 text-[14px] font-medium text-neutral-300 hover:text-white hover:bg-white/[0.04] rounded-lg" data-i18n="how-it-works" href="#how" onclick="closeMobileMenu()">How it works</a>
 <a class="block px-4 py-3 text-[14px] font-medium text-neutral-300 hover:text-white hover:bg-white/[0.04] rounded-lg" data-i18n="features" href="#features" onclick="closeMobileMenu()">Features</a>
 <a class="block px-4 py-3 text-[14px] font-medium text-neutral-300 hover:text-white hover:bg-white/[0.04] rounded-lg" data-i18n="nav.accessibility" href="#accessibility" onclick="closeMobileMenu()">Accessibility</a>
@@ -390,6 +397,7 @@
 </nav>
 </div>
 </header>
+<main id="main" tabindex="-1">
 <!-- ==================== HERO ==================== -->
 <section class="pt-48 pb-20 px-6 bg-radial relative overflow-hidden">
 <!-- Decorative elements -->
@@ -405,34 +413,34 @@
 <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 mb-10 animate-fade-up stagger-2">
 <a class="btn-primary px-7 py-3.5 rounded-xl text-white font-semibold text-[15px] flex items-center gap-2 shadow-lg shadow-brand-500/25 w-full sm:w-auto justify-center" href="#generator">
             <span data-i18n="buy-my-mcp-server">Buy my MCP server</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            <svg aria-hidden="true" class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </a>
 <a class="btn-secondary px-7 py-3.5 rounded-xl text-neutral-300 font-medium text-[15px] flex items-center gap-2 w-full sm:w-auto justify-center" href="#how">
             <span data-i18n="how-it-works">How it works</span>
-            <svg class="w-4 h-4 text-neutral-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            <svg aria-hidden="true" class="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </a>
 </div>
 <!-- Demo trigger -->
 <button class="inline-flex items-center gap-2.5 mb-10 mx-auto lg:mx-0 group animate-fade-up stagger-2" onclick="openDemo()">
 <span class="w-9 h-9 rounded-full bg-white/[0.05] border border-white/[0.12] flex items-center justify-center group-hover:bg-brand-500/15 group-hover:border-brand-500/30 transition-all">
-<svg class="w-3.5 h-3.5 text-neutral-300 group-hover:text-brand-400 transition-colors" fill="currentColor" viewbox="0 0 20 20"><path d="M14.752 11.168l-6.197-3.567A1 1 0 007 8.467v7.066a1 1 0 001.555.833l6.197-3.567a1 1 0 000-1.632z"></path></svg>
+<svg aria-hidden="true" class="w-3.5 h-3.5 text-neutral-300 group-hover:text-brand-400 transition-colors" fill="currentColor" viewbox="0 0 20 20"><path d="M14.752 11.168l-6.197-3.567A1 1 0 007 8.467v7.066a1 1 0 001.555.833l6.197-3.567a1 1 0 000-1.632z"></path></svg>
 </span>
 <span class="text-[13px] font-medium text-neutral-400 group-hover:text-white transition-colors" data-i18n="watch-the-installation-demo-1-min">Watch the installation demo (1 min)</span>
 </button>
 <!-- Trust indicators -->
 <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 animate-fade-up stagger-3">
-<div class="flex items-center gap-2 text-neutral-500">
-<svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+<div class="flex items-center gap-2 text-neutral-400">
+<svg aria-hidden="true" class="w-4 h-4 text-emerald-500" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] font-medium" data-i18n="no-account-or-password">No account or password</span>
 </div>
 <div class="w-px h-4 bg-white/10 hidden sm:block"></div>
-<div class="flex items-center gap-2 text-neutral-500">
-<svg class="w-4 h-4 text-blue-400" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" fill-rule="evenodd"></path></svg>
+<div class="flex items-center gap-2 text-neutral-400">
+<svg aria-hidden="true" class="w-4 h-4 text-blue-400" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] font-medium" data-i18n="your-data-never-leaves-your-machine">Your data never leaves your machine</span>
 </div>
 <div class="w-px h-4 bg-white/10 hidden sm:block"></div>
-<div class="flex items-center gap-2 text-neutral-500">
-<svg class="w-4 h-4 text-amber-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+<div class="flex items-center gap-2 text-neutral-400">
+<svg aria-hidden="true" class="w-4 h-4 text-amber-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
 <span class="text-[13px] font-medium" data-i18n="delivery-in-minutes">Delivery in minutes</span>
 </div>
 </div>
@@ -442,7 +450,7 @@
 <div class="absolute -inset-6 bg-brand-500/[0.06] blur-3xl rounded-full pointer-events-none"></div>
 <div class="card rounded-2xl p-6 shadow-2xl shadow-black/50 relative">
 <div class="flex items-center justify-between mb-5">
-<span class="text-[11px] font-mono text-neutral-500 uppercase tracking-wider" data-i18n="status.title">Live service status</span>
+<span class="text-[11px] font-mono text-neutral-400 uppercase tracking-wider" data-i18n="status.title">Live service status</span>
 <span aria-live="polite" class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-neutral-400" id="serviceBadge" role="status"><span class="w-1.5 h-1.5 rounded-full bg-neutral-500" id="serviceDot"></span><span id="serviceBadgeText">Checking...</span></span>
 </div>
 <div class="space-y-3">
@@ -453,7 +461,7 @@
 </div>
 <div>
 <p class="text-[13px] font-semibold text-white" data-i18n="status.model">AI policy model</p>
-<p class="text-[11px] text-neutral-500" id="modelName">Featherless.ai</p>
+<p class="text-[11px] text-neutral-400" id="modelName">Featherless.ai</p>
 </div>
 </div>
 <svg aria-hidden="true" class="w-4 h-4 text-emerald-400 hidden" fill="currentColor" id="chkModel" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
@@ -465,7 +473,7 @@
 </div>
 <div>
 <p class="text-[13px] font-semibold text-white" data-i18n="status.voice">Voice reports</p>
-<p class="text-[11px] text-neutral-500" data-i18n="status.voice.detail">ElevenLabs: English, German, Spanish</p>
+<p class="text-[11px] text-neutral-400" data-i18n="status.voice.detail">ElevenLabs: English, German, Spanish</p>
 </div>
 </div>
 <svg aria-hidden="true" class="w-4 h-4 text-emerald-400 hidden" fill="currentColor" id="chkVoice" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
@@ -477,7 +485,7 @@
 </div>
 <div>
 <p class="text-[13px] font-semibold text-white" data-i18n="status.templates">Verified server templates</p>
-<p class="text-[11px] text-neutral-500" data-i18n="status.templates.detail">Files, database and API</p>
+<p class="text-[11px] text-neutral-400" data-i18n="status.templates.detail">Files, database and API</p>
 </div>
 </div>
 <svg aria-hidden="true" class="w-4 h-4 text-emerald-400" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
@@ -486,11 +494,11 @@
 <div class="divider my-5"></div>
 <div class="flex items-center justify-between">
 <div>
-<p class="text-[11px] text-neutral-500" data-i18n="status.policy.label">AI policy step</p>
+<p class="text-[11px] text-neutral-400" data-i18n="status.policy.label">AI policy step</p>
 <p class="text-[18px] font-bold text-white" data-i18n="status.policy.value">about 3 s</p>
 </div>
 <div class="text-right">
-<p class="text-[11px] text-neutral-500" data-i18n="status.languages.label">Languages</p>
+<p class="text-[11px] text-neutral-400" data-i18n="status.languages.label">Languages</p>
 <p class="text-[18px] font-bold text-white">3</p>
 </div>
 </div>
@@ -500,23 +508,23 @@
 </section>
 <!-- ==================== LOGO / COMPATIBILITY STRIP ==================== -->
 <section class="py-10 border-y border-white/[0.04] overflow-hidden">
-<p class="text-center text-[11px] font-mono uppercase tracking-wider text-neutral-600 mb-6" data-i18n="works-with-the-ai-clients-you">Works with the AI clients you already use</p>
+<p class="text-center text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-6" data-i18n="works-with-the-ai-clients-you">Works with the AI clients you already use</p>
 <div class="relative flex overflow-hidden select-none marquee-mask">
 <div class="flex gap-16 marquee-track flex-shrink-0 items-center px-8">
-<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">Claude Desktop</span>
-<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">Cursor</span>
-<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">Windsurf</span>
-<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">VS Code + Copilot</span>
-<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">Zed</span>
-<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">Cline</span>
+<span class="text-[18px] font-bold text-neutral-400 whitespace-nowrap">Claude Desktop</span>
+<span class="text-[18px] font-bold text-neutral-400 whitespace-nowrap">Cursor</span>
+<span class="text-[18px] font-bold text-neutral-400 whitespace-nowrap">Windsurf</span>
+<span class="text-[18px] font-bold text-neutral-400 whitespace-nowrap">VS Code + Copilot</span>
+<span class="text-[18px] font-bold text-neutral-400 whitespace-nowrap">Zed</span>
+<span class="text-[18px] font-bold text-neutral-400 whitespace-nowrap">Cline</span>
 </div>
 <div aria-hidden="true" class="flex gap-16 marquee-track flex-shrink-0 items-center px-8">
-<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">Claude Desktop</span>
-<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">Cursor</span>
-<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">Windsurf</span>
-<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">VS Code + Copilot</span>
-<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">Zed</span>
-<span class="text-[18px] font-bold text-neutral-500 whitespace-nowrap">Cline</span>
+<span class="text-[18px] font-bold text-neutral-400 whitespace-nowrap">Claude Desktop</span>
+<span class="text-[18px] font-bold text-neutral-400 whitespace-nowrap">Cursor</span>
+<span class="text-[18px] font-bold text-neutral-400 whitespace-nowrap">Windsurf</span>
+<span class="text-[18px] font-bold text-neutral-400 whitespace-nowrap">VS Code + Copilot</span>
+<span class="text-[18px] font-bold text-neutral-400 whitespace-nowrap">Zed</span>
+<span class="text-[18px] font-bold text-neutral-400 whitespace-nowrap">Cline</span>
 </div>
 </div>
 </section>
@@ -585,7 +593,7 @@
 <div class="text-center mb-14">
 <span class="step-indicator inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono font-semibold text-brand-400 uppercase tracking-wider mb-4" data-i18n="process">Process</span>
 <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-3" data-i18n="from-idea-to-connected-ai-in">From idea to connected AI in 3 steps</h2>
-<p class="text-neutral-500 text-base max-w-lg mx-auto" data-i18n="no-hiring-developers-or-reading-technical">No hiring developers or reading technical documentation. You pick the source, we build the server.</p>
+<p class="text-neutral-400 text-base max-w-lg mx-auto" data-i18n="no-hiring-developers-or-reading-technical">No hiring developers or reading technical documentation. You pick the source, we build the server.</p>
 </div>
 <div class="grid md:grid-cols-3 gap-6">
 <div class="card card-interactive reveal rounded-2xl p-7 relative">
@@ -613,22 +621,22 @@
 <div class="text-center mb-12">
 <span class="step-indicator inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono font-semibold text-brand-400 uppercase tracking-wider mb-4" data-i18n-html="mcp-server-quote-builder"><span class="w-1.5 h-1.5 rounded-full bg-brand-500"></span> MCP server quote builder</span>
 <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-3" data-i18n="configure-your-server-in-3-steps">Configure your server in 3 steps</h2>
-<p class="text-neutral-500 text-base" data-i18n="no-code-no-manual-setup-instant">No code. No manual setup. Instant quote.</p>
-<p class="text-[11px] font-mono text-neutral-600 mt-3" data-i18n="demo-environment-payments-do-not-process">Demo environment: payments do not process real charges.</p>
+<p class="text-neutral-400 text-base" data-i18n="no-code-no-manual-setup-instant">No code. No manual setup. Instant quote.</p>
+<p class="text-[11px] font-mono text-neutral-400 mt-3" data-i18n="demo-environment-payments-do-not-process">Demo environment: payments do not process real charges.</p>
 </div>
 <!-- Generator card -->
 <div class="card rounded-2xl p-8 md:p-10 shadow-2xl shadow-black/40">
 <!-- Server name -->
 <div class="mb-7">
 <label class="text-[14px] font-semibold text-white block mb-3" data-i18n="field.server_name" for="serverName">Server name</label>
-<input autocomplete="off" class="input-field w-full px-4 py-3.5 rounded-xl text-[14px]" data-i18n-placeholder="field.server_name.placeholder" id="serverName" maxlength="60" placeholder="e.g. shop-database" type="text"/>
+<input autocomplete="off" class="input-field w-full px-4 py-3.5 rounded-xl text-[14px]" data-i18n-placeholder="field.server_name.placeholder" aria-describedby="serverNameHint" id="serverName" maxlength="60" placeholder="e.g. shop-database" type="text"/>
 <p class="hidden text-[11px] text-red-400 mt-2" data-i18n="error.server_name" id="serverNameHint" role="alert">Use 3 to 40 characters: lowercase letters, numbers and hyphens, starting with a letter.</p>
 </div>
 <!-- Step 1: Data source -->
 <div class="mb-7">
 <div class="flex items-center gap-3 mb-3">
 <span class="w-7 h-7 rounded-lg bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-[11px] font-bold text-brand-400">1</span>
-<label class="text-[14px] font-semibold text-white" data-i18n="data-source">Data source</label>
+<label class="text-[14px] font-semibold text-white" data-i18n="data-source" for="sourceSelect">Data source</label>
 </div>
 <select class="input-field w-full px-4 py-3.5 rounded-xl text-[14px] cursor-pointer" id="sourceSelect" onchange="updateForm()">
 <option data-i18n="select-what-you-want-to-connect" disabled="" selected="" value="">Select what you want to connect...</option>
@@ -666,7 +674,7 @@
 <div class="flex items-center gap-3 mb-3">
 <span class="w-7 h-7 rounded-lg bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-[11px] font-bold text-brand-400">3</span>
 <label class="text-[14px] font-semibold text-white" data-i18n="instructions-for-the-ai">Instructions for the AI</label>
-<span class="text-[11px] font-mono text-neutral-600 bg-white/[0.03] px-2 py-0.5 rounded" data-i18n="optional">optional</span>
+<span class="text-[11px] font-mono text-neutral-400 bg-white/[0.03] px-2 py-0.5 rounded" data-i18n="optional">optional</span>
 </div>
 <textarea class="input-field w-full px-4 py-3.5 rounded-xl resize-none text-[14px]" id="aiInstructions" data-i18n-placeholder="specific-rules-e-g-read-only" placeholder="Specific rules (e.g. read-only, block access to passwords, limit to 50 rows)" rows="3"></textarea>
 </div>
@@ -678,28 +686,32 @@
 <option value="es">Español</option>
 <option value="de">Deutsch</option>
 </select>
-<p class="text-[11px] text-neutral-500 mt-2" data-i18n="field.audio_language.hint" id="voiceLanguageHint">Build status and errors are announced in this language.</p>
+<p class="text-[11px] text-neutral-400 mt-2" data-i18n="field.audio_language.hint" id="voiceLanguageHint">Build status and errors are announced in this language.</p>
+<div class="mt-4 flex items-start gap-3">
+<input checked class="mt-0.5 w-4 h-4 accent-red-600" id="autoRead" type="checkbox"/>
+<label class="text-[13px] text-neutral-300" for="autoRead"><span data-i18n="field.autoread">Read reports aloud automatically</span><span class="block text-[11px] text-neutral-400" data-i18n="field.autoread.hint">Turn this off if your screen reader already announces them.</span></label>
+</div>
 </div>
 <!-- Price & CTA -->
 <div class="rounded-xl bg-white/[0.02] border border-white/[0.06] p-5 mb-6">
 <div class="flex items-center justify-between">
 <div>
-<p class="text-[11px] font-medium text-neutral-500 uppercase tracking-wider mb-1" data-i18n="total">Total</p>
+<p class="text-[11px] font-medium text-neutral-400 uppercase tracking-wider mb-1" data-i18n="total">Total</p>
 <p class="text-2xl font-bold text-white tracking-tight" id="priceDisplay">$0.00</p>
 </div>
 <div class="text-right">
-<p class="text-[11px] text-neutral-500" data-i18n="instant-delivery">Instant delivery</p>
-<p class="text-[11px] text-neutral-500" data-i18n="server-zip-instructions">Server.zip + instructions</p>
+<p class="text-[11px] text-neutral-400" data-i18n="instant-delivery">Instant delivery</p>
+<p class="text-[11px] text-neutral-400" data-i18n="server-zip-instructions">Server.zip + instructions</p>
 </div>
 </div>
 </div>
 <button class="btn-primary w-full py-4 rounded-xl text-white font-semibold text-[15px] flex items-center justify-center gap-2.5 shadow-lg shadow-brand-500/25" id="payButton" onclick="openCheckout()">
-<svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg aria-hidden="true" class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 <span id="ctaText">Generate MCP - $0.00</span>
 </button>
-<p class="text-center text-[11px] text-neutral-600 mt-4 font-mono flex items-center justify-center gap-1.5">
-<svg class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-          <span data-i18n="secure-payment-with-stripe-one-payment">Secure payment with Stripe. One payment equals one MCP. No subscriptions</span>
+<p class="text-center text-[11px] text-neutral-400 mt-4 font-mono flex items-center justify-center gap-1.5">
+<svg aria-hidden="true" class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          <span data-i18n="pay.demo.cta">Demo payment. One payment equals one MCP. Nothing is charged.</span>
         </p>
 </div>
 </div>
@@ -711,14 +723,14 @@
 <div class="text-center mb-14">
 <span class="step-indicator inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono font-semibold text-brand-400 uppercase tracking-wider mb-4" data-i18n="features">Features</span>
 <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-3" data-i18n="everything-a-business-needs-nothing-it">Everything a business needs, nothing it doesn't</h2>
-<p class="text-neutral-500 text-base max-w-lg mx-auto" data-i18n="built-for-teams-that-want-results">Built for teams that want results, not another technical project to maintain.</p>
+<p class="text-neutral-400 text-base max-w-lg mx-auto" data-i18n="built-for-teams-that-want-results">Built for teams that want results, not another technical project to maintain.</p>
 </div>
 <!-- Features grid -->
 <div class="grid md:grid-cols-3 gap-5">
 <!-- Feature 1 -->
 <div class="card card-interactive reveal rounded-xl p-7 group">
 <div class="w-11 h-11 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-5 group-hover:bg-emerald-500/15 transition-colors">
-<svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg aria-hidden="true" class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 <h3 class="text-[16px] font-semibold text-white mb-2" data-i18n="100-local-and-private">100% local and private</h3>
 <p class="text-[13px] text-neutral-400 leading-relaxed" data-i18n="your-server-runs-on-your-machine">Your server runs on your machine and your data never leaves your infrastructure. Only the rules you write are sent to generate it.</p>
@@ -726,7 +738,7 @@
 <!-- Feature 2 -->
 <div class="card card-interactive reveal stagger-1 rounded-xl p-7 group">
 <div class="w-11 h-11 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-5 group-hover:bg-blue-500/15 transition-colors">
-<svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg aria-hidden="true" class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 <h3 class="text-[16px] font-semibold text-white mb-2" data-i18n="production-ready-code">Production-ready code</h3>
 <p class="text-[13px] text-neutral-400 leading-relaxed" data-i18n="typescript-error-handling-schema-validation-code">TypeScript, error handling, schema validation. Code you can extend, not a fragile prototype.</p>
@@ -734,7 +746,7 @@
 <!-- Feature 3 -->
 <div class="card card-interactive reveal stagger-2 rounded-xl p-7 group">
 <div class="w-11 h-11 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mb-5 group-hover:bg-amber-500/15 transition-colors">
-<svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg aria-hidden="true" class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 <h3 class="text-[16px] font-semibold text-white mb-2" data-i18n="ready-in-minutes">Ready in minutes</h3>
 <p class="text-[13px] text-neutral-400 leading-relaxed" data-i18n-html="npm-install-and-you-are-done"><code class="text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded text-[12px]">npm install</code> and you are done. Works with Claude Desktop, Cursor, Windsurf and any MCP client.</p>
@@ -742,7 +754,7 @@
 <!-- Feature 4 -->
 <div class="card card-interactive reveal rounded-xl p-7 group">
 <div class="w-11 h-11 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center mb-5 group-hover:bg-brand-500/15 transition-colors">
-<svg class="w-5 h-5 text-brand-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg aria-hidden="true" class="w-5 h-5 text-brand-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 <h3 class="text-[16px] font-semibold text-white mb-2" data-i18n="permissions-under-control">Permissions under control</h3>
 <p class="text-[13px] text-neutral-400 leading-relaxed" data-i18n="you-define-what-the-ai-can">You decide what the AI can read and what stays blocked. Everything is read-only by default.</p>
@@ -750,7 +762,7 @@
 <!-- Feature 5 -->
 <div class="card card-interactive reveal stagger-1 rounded-xl p-7 group">
 <div class="w-11 h-11 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mb-5 group-hover:bg-purple-500/15 transition-colors">
-<svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-4.13a4 4 0 11-8 0 4 4 0 018 0zm6 0a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg aria-hidden="true" class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-4.13a4 4 0 11-8 0 4 4 0 018 0zm6 0a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 <h3 class="text-[16px] font-semibold text-white mb-2" data-i18n="no-account-no-friction">No account, no friction</h3>
 <p class="text-[13px] text-neutral-400 leading-relaxed" data-i18n="buy-as-a-guest-pay-once">Buy as a guest, pay once and receive the file. No need to sign up or remember another password.</p>
@@ -758,7 +770,7 @@
 <!-- Feature 6 -->
 <div class="card card-interactive reveal stagger-2 rounded-xl p-7 group">
 <div class="w-11 h-11 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-5 group-hover:bg-cyan-500/15 transition-colors">
-<svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h5v5m0-5L10 14" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg aria-hidden="true" class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h5v5m0-5L10 14" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 <h3 class="text-[16px] font-semibold text-white mb-2" data-i18n="support-included">Support included</h3>
 <p class="text-[13px] text-neutral-400 leading-relaxed" data-i18n="if-something-goes-wrong-during-installation">If something goes wrong during installation, we help you by email at no extra cost until it works.</p>
@@ -772,7 +784,7 @@
 <div class="text-center mb-12">
 <span class="step-indicator inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono font-semibold text-brand-400 uppercase tracking-wider mb-4" data-i18n="comparison">Comparison</span>
 <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-3" data-i18n="hire-a-developer-or-buy-your">Hire a developer or buy your server</h2>
-<p class="text-neutral-500 text-base max-w-lg mx-auto" data-i18n="the-difference-in-time-cost-and">A typical comparison of time, cost and maintenance between hiring a developer and buying a ready-made server.</p>
+<p class="text-neutral-400 text-base max-w-lg mx-auto" data-i18n="the-difference-in-time-cost-and">A typical comparison of time, cost and maintenance between hiring a developer and buying a ready-made server.</p>
 </div>
 <div class="card reveal rounded-2xl overflow-hidden">
 <div class="grid grid-cols-3 text-center">
@@ -784,20 +796,20 @@
 <p class="text-[13px] font-semibold text-brand-400">MCP Builder</p>
 </div>
 <div class="p-5 border-b border-r border-white/[0.06] text-left text-[13px] text-neutral-400" data-i18n="delivery-time">Delivery time</div>
-<div class="p-5 border-b border-r border-white/[0.06] text-[13px] text-neutral-500" data-i18n="1-to-3-weeks">1 to 3 weeks</div>
+<div class="p-5 border-b border-r border-white/[0.06] text-[13px] text-neutral-400" data-i18n="1-to-3-weeks">1 to 3 weeks</div>
 <div class="p-5 border-b border-white/[0.06] text-[13px] font-semibold text-white bg-brand-500/[0.04]" data-i18n="minutes">Minutes</div>
 <div class="p-5 border-b border-r border-white/[0.06] text-left text-[13px] text-neutral-400" data-i18n="estimated-cost">Estimated cost</div>
-<div class="p-5 border-b border-r border-white/[0.06] text-[13px] text-neutral-500">$500 - $2,000</div>
+<div class="p-5 border-b border-r border-white/[0.06] text-[13px] text-neutral-400">$500 - $2,000</div>
 <div class="p-5 border-b border-white/[0.06] text-[13px] font-semibold text-white bg-brand-500/[0.04]" data-i18n="from-5">From $5</div>
 <div class="p-5 border-b border-r border-white/[0.06] text-left text-[13px] text-neutral-400" data-i18n="technical-knowledge-required">Technical knowledge required</div>
-<div class="p-5 border-b border-r border-white/[0.06] text-[13px] text-neutral-500" data-i18n="high">High</div>
+<div class="p-5 border-b border-r border-white/[0.06] text-[13px] text-neutral-400" data-i18n="high">High</div>
 <div class="p-5 border-b border-white/[0.06] text-[13px] font-semibold text-white bg-brand-500/[0.04]" data-i18n="none">None</div>
 <div class="p-5 border-r border-white/[0.06] text-left text-[13px] text-neutral-400" data-i18n="data-exposed-to-third-parties">Data exposed to third parties</div>
-<div class="p-5 border-r border-white/[0.06] text-[13px] text-neutral-500" data-i18n="depends-on-the-provider">Depends on the provider</div>
+<div class="p-5 border-r border-white/[0.06] text-[13px] text-neutral-400" data-i18n="depends-on-the-provider">Depends on the provider</div>
 <div class="p-5 text-[13px] font-semibold text-white bg-brand-500/[0.04]" data-i18n="never">Stays on your machine</div>
 </div>
 </div>
-<p class="text-center text-[11px] text-neutral-600 mt-4" data-i18n="cmp.note">Freelance figures are typical market estimates, not a quote.</p>
+<p class="text-center text-[11px] text-neutral-400 mt-4" data-i18n="cmp.note">Freelance figures are typical market estimates, not a quote.</p>
 </div>
 </section>
 <!-- ==================== PRICING SECTION ==================== -->
@@ -807,7 +819,7 @@
 <div class="text-center mb-14">
 <span class="step-indicator inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono font-semibold text-brand-400 uppercase tracking-wider mb-4" data-i18n="pricing">Pricing</span>
 <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-3" data-i18n="simple-transparent-no-surprises">Simple, transparent, no surprises</h2>
-<p class="text-neutral-500 text-base max-w-lg mx-auto" data-i18n="one-time-payment-per-mcp-server">One-time payment per MCP server. Need 3 servers? You pay 3 times, based on the type of each one.</p>
+<p class="text-neutral-400 text-base max-w-lg mx-auto" data-i18n="one-time-payment-per-mcp-server">One-time payment per MCP server. Need 3 servers? You pay 3 times, based on the type of each one.</p>
 </div>
 <!-- Pricing grid -->
 <div class="grid md:grid-cols-3 gap-5 mb-12">
@@ -815,43 +827,43 @@
 <div class="card card-interactive reveal rounded-xl p-7 flex flex-col relative group hover:border-brand-500/20 transition-all">
 <div class="mb-6">
 <div class="flex items-center justify-between mb-3">
-<span class="text-[11px] font-mono font-semibold text-neutral-500 uppercase tracking-wider">Starter</span>
+<span class="text-[11px] font-mono font-semibold text-neutral-400 uppercase tracking-wider">Starter</span>
 <div class="w-8 h-8 rounded-lg bg-neutral-500/10 border border-neutral-500/20 flex items-center justify-center">
-<svg class="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 </div>
 <h3 class="text-[22px] font-bold text-white mb-1" data-i18n="local-files-2">Local Files</h3>
-<p class="text-[13px] text-neutral-500 leading-relaxed" data-i18n="perfect-to-get-started-with-ai">Perfect to get started with AI and files on your machine.</p>
+<p class="text-[13px] text-neutral-400 leading-relaxed" data-i18n="perfect-to-get-started-with-ai">Perfect to get started with AI and files on your machine.</p>
 </div>
 <div class="mb-6">
 <div class="flex items-baseline gap-1">
 <span class="text-[36px] font-extrabold text-white tracking-tight">$5</span>
-<span class="text-[14px] text-neutral-500 font-medium" data-i18n="mcp-generated">/ MCP generated</span>
+<span class="text-[14px] text-neutral-400 font-medium" data-i18n="mcp-generated">/ MCP generated</span>
 </div>
 </div>
 <ul class="space-y-3 mb-8 flex-1">
 <li class="flex items-start gap-3">
-<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] text-neutral-300" data-i18n="mcp-server-for-csv-json-txt">MCP server for .csv, .json, .txt, .md files</span>
 </li>
 <li class="flex items-start gap-3">
-<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] text-neutral-300" data-i18n="read-and-write-local-files">Read-only access to local files</span>
 </li>
 <li class="flex items-start gap-3">
-<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] text-neutral-300" data-i18n="semantic-indexing-with-embeddings">Text search across your files</span>
 </li>
 <li class="flex items-start gap-3">
-<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] text-neutral-300" data-i18n="search-by-content-and-metadata">Folder sandbox: nothing outside your folder is readable</span>
 </li>
 <li class="flex items-start gap-3">
-<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] text-neutral-300" data-i18n="works-with-claude-cursor-and-windsurf">Works with Claude, Cursor and Windsurf</span>
 </li>
 <li class="flex items-start gap-3">
-<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] text-neutral-300" data-i18n="installation-documentation-included">Installation documentation included</span>
 </li>
 </ul>
@@ -866,45 +878,45 @@
 <div class="flex items-center justify-between mb-3">
 <span class="text-[11px] font-mono font-semibold text-brand-400 uppercase tracking-wider" data-i18n="professional">Professional</span>
 <div class="w-8 h-8 rounded-lg bg-brand-500/10 border border-brand-500/20 flex items-center justify-center">
-<svg class="w-4 h-4 text-brand-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-brand-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 </div>
 <h3 class="text-[22px] font-bold text-white mb-1" data-i18n="database-2">Database</h3>
-<p class="text-[13px] text-neutral-500 leading-relaxed" data-i18n="ideal-for-teams-that-need-ai">Ideal for teams that need AI connected to their database.</p>
+<p class="text-[13px] text-neutral-400 leading-relaxed" data-i18n="ideal-for-teams-that-need-ai">Ideal for teams that need AI connected to their database.</p>
 </div>
 <div class="mb-6">
 <div class="flex items-baseline gap-1">
 <span class="text-[36px] font-extrabold text-white tracking-tight">$15</span>
-<span class="text-[14px] text-neutral-500 font-medium" data-i18n="mcp-generated">/ MCP generated</span>
+<span class="text-[14px] text-neutral-400 font-medium" data-i18n="mcp-generated">/ MCP generated</span>
 </div>
 </div>
 <ul class="space-y-3 mb-8 flex-1">
 <li class="flex items-start gap-3">
-<svg class="w-4 h-4 text-brand-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-brand-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] text-neutral-300" data-i18n-html="everything-in-local-files-plus">Everything in <span class="text-white font-medium">Local Files</span>, plus:</span>
 </li>
 <li class="flex items-start gap-3">
-<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] text-neutral-300" data-i18n="postgresql-mysql-mariadb-connection">PostgreSQL, MySQL, MariaDB connection</span>
 </li>
 <li class="flex items-start gap-3">
-<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] text-neutral-300" data-i18n="automatic-table-and-schema-mapping">Table and column discovery for your AI</span>
 </li>
 <li class="flex items-start gap-3">
-<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] text-neutral-300" data-i18n="sql-queries-generated-by-the-ai">SQL written by your AI assistant, run read-only</span>
 </li>
 <li class="flex items-start gap-3">
-<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] text-neutral-300" data-i18n="configurable-read-and-write-permissions">Configurable row limit and blocked columns</span>
 </li>
 <li class="flex items-start gap-3">
-<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] text-neutral-300" data-i18n="validation-of-dangerous-queries-drop-delete">Validation of dangerous queries (DROP, DELETE)</span>
 </li>
 <li class="flex items-start gap-3">
-<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] text-neutral-300" data-i18n="connection-and-timeout-handling">Connection and timeout handling</span>
 </li>
 </ul>
@@ -914,47 +926,47 @@
 <div class="card card-interactive reveal stagger-2 rounded-xl p-7 flex flex-col relative group hover:border-brand-500/20 transition-all">
 <div class="mb-6">
 <div class="flex items-center justify-between mb-3">
-<span class="text-[11px] font-mono font-semibold text-neutral-500 uppercase tracking-wider">Enterprise</span>
+<span class="text-[11px] font-mono font-semibold text-neutral-400 uppercase tracking-wider">Enterprise</span>
 <div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
-<svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 </div>
 <h3 class="text-[22px] font-bold text-white mb-1" data-i18n="external-api">External API</h3>
-<p class="text-[13px] text-neutral-500 leading-relaxed" data-i18n="for-integrations-with-external-apis-and">For integrations with external APIs and SaaS.</p>
+<p class="text-[13px] text-neutral-400 leading-relaxed" data-i18n="for-integrations-with-external-apis-and">For integrations with external APIs and SaaS.</p>
 </div>
 <div class="mb-6">
 <div class="flex items-baseline gap-1">
 <span class="text-[36px] font-extrabold text-white tracking-tight">$20</span>
-<span class="text-[14px] text-neutral-500 font-medium" data-i18n="mcp-generated">/ MCP generated</span>
+<span class="text-[14px] text-neutral-400 font-medium" data-i18n="mcp-generated">/ MCP generated</span>
 </div>
 </div>
 <ul class="space-y-3 mb-8 flex-1">
 <li class="flex items-start gap-3">
-<svg class="w-4 h-4 text-amber-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-amber-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] text-neutral-300" data-i18n-html="everything-in-database-plus">Everything in <span class="text-white font-medium">Database</span>, plus:</span>
 </li>
 <li class="flex items-start gap-3">
-<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] text-neutral-300" data-i18n="connection-to-any-rest-or-graphql">Connection to any REST API (read-only GET)</span>
 </li>
 <li class="flex items-start gap-3">
-<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] text-neutral-300" data-i18n="authentication-with-api-key-oauth2-or">Authentication with an API key or bearer token</span>
 </li>
 <li class="flex items-start gap-3">
-<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] text-neutral-300" data-i18n="rate-limiting-and-smart-caching">Endpoint allowlist and blocked fields</span>
 </li>
 <li class="flex items-start gap-3">
-<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] text-neutral-300" data-i18n="mapping-of-endpoints-to-ai-tools">Mapping of endpoints to AI tools</span>
 </li>
 <li class="flex items-start gap-3">
-<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] text-neutral-300" data-i18n="converting-json-responses-to-text">Readable, size-limited responses</span>
 </li>
 <li class="flex items-start gap-3">
-<svg class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] text-neutral-300" data-i18n="pagination-and-error-handling">Timeouts and clear error messages</span>
 </li>
 </ul>
@@ -962,24 +974,24 @@
 </div>
 </div>
 <!-- Trust footer -->
-<div class="flex flex-wrap items-center justify-center gap-6 text-neutral-500">
+<div class="flex flex-wrap items-center justify-center gap-6 text-neutral-400">
 <div class="flex items-center gap-2">
-<svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-emerald-500" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] font-medium" data-i18n="one-time-payment-no-subscriptions">One-time payment, no subscriptions</span>
 </div>
 <div class="w-px h-4 bg-white/10"></div>
 <div class="flex items-center gap-2">
-<svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-emerald-500" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] font-medium" data-i18n="instant-delivery">Instant delivery</span>
 </div>
 <div class="w-px h-4 bg-white/10"></div>
 <div class="flex items-center gap-2">
-<svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-emerald-500" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] font-medium" data-i18n="email-support">Email support</span>
 </div>
 <div class="w-px h-4 bg-white/10"></div>
 <div class="flex items-center gap-2">
-<svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 text-emerald-500" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
 <span class="text-[13px] font-medium" data-i18n="free-updates">Free updates</span>
 </div>
 </div>
@@ -991,7 +1003,7 @@
 <div class="text-center mb-14">
 <span class="step-indicator inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono font-semibold text-brand-400 uppercase tracking-wider mb-4" data-i18n="uc.eyebrow">Use cases</span>
 <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-3" data-i18n="uc.title">What you can connect</h2>
-<p class="text-neutral-500 text-base max-w-lg mx-auto" data-i18n="uc.subtitle">Typical scenarios. These are examples, not customer stories.</p>
+<p class="text-neutral-400 text-base max-w-lg mx-auto" data-i18n="uc.subtitle">Typical scenarios. These are examples, not customer stories.</p>
 </div>
 <div class="grid md:grid-cols-3 gap-5">
 <div class="card card-interactive reveal rounded-xl p-7">
@@ -1029,19 +1041,19 @@
 <div class="space-y-3">
 <div class="flex items-center gap-3">
 <div class="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
-<svg class="w-3 h-3 text-emerald-400" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-3 h-3 text-emerald-400" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
 </div>
 <span class="text-[13px] text-neutral-300" data-i18n="no-credential-exposure">No credential exposure</span>
 </div>
 <div class="flex items-center gap-3">
 <div class="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
-<svg class="w-3 h-3 text-emerald-400" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-3 h-3 text-emerald-400" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
 </div>
 <span class="text-[13px] text-neutral-300" data-i18n="no-dependence-on-a-single-vendor">No dependence on a single vendor</span>
 </div>
 <div class="flex items-center gap-3">
 <div class="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
-<svg class="w-3 h-3 text-emerald-400" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+<svg aria-hidden="true" class="w-3 h-3 text-emerald-400" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
 </div>
 <span class="text-[13px] text-neutral-300" data-i18n="full-control-over-permissions">Full control over permissions</span>
 </div>
@@ -1053,7 +1065,7 @@
 <div class="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
 <div class="w-2.5 h-2.5 rounded-full bg-amber-500/80"></div>
 <div class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></div>
-<span class="ml-auto text-[10px] font-mono text-neutral-600">config.json</span>
+<span class="ml-auto text-[10px] font-mono text-neutral-400">config.json</span>
 </div>
 <pre class="p-5 overflow-x-auto"><code><span class="punctuation">{</span>
   <span class="property">"mcpServers"</span><span class="punctuation">: {</span>
@@ -1081,7 +1093,7 @@
 <p class="text-neutral-400 text-base mb-8 max-w-md mx-auto" data-i18n="no-sign-ups-or-contracts-choose">No sign-ups or contracts. Choose your data source and get your MCP server in minutes.</p>
 <a class="btn-primary inline-flex items-center gap-2 px-8 py-4 rounded-xl text-white font-semibold text-[15px] shadow-lg shadow-brand-500/25" href="#generator">
             <span data-i18n="buy-my-mcp-server">Buy my MCP server</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            <svg aria-hidden="true" class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </a>
 </div>
 </div>
@@ -1093,7 +1105,7 @@
 <div class="text-center mb-10">
 <span class="step-indicator inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono font-semibold text-brand-400 uppercase tracking-wider mb-4" data-i18n="frequently-asked-questions">Frequently asked questions</span>
 <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-3" data-i18n="before-you-buy">Before you buy</h2>
-<p class="text-neutral-500 text-base" data-i18n="tap-a-question-and-see-the">Tap a question and see the answer as in a chat.</p>
+<p class="text-neutral-400 text-base" data-i18n="tap-a-question-and-see-the">Tap a question and see the answer as in a chat.</p>
 </div>
 <div class="card reveal rounded-2xl overflow-hidden shadow-2xl shadow-black/40">
 <!-- Chat header -->
@@ -1108,7 +1120,7 @@
 </div>
 </div>
 <!-- Messages -->
-<div class="chat-scroll px-4 py-5 space-y-3 overflow-y-auto" id="chatMessages" style="max-height: 380px;"></div>
+<div class="chat-scroll px-4 py-5 space-y-3 overflow-y-auto" aria-live="polite" data-i18n-aria-label="a11y.chat.label" role="log" id="chatMessages" style="max-height: 380px;"></div>
 <!-- Quick reply chips -->
 <div class="px-4 py-4 border-t border-white/[0.06] bg-white/[0.01]">
 <div class="flex flex-wrap gap-2" id="faqChips"></div>
@@ -1116,6 +1128,7 @@
 </div>
 </div>
 </section>
+</main>
 <!-- ==================== FOOTER ==================== -->
 <footer class="py-14 px-6 border-t border-white/[0.04]">
 <div class="max-w-6xl mx-auto">
@@ -1123,7 +1136,7 @@
 <div class="md:col-span-1">
 <a class="flex items-center gap-2.5 mb-4" href="index.html">
 <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg shadow-brand-500/20">
-<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<svg aria-hidden="true" class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 <path d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
 </svg>
 </div>
@@ -1131,10 +1144,10 @@
 <span class="text-brand-500">&gt;_</span><span class="text-white">mcp</span><span class="text-neutral-400">builder</span>
 </span>
 </a>
-<p class="text-[13px] text-neutral-500 leading-relaxed" data-i18n="custom-mcp-servers-to-connect-your">Custom MCP servers to connect your AI to your data, with no friction and without leaving your infrastructure.</p>
+<p class="text-[13px] text-neutral-400 leading-relaxed" data-i18n="custom-mcp-servers-to-connect-your">Custom MCP servers to connect your AI to your data, with no friction and without leaving your infrastructure.</p>
 </div>
 <div>
-<p class="text-[11px] font-mono uppercase tracking-wider text-neutral-600 mb-4" data-i18n="product">Product</p>
+<p class="text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-4" data-i18n="product">Product</p>
 <div class="flex flex-col gap-3 text-[13px] text-neutral-400">
 <a class="hover:text-white transition-colors" data-i18n="how-it-works" href="#how">How it works</a>
 <a class="hover:text-white transition-colors" data-i18n="features" href="#features">Features</a>
@@ -1144,7 +1157,7 @@
 </div>
 </div>
 <div>
-<p class="text-[11px] font-mono uppercase tracking-wider text-neutral-600 mb-4" data-i18n="resources">Resources</p>
+<p class="text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-4" data-i18n="resources">Resources</p>
 <div class="flex flex-col gap-3 text-[13px] text-neutral-400">
 <a class="hover:text-white transition-colors" data-i18n="documentation" href="docs.html">Documentation</a>
 <a class="hover:text-white transition-colors" data-i18n="support" href="support.html">Support</a>
@@ -1152,7 +1165,7 @@
 </div>
 </div>
 <div>
-<p class="text-[11px] font-mono uppercase tracking-wider text-neutral-600 mb-4" data-i18n="legal">Legal</p>
+<p class="text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-4" data-i18n="legal">Legal</p>
 <div class="flex flex-col gap-3 text-[13px] text-neutral-400">
 <a class="hover:text-white transition-colors" data-i18n="terms" href="politics.html">Terms</a>
 <a class="hover:text-white transition-colors" data-i18n="privacy" href="politics.html#privacy">Privacy</a>
@@ -1161,28 +1174,28 @@
 </div>
 <div class="divider mb-8"></div>
 <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-<span class="text-[12px] text-neutral-600"><span data-i18n="2026-mcp-builder-all-rights-reserved">© 2026 MCP Builder. All rights reserved.</span> <a class="hover:text-neutral-400 transition-colors" data-i18n="admin-panel-demo" href="admin.html">Admin panel (demo)</a></span>
-<a class="text-[12px] text-neutral-500 hover:text-white transition-colors flex items-center gap-1.5" href="https://github.com/Josequevedov08" target="_blank">
-<svg class="w-3.5 h-3.5" fill="currentColor" viewbox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path></svg>
+<span class="text-[12px] text-neutral-400"><span data-i18n="2026-mcp-builder-all-rights-reserved">© 2026 MCP Builder. All rights reserved.</span> <a class="hover:text-neutral-400 transition-colors" data-i18n="admin-panel-demo" href="admin.html">Admin panel (demo)</a></span>
+<a class="text-[12px] text-neutral-400 hover:text-white transition-colors flex items-center gap-1.5" href="https://github.com/Josequevedov08" target="_blank">
+<svg aria-hidden="true" class="w-3.5 h-3.5" fill="currentColor" viewbox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path></svg>
           @Josequevedov08
         </a>
 </div>
 </div>
 </footer>
 <!-- ==================== MODAL: CHECKOUT / STRIPE REDIRECT ==================== -->
-<div class="fixed inset-0 z-[100] hidden items-center justify-center modal-backdrop p-4" id="checkoutModal">
+<div class="fixed inset-0 z-[100] hidden items-center justify-center modal-backdrop p-4" id="checkoutModal" aria-modal="true" role="dialog" aria-labelledby="checkoutTitle">
 <div class="w-full max-w-md card rounded-2xl p-0 relative animate-scale-in shadow-2xl overflow-hidden">
 <!-- Header -->
 <div class="px-6 pt-6 pb-4 border-b border-white/[0.06]">
 <div class="flex items-center justify-between mb-4">
 <div class="flex items-center gap-2">
 <div class="w-7 h-7 rounded-lg gradient-red flex items-center justify-center">
-<svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
+<svg aria-hidden="true" class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
 </div>
-<span class="text-[13px] font-semibold text-white" data-i18n="secure-checkout-with-stripe">Secure checkout with Stripe</span>
+<span class="text-[13px] font-semibold text-white" id="checkoutTitle" data-i18n="pay.demo.checkout">Demo checkout</span>
 </div>
-<button class="w-7 h-7 rounded-lg bg-white/[0.04] flex items-center justify-center hover:bg-white/[0.08] transition-colors" onclick="closeCheckout()">
-<svg class="w-3.5 h-3.5 text-neutral-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<button class="w-7 h-7 rounded-lg bg-white/[0.04] flex items-center justify-center hover:bg-white/[0.08] transition-colors" onclick="closeCheckout()" aria-label="Close" data-i18n-aria-label="a11y.close">
+<svg aria-hidden="true" class="w-3.5 h-3.5 text-neutral-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </button>
 </div>
 <!-- Order summary -->
@@ -1191,7 +1204,7 @@
 <span class="text-[13px] text-neutral-300" id="checkoutItem">MCP server - Local Files</span>
 <span class="text-[13px] font-semibold text-white" id="checkoutPrice">$5.00</span>
 </div>
-<div class="flex items-center justify-between text-[11px] text-neutral-500 mb-3">
+<div class="flex items-center justify-between text-[11px] text-neutral-400 mb-3">
 <span data-i18n="no-subscription-one-time-payment">No subscription, one-time payment</span>
 <span data-i18n="instant-delivery">Instant delivery</span>
 </div>
@@ -1214,7 +1227,7 @@
 <!-- Tabs -->
 <div class="flex gap-2 mb-5">
 <button class="flex-1 py-2.5 rounded-lg text-[12px] font-semibold transition-all bg-brand-500/10 border border-brand-500/30 text-brand-400 flex items-center justify-center gap-2" id="tabCard" onclick="setPaymentMethod('card')">
-<svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><rect height="13" rx="2" width="19" x="2.5" y="5.5"></rect><path d="M2.5 9.5h19" stroke-linecap="round"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><rect height="13" rx="2" width="19" x="2.5" y="5.5"></rect><path d="M2.5 9.5h19" stroke-linecap="round"></path></svg>
 <span data-i18n="card">Card</span>
 </button>
 <button class="flex-1 py-2.5 rounded-lg text-[12px] font-semibold transition-all bg-white/[0.02] border border-white/[0.08] text-neutral-400 hover:text-neutral-300 flex items-center justify-center gap-2" id="tabPaypal" onclick="setPaymentMethod('paypal')">
@@ -1225,12 +1238,12 @@
 <div class="space-y-4" id="cardForm">
 <!-- Email -->
 <div>
-<label class="text-[11px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block" data-i18n="email-to-send-you-the-receipt">Email (to send you the receipt)</label>
+<label class="text-[11px] font-medium text-neutral-400 uppercase tracking-wider mb-1.5 block" data-i18n="email-to-send-you-the-receipt" for="emailInput">Email (to send you the receipt)</label>
 <input class="input-field w-full px-4 py-3 rounded-xl text-[14px]" data-i18n-placeholder="you-email-com" id="emailInput" placeholder="you@email.com" type="email"/>
 </div>
 <!-- Card number -->
 <div>
-<label class="text-[11px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block" data-i18n="card-number">Card number</label>
+<label class="text-[11px] font-medium text-neutral-400 uppercase tracking-wider mb-1.5 block" data-i18n="card-number" for="cardNumber">Card number</label>
 <div class="relative">
 <input class="input-field w-full px-4 py-3 pr-16 rounded-xl text-[14px] font-mono" id="cardNumber" maxlength="19" oninput="formatCardNumber(this)" placeholder="4242 4242 4242 4242" type="text"/>
 <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
@@ -1243,17 +1256,17 @@
 <!-- Expiry & CVC -->
 <div class="grid grid-cols-2 gap-3">
 <div>
-<label class="text-[11px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block" data-i18n="expiry">Expiry</label>
+<label class="text-[11px] font-medium text-neutral-400 uppercase tracking-wider mb-1.5 block" data-i18n="expiry" for="cardExpiry">Expiry</label>
 <input class="input-field w-full px-4 py-3 rounded-xl text-[14px] font-mono" data-i18n-placeholder="mm-yy" id="cardExpiry" maxlength="5" oninput="formatExpiry(this)" placeholder="MM/YY" type="text"/>
 </div>
 <div>
-<label class="text-[11px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block">CVC</label>
+<label class="text-[11px] font-medium text-neutral-400 uppercase tracking-wider mb-1.5 block" for="cardCvc">CVC</label>
 <input class="input-field w-full px-4 py-3 rounded-xl text-[14px] font-mono" id="cardCvc" maxlength="4" placeholder="123" type="text"/>
 </div>
 </div>
 <!-- Cardholder -->
 <div>
-<label class="text-[11px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block" data-i18n="name-on-card">Name on card</label>
+<label class="text-[11px] font-medium text-neutral-400 uppercase tracking-wider mb-1.5 block" data-i18n="name-on-card" for="cardName">Name on card</label>
 <input class="input-field w-full px-4 py-3 rounded-xl text-[14px]" data-i18n-placeholder="as-it-appears-on-the-card" id="cardName" placeholder="As it appears on the card" type="text"/>
 </div>
 </div>
@@ -1262,55 +1275,59 @@
 <div class="w-14 h-14 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mx-auto mb-4">
 <span class="text-[16px] font-bold text-blue-400">PP</span>
 </div>
-<p class="text-[13px] text-neutral-400 mb-1" data-i18n="pay-with-paypal">Pay with PayPal</p>
-<p class="text-[11px] text-neutral-500" data-i18n="you-will-be-redirected-to-paypal">You will be redirected to PayPal to complete the payment</p>
+<p class="text-[13px] text-neutral-400 mb-1" data-i18n="pay-with-paypal">PayPal</p>
+<p class="text-[11px] text-neutral-400" data-i18n="pay.demo.paypal">PayPal is not available in this demo. Use the card tab.</p>
 </div>
+<p aria-live="polite" class="text-[12px] text-neutral-300 mt-4" id="buildProgress" role="status"></p>
 <p class="hidden mt-4 rounded-lg bg-red-500/[0.08] border border-red-500/20 px-3 py-2 text-[12px] text-red-300" id="checkoutError" role="alert"></p>
-<!-- Test mode banner -->
-<div class="mt-4 rounded-lg bg-amber-500/[0.06] border border-amber-500/15 px-3 py-2 flex items-center gap-2">
-<svg class="w-3.5 h-3.5 text-amber-400 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" fill-rule="evenodd"></path></svg>
-<span class="text-[10px] font-medium text-amber-400/90" data-i18n="test-mode-use-any-data-no">TEST MODE. Use any data, no real charge will be made</span>
+<!-- Demo payment box -->
+<div class="mt-4 rounded-lg bg-amber-500/[0.06] border border-amber-500/20 px-3 py-3" role="note">
+<p class="text-[11px] font-semibold text-amber-400 mb-1" data-i18n="pay.demo.title">Demo payment for judges</p>
+<p class="text-[11px] text-neutral-300 leading-relaxed mb-2" data-i18n="pay.demo.text">Nothing is charged and no card data leaves your browser. Use the test card 4242 4242 4242 4242, any future date and any CVC, or fill it in with the button.</p>
+<button class="px-3 py-1.5 rounded-md text-[11px] font-semibold bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 transition-colors" onclick="fillTestCard()" type="button" data-i18n="pay.demo.fill">Fill in test card</button>
+<p aria-live="polite" class="text-[11px] text-neutral-300 mt-2" id="testCardStatus" role="status"></p>
+</div>
 </div>
 </div>
 <!-- Footer -->
 <div class="px-6 pb-6">
 <button class="btn-primary w-full py-3.5 rounded-xl text-white font-semibold text-[14px] flex items-center justify-center gap-2 shadow-lg shadow-brand-500/25" id="checkoutPayButton" onclick="processPayment()">
 <span id="payButtonText">Pay $5.00</span>
-<svg class="w-4 h-4" fill="none" id="payButtonIcon" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-<svg class="w-4 h-4 animate-spin hidden" fill="none" id="payButtonSpinner" viewbox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4" fill="none" id="payButtonIcon" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4 animate-spin hidden" fill="none" id="payButtonSpinner" viewbox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path></svg>
 </button>
-<p class="text-center text-[10px] text-neutral-600 mt-3 font-mono flex items-center justify-center gap-1.5">
-<svg class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-          <span data-i18n="payment-processed-by-stripe-256-bit">Payment processed by Stripe. 256-bit SSL encryption</span>
+<p class="text-center text-[10px] text-neutral-400 mt-3 font-mono flex items-center justify-center gap-1.5">
+<svg aria-hidden="true" class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          <span data-i18n="pay.demo.footer">Simulated payment. No card data is sent anywhere.</span>
         </p>
 </div>
 </div>
 </div>
 <!-- ==================== MODAL: SUCCESS ==================== -->
-<div class="fixed inset-0 z-[100] hidden items-center justify-center modal-backdrop p-4" id="successModal">
+<div class="fixed inset-0 z-[100] hidden items-center justify-center modal-backdrop p-4" id="successModal" aria-modal="true" role="dialog" aria-label="Payment successful">
 <div class="w-full max-w-lg card rounded-2xl p-8 md:p-10 relative animate-scale-in shadow-2xl">
 <!-- Close -->
-<button class="absolute top-4 right-4 w-8 h-8 rounded-lg bg-white/[0.04] flex items-center justify-center hover:bg-white/[0.08] transition-colors" onclick="closeSuccess()">
-<svg class="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<button class="absolute top-4 right-4 w-8 h-8 rounded-lg bg-white/[0.04] flex items-center justify-center hover:bg-white/[0.08] transition-colors" onclick="closeSuccess()" aria-label="Close" data-i18n-aria-label="a11y.close">
+<svg aria-hidden="true" class="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </button>
 <!-- Success icon -->
 <div class="flex justify-center mb-6">
 <div class="w-16 h-16 rounded-full bg-emerald-500/10 border-2 border-emerald-500/30 flex items-center justify-center animate-scale-in">
-<svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
+<svg aria-hidden="true" class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
 </div>
 </div>
 <h3 class="text-xl font-bold text-center mb-1.5" data-i18n="payment-successful">Payment successful</h3>
 <p class="text-neutral-400 text-center text-[13px] mb-2" data-i18n="your-mcp-server-was-generated-successfully">Your MCP server was generated successfully.</p>
-<p class="text-neutral-500 text-center text-[11px] mb-8"><span data-i18n="order-id">Order ID:</span> <span class="font-mono text-neutral-400" id="orderId">#MB-XXXX</span></p>
+<p class="text-neutral-400 text-center text-[11px] mb-8"><span data-i18n="order-id">Order ID:</span> <span class="font-mono text-neutral-400" id="orderId">#MB-XXXX</span></p>
 <!-- Download button -->
 <button class="btn-primary w-full py-3.5 rounded-xl text-white font-semibold text-[14px] flex items-center justify-center gap-2 mb-6 shadow-lg shadow-brand-500/25">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg aria-hidden="true" class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
         <span data-i18n="download-server-zip">Download server.zip</span>
       </button>
 <!-- Install instructions -->
 <div class="rounded-xl overflow-hidden">
 <div class="flex items-center justify-between px-4 py-2.5 bg-white/[0.03] border-b border-white/[0.04]">
-<span class="text-[11px] font-mono text-neutral-500" data-i18n="installation">Installation</span>
+<span class="text-[11px] font-mono text-neutral-400" data-i18n="installation">Installation</span>
 <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded" data-i18n="2-steps">2 steps</span>
 </div>
 <pre class="code-block p-4 overflow-x-auto text-[12px]"><code><span class="comment" data-i18n-pre="1-install-dependencies"># 1. Install dependencies</span>
@@ -1320,16 +1337,16 @@
 <span class="comment" data-i18n-pre="paste-this-path-into-your-config"># Paste this path into your config.json:</span>
 <span class="punctuation">{</span> <span class="property">"command"</span><span class="punctuation">: </span><span class="string">"node"</span><span class="punctuation">, </span><span class="property">"args"</span><span class="punctuation">: [</span><span class="string">"./server/index.js"</span><span class="punctuation">] }</span></code></pre>
 </div>
-<p class="text-center text-[11px] text-neutral-600 mt-6">
+<p class="text-center text-[11px] text-neutral-400 mt-6">
         <span data-i18n="need-help-check-the">Need help? Check the</span> <a class="text-brand-400 hover:text-brand-300 transition-colors" data-i18n="documentation-2" href="#">documentation</a>
 </p>
 </div>
 </div>
 <!-- ==================== MODAL: DEMO DE INSTALACIÓN ==================== -->
-<div class="fixed inset-0 z-[100] hidden items-center justify-center modal-backdrop p-4" id="demoModal">
+<div class="fixed inset-0 z-[100] hidden items-center justify-center modal-backdrop p-4" id="demoModal" aria-modal="true" role="dialog" aria-label="Installation demo" data-i18n-aria-label="demo.dialog.label">
 <div class="w-full max-w-xl relative animate-scale-in">
-<button class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-white/[0.08] border border-white/[0.12] flex items-center justify-center hover:bg-white/[0.14] transition-colors z-10" onclick="closeDemo()">
-<svg class="w-4 h-4 text-neutral-300" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<button class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-white/[0.08] border border-white/[0.12] flex items-center justify-center hover:bg-white/[0.14] transition-colors z-10" onclick="closeDemo()" aria-label="Close" data-i18n-aria-label="a11y.close">
+<svg aria-hidden="true" class="w-4 h-4 text-neutral-300" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </button>
 <div class="code-block rounded-2xl overflow-hidden shadow-2xl">
 <!-- Player top bar -->
@@ -1337,7 +1354,7 @@
 <div class="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
 <div class="w-2.5 h-2.5 rounded-full bg-amber-500/80"></div>
 <div class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></div>
-<span class="ml-auto text-[10px] font-mono text-neutral-500" data-i18n="installation-demo-sh-animated-preview">installation-demo.sh - animated preview</span>
+<span class="ml-auto text-[10px] font-mono text-neutral-400" data-i18n="installation-demo-sh-animated-preview">installation-demo.sh - animated preview</span>
 </div>
 <!-- Simulated terminal -->
 <div class="p-6 min-h-[220px]">
@@ -1345,13 +1362,13 @@
 </div>
 <!-- Caption + progress -->
 <div class="px-6 pb-5">
-<p class="text-[12px] text-neutral-500 mb-3 font-medium" id="demoCaption">Starting demo...</p>
+<p class="text-[12px] text-neutral-400 mb-3 font-medium" id="demoCaption">Starting demo...</p>
 <div class="h-1 rounded-full bg-white/[0.06] overflow-hidden">
 <div class="demo-progress h-full gradient-red" id="demoProgress" style="width: 0%"></div>
 </div>
 </div>
 </div>
-<p class="text-center text-[11px] text-neutral-500 mt-4" data-i18n="simulation-of-the-real-installation-process">Simulation of the real installation process. The final file includes your exact configuration.</p>
+<p class="text-center text-[11px] text-neutral-400 mt-4" data-i18n="simulation-of-the-real-installation-process">Simulation of the real installation process. The final file includes your exact configuration.</p>
 </div>
 </div>
 <!-- ==================== JAVASCRIPT ==================== -->
@@ -1403,6 +1420,44 @@
       ctaText.textContent = I18N.t('cta.generate', { price: price.label });
     }
 
+    // ---- dialogs: focus moves in, stays inside and returns to the opener ----
+    const dialogState = { opener: null, active: null };
+    const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+    function openDialog(modal) {
+      dialogState.opener = document.activeElement;
+      dialogState.active = modal;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      const first = modal.querySelector(FOCUSABLE);
+      if (first) first.focus();
+    }
+
+    function closeDialog(modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      if (dialogState.active === modal) {
+        dialogState.active = null;
+        if (dialogState.opener && dialogState.opener.focus) dialogState.opener.focus();
+      }
+    }
+
+    document.addEventListener('keydown', (event) => {
+      const modal = dialogState.active;
+      if (!modal || event.key !== 'Tab') return;
+      const items = Array.from(modal.querySelectorAll(FOCUSABLE)).filter((el) => el.offsetParent !== null);
+      if (items.length === 0) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+
     function openCheckout() {
       const source = document.getElementById('sourceSelect').value;
       if (!source) {
@@ -1420,11 +1475,13 @@
       const serverName = McpApi.slugify(document.getElementById('serverName').value);
       const nameHint = document.getElementById('serverNameHint');
       if (!McpApi.isValidServerName(serverName)) {
+        document.getElementById('serverName').setAttribute('aria-invalid', 'true');
         nameHint.classList.remove('hidden');
         document.getElementById('serverName').focus();
         return;
       }
       nameHint.classList.add('hidden');
+      document.getElementById('serverName').removeAttribute('aria-invalid');
       document.getElementById('checkoutError').classList.add('hidden');
 
       const price = prices[source];
@@ -1432,21 +1489,15 @@
       resetPromo();
       refreshCheckoutTotal();
 
-      const modal = document.getElementById('checkoutModal');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
+      openDialog(document.getElementById('checkoutModal'));
     }
 
     function closeCheckout() {
-      const modal = document.getElementById('checkoutModal');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
+      closeDialog(document.getElementById('checkoutModal'));
     }
 
     function closeSuccess() {
-      const modal = document.getElementById('successModal');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
+      closeDialog(document.getElementById('successModal'));
     }
 
     function setPaymentMethod(method) {
@@ -1536,13 +1587,23 @@
         : I18N.t('checkout.pay', { price: document.getElementById('checkoutPrice').textContent });
     }
 
+    function fillTestCard() {
+      const values = { emailInput: 'judge@example.com', cardNumber: '4242 4242 4242 4242', cardExpiry: '12/34', cardCvc: '123', cardName: 'Test Judge' };
+      Object.keys(values).forEach(function (id) { document.getElementById(id).value = values[id]; });
+      setPaymentMethod('card');
+      document.getElementById('testCardStatus').textContent = I18N.t('pay.demo.filled');
+    }
+
     async function processPayment() {
       const errorBox = document.getElementById('checkoutError');
       errorBox.classList.add('hidden');
+      const progress = document.getElementById('buildProgress');
+      progress.textContent = I18N.t('progress.payment');
       setPayButtonBusy(true);
 
       // Demo payment step, followed by the real API call.
       await new Promise((resolve) => setTimeout(resolve, 1200));
+      progress.textContent = I18N.t('progress.generating');
 
       const payload = collectBuildPayload();
       try {
@@ -1553,14 +1614,19 @@
             server_name: build.server_name,
             file_count: Object.keys(build.files).length,
             language: payload.language,
+            autoRead: document.getElementById('autoRead').checked,
             spoken_summary: build.spoken_summary,
+            applied_rules: build.applied_rules,
+            ai_status: build.ai_status,
             files: build.files
           }));
         } catch (storageError) { /* storage unavailable */ }
+        progress.textContent = I18N.t('progress.done');
         closeCheckout();
         setPayButtonBusy(false);
         showSuccess();
       } catch (err) {
+        progress.textContent = '';
         setPayButtonBusy(false);
         errorBox.textContent = McpApi.errorMessage(err);
         errorBox.classList.remove('hidden');
@@ -1592,11 +1658,27 @@
       if (e.key === 'Escape') {
         closeCheckout();
         closeSuccess();
+        closeDemo();
       }
     });
 
     // Mobile menu
+    function syncMenuButton() {
+      const menu = document.getElementById('mobileMenu');
+      document.getElementById('menuButton').setAttribute('aria-expanded', String(!menu.classList.contains('hidden')));
+    }
+
     function toggleMobileMenu() {
+      toggleMobileMenuBase();
+      syncMenuButton();
+    }
+
+    function closeMobileMenu() {
+      closeMobileMenuBase();
+      syncMenuButton();
+    }
+
+    function toggleMobileMenuBase() {
       const menu = document.getElementById('mobileMenu');
       const iconOpen = document.getElementById('menuIconOpen');
       const iconClose = document.getElementById('menuIconClose');
@@ -1612,7 +1694,7 @@
       }
     }
 
-    function closeMobileMenu() {
+    function closeMobileMenuBase() {
       const menu = document.getElementById('mobileMenu');
       const iconOpen = document.getElementById('menuIconOpen');
       const iconClose = document.getElementById('menuIconClose');
@@ -1688,7 +1770,7 @@
       const code = input.value.trim().toUpperCase();
 
       if (!code) {
-        showPromoMessage('promo.empty', {}, 'text-neutral-500');
+        showPromoMessage('promo.empty', {}, 'text-neutral-400');
         return;
       }
 
@@ -1762,9 +1844,9 @@
           <div class="bg-brand-600 rounded-2xl rounded-br-sm px-4 py-2.5">
             <p class="text-[13px] text-white leading-relaxed">${item.q}</p>
           </div>
-          <p class="text-[10px] text-neutral-600 mt-1 mr-1 text-right flex items-center justify-end gap-1">
+          <p class="text-[10px] text-neutral-400 mt-1 mr-1 text-right flex items-center justify-end gap-1">
             ${sendTime}
-            <svg id="${tickId}" class="w-3.5 h-3.5 text-neutral-600 transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2 12l4 4L14 8"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 12l4 4L20 8"/></svg>
+            <svg aria-hidden="true" id="${tickId}" class="w-3.5 h-3.5 text-neutral-400 transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2 12l4 4L14 8"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 12l4 4L20 8"/></svg>
           </p>
         </div>`;
       box.appendChild(userWrap);
@@ -1797,13 +1879,13 @@
               <div class="bg-white/[0.05] border border-white/[0.06] rounded-2xl rounded-bl-sm px-4 py-2.5">
                 <p class="text-[13px] text-neutral-200 leading-relaxed">${item.a}</p>
               </div>
-              <p class="text-[10px] text-neutral-600 mt-1 ml-1">${nowLabel()}</p>
+              <p class="text-[10px] text-neutral-400 mt-1 ml-1">${nowLabel()}</p>
             </div>`;
           box.appendChild(botWrap);
           scrollChatToBottom();
 
           const tick = document.getElementById(tickId);
-          if (tick) tick.classList.replace('text-neutral-600', 'text-sky-400');
+          if (tick) tick.classList.replace('text-neutral-400', 'text-sky-400');
         }, 900);
       }, 350);
     }
@@ -1834,16 +1916,12 @@
     }
 
     function openDemo() {
-      const modal = document.getElementById('demoModal');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
+      openDialog(document.getElementById('demoModal'));
       runDemoSequence();
     }
 
     function closeDemo() {
-      const modal = document.getElementById('demoModal');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
+      closeDialog(document.getElementById('demoModal'));
       clearDemoTimers();
     }
 
@@ -1939,7 +2017,7 @@
             <div class="bg-white/[0.05] border border-white/[0.06] rounded-2xl rounded-bl-sm px-4 py-2.5">
               <p class="text-[13px] text-neutral-200 leading-relaxed">${I18N.t('chat.welcome')}</p>
             </div>
-            <p class="text-[10px] text-neutral-600 mt-1 ml-1">${nowLabel()}</p>
+            <p class="text-[10px] text-neutral-400 mt-1 ml-1">${nowLabel()}</p>
           </div>
         </div>`;
     }

@@ -72,7 +72,7 @@
 </div>
 <span class="font-mono font-bold text-[15px] tracking-tight"><span class="text-brand-500">&gt;_</span><span class="text-white">mcp</span><span class="text-neutral-400">builder</span></span>
 </a>
-<nav class="hidden lg:flex items-center gap-1">
+<nav aria-label="Main navigation" class="hidden lg:flex items-center gap-1" data-i18n-aria-label="nav.main">
 <a class="px-3.5 py-2 text-[13px] font-medium text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]" data-i18n="home" href="index.html">Home</a>
 <a class="px-3.5 py-2 text-[13px] font-medium text-brand-400 rounded-lg bg-brand-500/8" data-i18n="documentation" href="docs.html">Documentation</a>
 <a class="px-3.5 py-2 text-[13px] font-medium text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]" data-i18n="support" href="support.html">Support</a>
@@ -82,13 +82,13 @@
 <a class="hidden sm:block px-3.5 py-2 text-[13px] font-medium text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]" data-i18n="support" href="support.html">Support</a>
 <a class="hidden sm:block px-3.5 py-2 text-[13px] font-medium text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]" data-i18n="legal" href="politics.html">Legal</a>
 </div>
-<button class="lg:hidden w-10 h-10 rounded-lg bg-white/[0.04] flex items-center justify-center hover:bg-white/[0.08] transition-colors" onclick="toggleMobileMenu()">
-<svg class="w-5 h-5 text-neutral-300" fill="none" id="menuIconOpen" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-<svg class="w-5 h-5 text-neutral-300 hidden" fill="none" id="menuIconClose" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<button class="lg:hidden w-10 h-10 rounded-lg bg-white/[0.04] flex items-center justify-center hover:bg-white/[0.08] transition-colors" onclick="toggleMobileMenu()" aria-controls="mobileMenu" aria-expanded="false" aria-label="Menu" data-i18n-aria-label="nav.menu" id="menuButton">
+<svg aria-hidden="true" class="w-5 h-5 text-neutral-300" fill="none" id="menuIconOpen" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg aria-hidden="true" class="w-5 h-5 text-neutral-300 hidden" fill="none" id="menuIconClose" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </button>
 </div>
 <div class="hidden lg:hidden border-t border-white/[0.04] bg-surface-900/95 backdrop-blur-xl" id="mobileMenu">
-<nav class="px-4 py-4 space-y-1">
+<nav aria-label="Mobile navigation" class="px-4 py-4 space-y-1" data-i18n-aria-label="nav.mobile">
 <a class="block px-4 py-3 text-[14px] font-medium text-neutral-300 hover:text-white hover:bg-white/[0.04] rounded-lg" data-i18n="home" href="index.html" onclick="closeMobileMenu()">Home</a>
 <a class="block px-4 py-3 text-[14px] font-medium text-brand-400 hover:bg-white/[0.04] rounded-lg" data-i18n="documentation" href="docs.html" onclick="closeMobileMenu()">Documentation</a>
 <a class="block px-4 py-3 text-[14px] font-medium text-neutral-300 hover:text-white hover:bg-white/[0.04] rounded-lg" data-i18n="support" href="support.html" onclick="closeMobileMenu()">Support</a>
@@ -101,188 +101,117 @@
 <div class="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-8">
 <!-- Sidebar -->
 <aside class="hidden lg:block">
-<nav class="sticky top-24 space-y-1 card rounded-xl p-3">
-<p class="px-3 py-2 text-[11px] font-semibold text-neutral-500 uppercase tracking-wider" data-i18n="guide">Guide</p>
+<nav aria-label="On this page" class="sticky top-24 space-y-1 card rounded-xl p-3" data-i18n-aria-label="nav.sections">
+<p class="px-3 py-2 text-[11px] font-semibold text-neutral-400 uppercase tracking-wider" data-i18n="guide">Guide</p>
 <a class="sidebar-link active block px-3 py-2 text-[13px] text-neutral-300 rounded-lg" data-i18n="getting-started" href="#getting-started">Getting started</a>
 <a class="sidebar-link block px-3 py-2 text-[13px] text-neutral-300 rounded-lg" data-i18n="installation" href="#installation">Installation</a>
 <a class="sidebar-link block px-3 py-2 text-[13px] text-neutral-300 rounded-lg" data-i18n="configuration" href="#configuration">Configuration</a>
-<p class="px-3 py-2 mt-4 text-[11px] font-semibold text-neutral-500 uppercase tracking-wider" data-i18n="types">Types</p>
+<p class="px-3 py-2 mt-4 text-[11px] font-semibold text-neutral-400 uppercase tracking-wider" data-i18n="types">Types</p>
 <a class="sidebar-link block px-3 py-2 text-[13px] text-neutral-300 rounded-lg" data-i18n="local-files-2" href="#local-files">Local Files</a>
 <a class="sidebar-link block px-3 py-2 text-[13px] text-neutral-300 rounded-lg" data-i18n="databases" href="#databases">Databases</a>
 <a class="sidebar-link block px-3 py-2 text-[13px] text-neutral-300 rounded-lg" data-i18n="external-apis" href="#external-apis">External APIs</a>
-<p class="px-3 py-2 mt-4 text-[11px] font-semibold text-neutral-500 uppercase tracking-wider" data-i18n="reference">Reference</p>
+<p class="px-3 py-2 mt-4 text-[11px] font-semibold text-neutral-400 uppercase tracking-wider" data-i18n="reference">Reference</p>
+<a class="sidebar-link block px-3 py-2 text-[13px] text-neutral-300 rounded-lg" data-i18n="docs.a11y.nav" href="#accessibility">Accessibility</a>
 <a class="sidebar-link block px-3 py-2 text-[13px] text-neutral-300 rounded-lg" data-i18n="troubleshooting" href="#troubleshooting">Troubleshooting</a>
-<a class="sidebar-link block px-3 py-2 text-[13px] text-neutral-300 rounded-lg" href="#faq">FAQ</a>
+<a class="sidebar-link block px-3 py-2 text-[13px] text-neutral-300 rounded-lg" data-i18n="frequently-asked-questions" href="#faq">FAQ</a>
 </nav>
 </aside>
 <!-- Content -->
 <article class="prose prose-invert max-w-none">
-<!-- Getting Started -->
 <section class="mb-12" id="getting-started">
 <h1 class="text-3xl font-bold text-white mb-4" data-i18n="documentation">Documentation</h1>
-<p class="text-neutral-400 leading-relaxed mb-6" data-i18n="learn-how-to-generate-production-ready">Learn how to generate production-ready MCP (Model Context Protocol) servers in minutes, without writing code.</p>
-<h2 class="text-xl font-semibold text-white mb-3 mt-8" data-i18n="what-is-mcp-builder">What is MCP Builder?</h2>
-<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="mcp-builder-is-a-tool-that">MCP Builder is a tool that lets you generate production-ready MCP servers. You just configure what you want to connect, pay, and receive a .zip file with the complete server and installation documentation.</p>
-<div class="card rounded-xl p-5 mb-6">
-<div class="flex items-start gap-3">
-<div class="w-8 h-8 rounded-lg bg-brand-500/10 border border-brand-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-<svg class="w-4 h-4 text-brand-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</div>
-<div>
-<p class="text-[13px] font-semibold text-white mb-1" data-i18n="no-accounts-or-sign-ups">No accounts or sign-ups</p>
-<p class="text-[13px] text-neutral-400" data-i18n="the-flow-is-guest-only-you">The flow is guest-only. You pay, download, done. No user to create, no passwords.</p>
-</div>
-</div>
-</div>
+<p class="text-neutral-400 leading-relaxed mb-6" data-i18n="docs.intro">Generate a working MCP (Model Context Protocol) server that connects an AI assistant to your files, database or API, with access rules you describe in plain language.</p>
+<h2 class="text-xl font-semibold text-white mb-3 mt-8" data-i18n="docs.how.title">How a build works</h2>
+<ol class="list-decimal pl-5 space-y-2 text-[13px] text-neutral-300 mb-4"><li data-i18n="docs.how.1">The AI model (open weights, served by Featherless.ai) reads your instructions and turns them into a small JSON policy: limits, blocked fields and tool descriptions.</li><li data-i18n="docs.how.2">The policy is validated and clamped by the backend. Secret-looking names such as password or token are always blocked.</li><li data-i18n="docs.how.3">The code comes from tested templates, not from the model, so the project compiles and the security checks are always present.</li><li data-i18n="docs.how.4">You get a spoken report (optional) and download the .zip from the result page.</li></ol>
+<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="docs.what.p">You choose a source, list what may be exposed and write your instructions. The service returns a .zip with a TypeScript server, its configuration and a README.</p>
+<div class="card rounded-xl p-5 mt-4 mb-4 border-amber-500/20"><p class="text-[13px] font-semibold text-amber-400 mb-1" data-i18n="docs.demo.title">About the demo</p><p class="text-[13px] text-neutral-400" data-i18n="docs.demo.text">Payment on this site is a simulation and nothing is charged. The generation, the AI step, the voice report and the download are real.</p></div>
 </section>
-<!-- Installation -->
 <section class="mb-12" id="installation">
-<h2 class="text-xl font-semibold text-white mb-4" data-i18n="installing-the-generated-server">Installing the generated server</h2>
-<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="once-you-download-the-zip-file">Once you download the .zip file, follow these steps:</p>
-<h3 class="text-[14px] font-semibold text-white mb-2 mt-6" data-i18n="1-extract-and-install-dependencies">1. Extract and install dependencies</h3>
-<pre class="code-block rounded-lg p-4 overflow-x-auto text-[13px] font-mono"><code><span class="text-neutral-500" data-i18n-nl="1" data-i18n-pre="extract-the-archive"># Extract the archive
-</span>unzip server.zip
-cd server
-
-<span class="text-neutral-500" data-i18n-nl="1" data-i18n-pre="install-dependencies"># Install dependencies
-</span>npm install</code></pre>
-<h3 class="text-[14px] font-semibold text-white mb-2 mt-6" data-i18n="2-configure-claude-desktop">2. Configure Claude Desktop</h3>
-<pre class="code-block rounded-lg p-4 overflow-x-auto text-[13px] font-mono"><code><span class="text-neutral-500" data-i18n-nl="1" data-i18n-pre="file-library-application-support-claude-claude"># File: ~/Library/Application Support/Claude/claude_desktop_config.json
-# On Windows: %APPDATA%\Claude\claude_desktop_config.json
-</span>{
-  <span class="text-blue-300">"mcpServers"</span>: {
-    <span class="text-blue-300">"my-server"</span>: {
-      <span class="text-blue-300">"command"</span>: <span class="text-green-300">"node"</span>,
-      <span class="text-blue-300">"args"</span>: [<span class="text-green-300">"./server/index.js"</span>]
+<h2 class="text-xl font-semibold text-white mb-4" data-i18n="docs.install.title">Install the generated server</h2>
+<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="docs.install.intro">Requires Node.js 18 or newer. Unzip the download, then:</p>
+<h3 class="text-[14px] font-semibold text-white mb-2 mt-6" data-i18n="docs.install.step1">1. Install and build</h3>
+<pre class="code-block rounded-lg p-4 overflow-x-auto text-[13px] font-mono" tabindex="0"><code>npm install
+npm run build
+</code></pre>
+<h3 class="text-[14px] font-semibold text-white mb-2 mt-6" data-i18n="docs.install.step2">2. Connect it to Claude Desktop</h3>
+<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="docs.install.step2.p">Add the server to claude_desktop_config.json. Use the real absolute path of the folder and set the environment variable for your source (see the table in Configuration).</p>
+<pre class="code-block rounded-lg p-4 overflow-x-auto text-[13px] font-mono" tabindex="0"><code>{
+  &quot;mcpServers&quot;: {
+    &quot;clinica-pacientes&quot;: {
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [&quot;/absolute/path/to/clinica-pacientes/dist/index.js&quot;],
+      &quot;env&quot;: {
+        &quot;DATABASE_URL&quot;: &quot;postgresql://readonly_user:password@localhost/clinic&quot;
+      }
     }
   }
 }</code></pre>
-<h3 class="text-[14px] font-semibold text-white mb-2 mt-6" data-i18n="3-restart-claude-desktop">3. Restart Claude Desktop</h3>
-<p class="text-neutral-400 text-[13px]" data-i18n="close-and-reopen-claude-desktop-the">Close and reopen Claude Desktop. The MCP server will appear automatically in the tools list.</p>
+<h3 class="text-[14px] font-semibold text-white mb-2 mt-6" data-i18n="docs.install.step3">3. Restart Claude Desktop</h3>
+<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="docs.install.step3.p">Quit Claude Desktop completely and open it again. The tools of your server appear in the tools list. Cursor, Windsurf and any other MCP client can run the same command.</p>
 </section>
-<!-- Configuration -->
 <section class="mb-12" id="configuration">
-<h2 class="text-xl font-semibold text-white mb-4" data-i18n="configuration-options">Configuration options</h2>
-<div class="card rounded-xl overflow-hidden">
-<table class="w-full text-[13px]">
-<thead class="bg-white/[0.03]">
-<tr>
-<th class="px-5 py-3 text-left font-semibold text-neutral-300" data-i18n="parameter">Parameter</th>
-<th class="px-5 py-3 text-left font-semibold text-neutral-300" data-i18n="type">Type</th>
-<th class="px-5 py-3 text-left font-semibold text-neutral-300" data-i18n="description">Description</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-white/[0.04]">
-<tr>
-<td class="px-5 py-3 font-mono text-brand-400">source</td>
-<td class="px-5 py-3 text-neutral-400">string</td>
-<td class="px-5 py-3 text-neutral-300" data-i18n="source-type-local-database-api">Source type: local, database, api</td>
-</tr>
-<tr>
-<td class="px-5 py-3 font-mono text-brand-400">tables</td>
-<td class="px-5 py-3 text-neutral-400">string[]</td>
-<td class="px-5 py-3 text-neutral-300" data-i18n="allowed-tables-database-only">Allowed tables (database only)</td>
-</tr>
-<tr>
-<td class="px-5 py-3 font-mono text-brand-400">permissions</td>
-<td class="px-5 py-3 text-neutral-400">string</td>
-<td class="px-5 py-3 text-neutral-300">read, write, full</td>
-</tr>
-<tr>
-<td class="px-5 py-3 font-mono text-brand-400">rules</td>
-<td class="px-5 py-3 text-neutral-400">string</td>
-<td class="px-5 py-3 text-neutral-300" data-i18n="custom-security-rules">Custom security rules</td>
-</tr>
-</tbody>
-</table>
-</div>
+<h2 class="text-xl font-semibold text-white mb-4" data-i18n="configuration">Configuration</h2>
+<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="docs.config.p">Every generated project has an mcp.config.json. It holds the resources you exposed and the policy the server enforces. Edit it, then run npm run build again.</p>
+<h3 class="text-[14px] font-semibold text-white mb-2 mt-6" data-i18n="docs.config.example">Example for a database source</h3>
+<pre class="code-block rounded-lg p-4 overflow-x-auto text-[13px] font-mono" tabindex="0"><code>{
+  &quot;server&quot;: { &quot;name&quot;: &quot;clinica-pacientes&quot;, &quot;version&quot;: &quot;1.0.0&quot; },
+  &quot;resources&quot;: [&quot;patients&quot;, &quot;appointments&quot;],
+  &quot;db_engine&quot;: &quot;postgresql&quot;,
+  &quot;policy&quot;: {
+    &quot;max_rows&quot;: 100,
+    &quot;blocked_columns&quot;: [&quot;password&quot;, &quot;token&quot;, &quot;diagnosis&quot;],
+    &quot;statement_timeout_ms&quot;: 15000
+  },
+  &quot;tool_descriptions&quot;: {
+    &quot;run_query&quot;: &quot;Read-only SELECT over patients and appointments.&quot;
+  }
+}</code></pre>
+<h3 class="text-[14px] font-semibold text-white mb-2 mt-6" data-i18n="docs.config.policy">Policy fields</h3>
+<div class="card rounded-xl overflow-x-auto mb-4"><table class="w-full text-[13px]"><thead class="bg-white/[0.03]"><tr><th class="px-5 py-3 text-left font-semibold text-neutral-300" scope="col" data-i18n="docs.col.field">Field</th><th class="px-5 py-3 text-left font-semibold text-neutral-300" scope="col" data-i18n="docs.col.applies">Applies to</th><th class="px-5 py-3 text-left font-semibold text-neutral-300" scope="col" data-i18n="docs.col.meaning">What it does</th></tr></thead><tbody class="divide-y divide-white/[0.04]"><tr><td class="px-5 py-3 font-mono text-brand-400">resources</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.all">All sources</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.f.resources">Folders, tables or endpoints the server may expose. Anything else is refused.</td></tr><tr><td class="px-5 py-3 font-mono text-brand-400">tool_descriptions</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.all">All sources</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.f.tool_descriptions">Text the AI client reads to decide when to use each tool.</td></tr><tr><td class="px-5 py-3 font-mono text-brand-400">allowed_extensions</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.files">Local files</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.f.allowed_extensions">File extensions that can be listed and read.</td></tr><tr><td class="px-5 py-3 font-mono text-brand-400">max_file_bytes</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.files">Local files</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.f.max_file_bytes">Largest file size that will be read (1 KB to 5 MB).</td></tr><tr><td class="px-5 py-3 font-mono text-brand-400">max_results</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.files">Local files</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.f.max_results">Maximum number of search results (1 to 200).</td></tr><tr><td class="px-5 py-3 font-mono text-brand-400">max_rows</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.database">Database</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.f.max_rows">Maximum rows returned by a query (1 to 1000).</td></tr><tr><td class="px-5 py-3 font-mono text-brand-400">blocked_columns</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.database">Database</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.f.blocked_columns">Columns that are never returned, even if a query asks for them.</td></tr><tr><td class="px-5 py-3 font-mono text-brand-400">statement_timeout_ms</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.database">Database</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.f.statement_timeout_ms">Time limit for each query, in milliseconds.</td></tr><tr><td class="px-5 py-3 font-mono text-brand-400">blocked_fields</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.api">External API</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.f.blocked_fields">JSON fields removed from every API response.</td></tr><tr><td class="px-5 py-3 font-mono text-brand-400">max_response_chars</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.api">External API</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.f.max_response_chars">Responses longer than this are truncated.</td></tr><tr><td class="px-5 py-3 font-mono text-brand-400">timeout_ms</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.api">External API</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.f.timeout_ms">Time limit for each API call, in milliseconds.</td></tr></tbody></table></div>
+<h3 class="text-[14px] font-semibold text-white mb-2 mt-6" data-i18n="docs.config.env">Environment variables</h3>
+<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="docs.config.env.p">Secrets never go in mcp.config.json. The server reads them from its environment, which is the env block in the client configuration or a local .env file.</p>
+<div class="card rounded-xl overflow-x-auto mb-4"><table class="w-full text-[13px]"><thead class="bg-white/[0.03]"><tr><th class="px-5 py-3 text-left font-semibold text-neutral-300" scope="col" data-i18n="docs.col.variable">Variable</th><th class="px-5 py-3 text-left font-semibold text-neutral-300" scope="col" data-i18n="docs.col.applies">Applies to</th><th class="px-5 py-3 text-left font-semibold text-neutral-300" scope="col" data-i18n="docs.col.meaning">What it does</th></tr></thead><tbody class="divide-y divide-white/[0.04]"><tr><td class="px-5 py-3 font-mono text-brand-400">MCP_ALLOWED_DIRS</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.files">Local files</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.v.dirs">Folders the server may read, separated by ; on Windows or : elsewhere.</td></tr><tr><td class="px-5 py-3 font-mono text-brand-400">DATABASE_URL</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.database">Database</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.v.db">Connection string of a read-only database user.</td></tr><tr><td class="px-5 py-3 font-mono text-brand-400">API_BASE_URL</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.api">External API</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.v.base">Base address of the API.</td></tr><tr><td class="px-5 py-3 font-mono text-brand-400">API_TOKEN</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.api">External API</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.v.token">Access token, if the API needs one.</td></tr><tr><td class="px-5 py-3 font-mono text-brand-400">API_AUTH_HEADER</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.api">External API</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.v.header">Header that carries the token. Defaults to Authorization.</td></tr><tr><td class="px-5 py-3 font-mono text-brand-400">API_AUTH_SCHEME</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.api">External API</td><td class="px-5 py-3 text-neutral-300" data-i18n="docs.v.scheme">Token prefix. Defaults to Bearer. Leave empty for raw keys.</td></tr></tbody></table></div>
 </section>
-<!-- Local Files -->
 <section class="mb-12" id="local-files">
 <h2 class="text-xl font-semibold text-white mb-4" data-i18n="local-files-2">Local Files</h2>
-<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="connect-your-ai-to-files-on">Connect your AI to files on your machine. Supports .csv, .json, .txt, .md.</p>
-<pre class="code-block rounded-lg p-4 overflow-x-auto text-[13px] font-mono"><code><span class="text-neutral-500" data-i18n-nl="1" data-i18n-pre="example-server-for-csv-files"># Example: server for CSV files
-</span><span class="text-blue-300">source</span>: local
-<span class="text-blue-300">path</span>: <span class="text-green-300">"./data"</span>
-<span class="text-blue-300">types</span>: [<span class="text-green-300">".csv"</span>, <span class="text-green-300">".json"</span>]</code></pre>
+<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="docs.files.p">Lets the assistant list, read and search text files inside folders you choose. It cannot leave those folders.</p>
+<ul class="list-disc pl-5 space-y-1.5 text-[13px] text-neutral-300 mb-4"><li data-i18n="docs.files.t1">list_files: lists the allowed files.</li><li data-i18n="docs.files.t2">read_file: returns the content of one file, up to the size limit.</li><li data-i18n="docs.files.t3">search_files: finds text across the allowed files.</li></ul>
+<div class="card rounded-xl p-5 mt-4 mb-4 border-amber-500/20"><p class="text-[13px] font-semibold text-amber-400 mb-1" data-i18n="docs.security">Security</p><p class="text-[13px] text-neutral-400" data-i18n="docs.files.protect">Every path is resolved to its real location before it is opened, so ../ tricks and symbolic links that point outside the folder are refused. Only the allowed extensions are read.</p></div>
 </section>
-<!-- Databases -->
 <section class="mb-12" id="databases">
 <h2 class="text-xl font-semibold text-white mb-4" data-i18n="databases">Databases</h2>
-<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="postgresql-mysql-mariadb-sql-queries-generated">PostgreSQL, MySQL, MariaDB. SQL queries generated by the AI with security validation.</p>
-<pre class="code-block rounded-lg p-4 overflow-x-auto text-[13px] font-mono"><code><span class="text-neutral-500" data-i18n-nl="1" data-i18n-pre="example-postgresql-connection"># Example: PostgreSQL connection
-</span><span class="text-blue-300">source</span>: database
-<span class="text-blue-300">host</span>: <span class="text-green-300">"localhost:5432"</span>
-<span class="text-blue-300">database</span>: <span class="text-green-300">"my_db"</span>
-<span class="text-blue-300">tables</span>: [<span class="text-green-300">"users"</span>, <span class="text-green-300">"orders"</span>]
-<span class="text-blue-300">permissions</span>: <span class="text-green-300">"read"</span></code></pre>
-<div class="card rounded-xl p-5 mt-4 border-amber-500/20">
-<div class="flex items-start gap-3">
-<svg class="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" fill-rule="evenodd"></path></svg>
-<div>
-<p class="text-[13px] font-semibold text-amber-400 mb-1" data-i18n="security">Security</p>
-<p class="text-[13px] text-neutral-400" data-i18n="dangerous-queries-drop-delete-truncate-are">Dangerous queries (DROP, DELETE, TRUNCATE) are blocked by default. Permissions are configurable.</p>
-</div>
-</div>
-</div>
+<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="docs.db.p">PostgreSQL or MySQL/MariaDB. The assistant can inspect the tables you exposed and run read-only queries.</p>
+<ul class="list-disc pl-5 space-y-1.5 text-[13px] text-neutral-300 mb-4"><li data-i18n="docs.db.t1">list_tables: lists the exposed tables.</li><li data-i18n="docs.db.t2">describe_table: shows the visible columns of a table.</li><li data-i18n="docs.db.t3">run_query: runs one SELECT statement.</li></ul>
+<div class="card rounded-xl p-5 mt-4 mb-4 border-amber-500/20"><p class="text-[13px] font-semibold text-amber-400 mb-1" data-i18n="docs.db.protect.title">How queries are checked</p><p class="text-[13px] text-neutral-400" data-i18n="docs.db.protect">Only a single SELECT is accepted. Words such as INSERT, UPDATE, DELETE, DROP or TRUNCATE are refused, only exposed tables can be read, blocked columns are never returned, and the query runs inside a read-only transaction with a time limit. Use a database user that can only read as a second layer.</p></div>
 </section>
-<!-- External APIs -->
 <section class="mb-12" id="external-apis">
 <h2 class="text-xl font-semibold text-white mb-4" data-i18n="external-apis">External APIs</h2>
-<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="connect-your-ai-to-any-rest">Connect your AI to any REST or GraphQL API. Auth with API key, OAuth2 or Bearer token.</p>
-<pre class="code-block rounded-lg p-4 overflow-x-auto text-[13px] font-mono"><code><span class="text-neutral-500" data-i18n-nl="1" data-i18n-pre="example-rest-api-connection"># Example: REST API connection
-</span><span class="text-blue-300">source</span>: api
-<span class="text-blue-300">baseUrl</span>: <span class="text-green-300">"https://api.example.com"</span>
-<span class="text-blue-300">auth</span>: {
-  <span class="text-blue-300">"type"</span>: <span class="text-green-300">"bearer"</span>,
-  <span class="text-blue-300">"token"</span>: <span class="text-green-300">"your-token"</span>
-}
-<span class="text-blue-300">endpoints</span>: [<span class="text-green-300">"/products"</span>, <span class="text-green-300">"/orders"</span>]</code></pre>
+<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="docs.api.p">Lets the assistant call the endpoints you list on one REST API.</p>
+<ul class="list-disc pl-5 space-y-1.5 text-[13px] text-neutral-300 mb-4"><li data-i18n="docs.api.t1">list_endpoints: lists the allowed endpoints.</li><li data-i18n="docs.api.t2">call_endpoint: calls one allowed endpoint and returns the JSON, truncated if long.</li></ul>
+<div class="card rounded-xl p-5 mt-4 mb-4 border-amber-500/20"><p class="text-[13px] font-semibold text-amber-400 mb-1" data-i18n="docs.security">Security</p><p class="text-[13px] text-neutral-400" data-i18n="docs.api.protect">Only endpoints on the list can be called. Full URLs and redirects are refused, so the server cannot be pointed to another host. Blocked fields are removed from the response before the assistant sees it.</p></div>
 </section>
-<!-- Troubleshooting -->
+<section class="mb-12" id="accessibility">
+<h2 class="text-xl font-semibold text-white mb-4" data-i18n="docs.a11y.nav">Accessibility</h2>
+<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="docs.a11y.intro">MCP Builder is designed so that a blind or low-vision developer can build a server without looking at the screen. This section explains how.</p>
+<h3 class="text-[14px] font-semibold text-white mb-2 mt-6" data-i18n="docs.a11y.spoken.title">Spoken build report</h3>
+<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="docs.a11y.spoken.p">When a build finishes, the service creates an audio report with an ElevenLabs voice in English, German or Spanish. It says the server name, how many files were created and which rules the server enforces. Choose the language in the voice language field.</p>
+<h3 class="text-[14px] font-semibold text-white mb-2 mt-6" data-i18n="docs.a11y.text.title">Text version of every report</h3>
+<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="docs.a11y.text.p">The same report is always written as text in a live region. A screen reader announces it even if audio is off or fails, and a braille display shows it.</p>
+<h3 class="text-[14px] font-semibold text-white mb-2 mt-6" data-i18n="docs.a11y.kbd.title">Keyboard and labels</h3>
+<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="docs.a11y.kbd.p">Every control can be reached with Tab. Dialogs move focus inside and return it when they close, Escape closes them, every field has a label, and status changes are announced. Automated checks with axe-core report zero violations on all pages in the three languages.</p>
+<h3 class="text-[14px] font-semibold text-white mb-2 mt-6" data-i18n="docs.a11y.auto.title">Automatic reading</h3>
+<p class="text-neutral-400 leading-relaxed mb-4" data-i18n="docs.a11y.auto.p">The result page can play the report by itself. The option to read it aloud automatically can be turned off, for example if your screen reader already speaks every change.</p>
+<h3 class="text-[14px] font-semibold text-white mb-2 mt-6" data-i18n="docs.a11y.steps.title">Step by step with a screen reader</h3>
+<ol class="list-decimal pl-5 space-y-2 text-[13px] text-neutral-300 mb-4"><li data-i18n="docs.a11y.s1">Open the home page and jump by headings to the build section, for example with the H key in NVDA or JAWS.</li><li data-i18n="docs.a11y.s2">Fill the fields in order: server name, source type, what to expose, instructions and voice language. Each field has a label and a hint.</li><li data-i18n="docs.a11y.s3">Activate the build button. Progress and errors are announced, so there is no need to look for them.</li><li data-i18n="docs.a11y.s4">On the result page the report is announced and can be played. Then activate the download button for the .zip.</li><li data-i18n="docs.a11y.s5">Open README.md inside the .zip and follow it. It is plain text, with the exact commands.</li></ol>
+<div class="card rounded-xl p-5 mt-4 mb-4 border-amber-500/20"><p class="text-[13px] font-semibold text-amber-400 mb-1" data-i18n="docs.a11y.limits.title">Honest limits</p><p class="text-[13px] text-neutral-400" data-i18n="docs.a11y.limits.p">Automated audits cover the structure and labels, but a complete test with real screen reader users has not been done yet. The audio depends on the ElevenLabs service being available; the text version does not.</p></div>
+</section>
 <section class="mb-12" id="troubleshooting">
 <h2 class="text-xl font-semibold text-white mb-4" data-i18n="troubleshooting">Troubleshooting</h2>
-<div class="space-y-3">
-<details class="card rounded-xl p-5 group">
-<summary class="text-[14px] font-medium text-white cursor-pointer flex items-center justify-between">
-                  <span data-i18n="the-server-does-not-appear-in">The server does not appear in Claude Desktop</span>
-                  <svg class="w-4 h-4 text-neutral-500 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</summary>
-<p class="mt-3 text-[13px] text-neutral-400 leading-relaxed" data-i18n="check-that-the-path-in-the">Check that the path in the configuration file is absolute. Fully restart Claude Desktop (quit it from the system tray, not just the window).</p>
-</details>
-<details class="card rounded-xl p-5 group">
-<summary class="text-[14px] font-medium text-white cursor-pointer flex items-center justify-between">
-                  <span data-i18n="database-connection-error">Database connection error</span>
-                  <svg class="w-4 h-4 text-neutral-500 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</summary>
-<p class="mt-3 text-[13px] text-neutral-400 leading-relaxed" data-i18n="check-that-the-database-accepts-connections">Check that the database accepts connections from your IP. Review the host, port, user and password in the configuration.</p>
-</details>
-<details class="card rounded-xl p-5 group">
-<summary class="text-[14px] font-medium text-white cursor-pointer flex items-center justify-between">
-                  <span data-i18n="the-external-api-does-not-respond">The external API does not respond</span>
-                  <svg class="w-4 h-4 text-neutral-500 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</summary>
-<p class="mt-3 text-[13px] text-neutral-400 leading-relaxed" data-i18n="check-that-the-base-url-is">Check that the base URL is correct and that the token or API key has the required permissions. The server includes detailed logs for debugging.</p>
-</details>
-</div>
+<div class="space-y-3"><details class="card rounded-xl p-5 group"><summary class="text-[14px] font-medium text-white cursor-pointer flex items-center justify-between"><span data-i18n="docs.ts.1.q">The server does not appear in Claude Desktop</span><svg aria-hidden="true" class="w-4 h-4 text-neutral-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></summary><p class="mt-3 text-[13px] text-neutral-400 leading-relaxed" data-i18n="docs.ts.1.a">Check that the path points to dist/index.js and is absolute, and that you ran npm run build. Quit Claude Desktop completely, including the system tray, and open it again.</p></details><details class="card rounded-xl p-5 group"><summary class="text-[14px] font-medium text-white cursor-pointer flex items-center justify-between"><span data-i18n="docs.ts.2.q">The server starts but says a variable is missing</span><svg aria-hidden="true" class="w-4 h-4 text-neutral-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></summary><p class="mt-3 text-[13px] text-neutral-400 leading-relaxed" data-i18n="docs.ts.2.a">Set the variable for your source in the env block of the client configuration: MCP_ALLOWED_DIRS, DATABASE_URL or API_BASE_URL.</p></details><details class="card rounded-xl p-5 group"><summary class="text-[14px] font-medium text-white cursor-pointer flex items-center justify-between"><span data-i18n="docs.ts.3.q">A database query is refused</span><svg aria-hidden="true" class="w-4 h-4 text-neutral-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></summary><p class="mt-3 text-[13px] text-neutral-400 leading-relaxed" data-i18n="docs.ts.3.a">The server accepts one SELECT over the exposed tables. Add the table to resources in mcp.config.json, remove blocked columns from the query, then run npm run build.</p></details><details class="card rounded-xl p-5 group"><summary class="text-[14px] font-medium text-white cursor-pointer flex items-center justify-between"><span data-i18n="docs.ts.4.q">The API call fails</span><svg aria-hidden="true" class="w-4 h-4 text-neutral-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></summary><p class="mt-3 text-[13px] text-neutral-400 leading-relaxed" data-i18n="docs.ts.4.a">Check API_BASE_URL and the token. The endpoint must be in the list, and it must be a path such as /products, not a full URL.</p></details><details class="card rounded-xl p-5 group"><summary class="text-[14px] font-medium text-white cursor-pointer flex items-center justify-between"><span data-i18n="docs.ts.5.q">The voice report does not play</span><svg aria-hidden="true" class="w-4 h-4 text-neutral-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></summary><p class="mt-3 text-[13px] text-neutral-400 leading-relaxed" data-i18n="docs.ts.5.a">Read the text version shown on the page, which is always available. Audio needs the voice service to be reachable; try the button again after a moment.</p></details></div>
 </section>
-<!-- FAQ -->
 <section class="mb-12" id="faq">
 <h2 class="text-xl font-semibold text-white mb-4" data-i18n="frequently-asked-questions">Frequently asked questions</h2>
-<div class="space-y-3">
-<div class="card rounded-xl p-5">
-<h3 class="text-[14px] font-semibold text-white mb-2" data-i18n="what-does-the-downloaded-file-include">What does the downloaded file include?</h3>
-<p class="text-[13px] text-neutral-400" data-i18n="the-zip-file-contains-an-mcp">The .zip file contains: an MCP server in TypeScript, a package.json with dependencies, a README with step-by-step instructions, and production-ready configuration.</p>
-</div>
-<div class="card rounded-xl p-5">
-<h3 class="text-[14px] font-semibold text-white mb-2" data-i18n="is-it-compatible-with-cursor-and">Is it compatible with Cursor and Windsurf?</h3>
-<p class="text-[13px] text-neutral-400" data-i18n="yes-the-generated-mcp-server-follows">Yes. The generated MCP server follows the MCP standard and works with any compatible client: Claude Desktop, Cursor, Windsurf and more.</p>
-</div>
-<div class="card rounded-xl p-5">
-<h3 class="text-[14px] font-semibold text-white mb-2" data-i18n="do-i-need-node-js-installed">Do I need Node.js installed?</h3>
-<p class="text-[13px] text-neutral-400" data-i18n="yes-node-js-18-is-required">Yes, Node.js 18+ is required to run the MCP server. You can download it from nodejs.org.</p>
-</div>
-</div>
+<div class="space-y-3"><div class="card rounded-xl p-5"><h3 class="text-[14px] font-semibold text-white mb-2" data-i18n="docs.faq.1.q">What does the downloaded file include?</h3><p class="text-[13px] text-neutral-400" data-i18n="docs.faq.1.a">A TypeScript MCP server (src/index.ts), package.json, tsconfig.json, mcp.config.json with your rules, .env.example and a README with the steps.</p></div><div class="card rounded-xl p-5"><h3 class="text-[14px] font-semibold text-white mb-2" data-i18n="docs.faq.2.q">Is it compatible with Cursor and Windsurf?</h3><p class="text-[13px] text-neutral-400" data-i18n="docs.faq.2.a">Yes. The server speaks MCP over stdio, so any MCP client can run it with the same command.</p></div><div class="card rounded-xl p-5"><h3 class="text-[14px] font-semibold text-white mb-2" data-i18n="docs.faq.3.q">Do I need Node.js installed?</h3><p class="text-[13px] text-neutral-400" data-i18n="docs.faq.3.a">Yes, Node.js 18 or newer, to build and run the generated server.</p></div><div class="card rounded-xl p-5"><h3 class="text-[14px] font-semibold text-white mb-2" data-i18n="docs.faq.4.q">Does the AI write the code of my server?</h3><p class="text-[13px] text-neutral-400" data-i18n="docs.faq.4.a">No. The model only turns your instructions into a validated policy. The code comes from templates that are compiled and tested in the project&#x27;s continuous integration.</p></div></div>
 </section>
 </article>
 </div>
@@ -292,11 +221,11 @@ cd server
 <footer class="py-10 px-6 border-t border-white/[0.04]">
 <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
 <div class="flex items-center gap-4">
-<span class="font-mono font-bold text-[13px]"><span class="text-brand-500">&gt;_</span><span class="text-white">mcp</span><span class="text-neutral-500">builder</span></span>
-<span class="text-[11px] text-neutral-600">© 2026</span>
-<a class="text-[11px] text-neutral-500 hover:text-white transition-colors" href="https://github.com/Josequevedov08" target="_blank">@Josequevedov08</a>
+<span class="font-mono font-bold text-[13px]"><span class="text-brand-500">&gt;_</span><span class="text-white">mcp</span><span class="text-neutral-400">builder</span></span>
+<span class="text-[11px] text-neutral-400">© 2026</span>
+<a class="text-[11px] text-neutral-400 hover:text-white transition-colors" href="https://github.com/Josequevedov08" target="_blank">@Josequevedov08</a>
 </div>
-<div class="flex flex-wrap items-center gap-4 md:gap-6 text-[12px] font-medium text-neutral-500">
+<div class="flex flex-wrap items-center gap-4 md:gap-6 text-[12px] font-medium text-neutral-400">
 <a class="hover:text-white transition-colors" data-i18n="home" href="index.html">Home</a>
 <a class="hover:text-white transition-colors" data-i18n="support" href="support.html">Support</a>
 <a class="hover:text-white transition-colors" data-i18n="terms" href="politics.html">Terms</a>
@@ -306,6 +235,9 @@ cd server
 </footer>
 <script>
     // Mobile menu
+    function syncMenuButton() {
+      document.getElementById('menuButton').setAttribute('aria-expanded', String(!document.getElementById('mobileMenu').classList.contains('hidden')));
+    }
     function toggleMobileMenu() {
       const menu = document.getElementById('mobileMenu');
       const iconOpen = document.getElementById('menuIconOpen');
@@ -319,11 +251,13 @@ cd server
         iconOpen.classList.remove('hidden');
         iconClose.classList.add('hidden');
       }
+      syncMenuButton();
     }
     function closeMobileMenu() {
       document.getElementById('mobileMenu').classList.add('hidden');
       document.getElementById('menuIconOpen').classList.remove('hidden');
       document.getElementById('menuIconClose').classList.add('hidden');
+      syncMenuButton();
     }
     // Sidebar active state
     document.querySelectorAll('.sidebar-link').forEach(link => {

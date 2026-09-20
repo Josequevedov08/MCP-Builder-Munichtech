@@ -9,6 +9,7 @@
   <script src="i18n.js"></script>
   <script src="config.js"></script>
   <script src="api.js"></script>
+  <script src="zip.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -38,20 +39,27 @@
     .btn-primary:hover { background: linear-gradient(180deg, #F87171 0%, #EF4444 100%); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(220, 38, 38, 0.3); }
     @keyframes scaleIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
     .animate-scale-in { animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+      .reveal { opacity: 1 !important; transform: none !important; }
+      .marquee-track { animation: none !important; }
+    }
   </style>
 </head>
-<body class="bg-radial min-h-screen flex items-center justify-center p-4">
+<body class="bg-radial min-h-screen flex justify-center px-4 py-16">
+<a class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-white focus:text-black focus:font-semibold" data-i18n="a11y.skip" href="#main">Skip to main content</a>
+<main class="w-full max-w-2xl text-center" id="main" tabindex="-1">
 <div data-lang-switcher class="fixed top-4 right-4 z-50"></div>
-<div class="w-full max-w-lg text-center">
 <!-- Success icon -->
 <div class="flex justify-center mb-6">
 <div class="w-20 h-20 rounded-full bg-emerald-500/10 border-2 border-emerald-500/30 flex items-center justify-center animate-scale-in">
-<svg class="w-10 h-10 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
+<svg aria-hidden="true" class="w-10 h-10 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
 </div>
 </div>
 <h1 class="text-3xl font-bold text-white mb-2" data-i18n="payment-successful-2">Payment successful!</h1>
 <p class="text-neutral-400 text-base mb-2" data-i18n="your-mcp-server-was-generated-successfully">Your MCP server was generated successfully.</p>
-<p class="text-neutral-500 text-[13px] mb-8"><span data-i18n="order-id">Order ID:</span> <span class="font-mono text-neutral-400" id="orderIdDisplay">#MB-XXXXXXXX</span></p>
+<p class="text-neutral-400 text-[13px] mb-8"><span data-i18n="order-id">Order ID:</span> <span class="font-mono text-neutral-400" id="orderIdDisplay">#MB-XXXXXXXX</span></p>
 <!-- Build status (text and audio) -->
 <div class="card rounded-2xl p-5 mb-6 hidden" id="buildStatusCard">
 <p aria-live="polite" class="text-[13px] text-neutral-300 mb-3" id="buildSummary" role="status"></p>
@@ -61,33 +69,49 @@
 <div class="card rounded-2xl p-8 mb-6">
 <h2 class="text-lg font-semibold text-white mb-2" data-i18n="your-server-is-ready">Your server is ready</h2>
 <p class="text-neutral-400 text-[13px] mb-6" data-i18n="click-the-button-to-download-the">Click the button to download the .zip file with the complete server and installation instructions.</p>
-<button class="btn-primary w-full py-4 rounded-xl text-white font-semibold text-[15px] flex items-center justify-center gap-2.5 shadow-lg shadow-brand-500/25">
-<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-        <span data-i18n="download-server-zip">Download server.zip</span>
-      </button>
+<button class="btn-primary w-full py-4 rounded-xl text-white font-semibold text-[15px] flex items-center justify-center gap-2.5 shadow-lg shadow-brand-500/25 disabled:opacity-50 disabled:cursor-not-allowed" disabled id="downloadZip" type="button">
+<svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span data-i18n="download-server-zip">Download server.zip</span>
+</button>
+<p aria-live="polite" class="text-[13px] text-neutral-300 mt-3" id="downloadStatus" role="status"></p>
+</div>
+<!-- Rules and files -->
+<div class="hidden" id="buildDetails">
+<div class="card rounded-2xl p-6 mb-6 text-left">
+<h2 class="text-[15px] font-semibold text-white mb-1" data-i18n="success.rules.title">Rules your server enforces</h2>
+<p class="text-[12px] text-neutral-400 mb-4" id="aiStatusText"></p>
+<ul class="space-y-2 text-[13px] text-neutral-300 list-disc pl-5" id="rulesList"></ul>
+</div>
+<div class="card rounded-2xl p-6 mb-6 text-left">
+<h2 class="text-[15px] font-semibold text-white mb-3" data-i18n="success.files.title">Files in your server</h2>
+<label class="block text-[12px] text-neutral-400 mb-1.5" data-i18n="success.files.select" for="fileSelect">File to preview</label>
+<select class="w-full px-4 py-3 rounded-xl text-[13px] bg-[#0A0A0A] border border-white/10 text-white mb-3" id="fileSelect"></select>
+<pre class="code-block rounded-xl p-4 overflow-auto text-left text-[12px] max-h-80" id="filePreview" tabindex="0"></pre>
+</div>
 </div>
 <!-- Instructions -->
 <div class="card rounded-2xl p-6 mb-6">
 <h3 class="text-[14px] font-semibold text-white mb-4" data-i18n="quick-installation">Quick installation</h3>
 <div class="rounded-xl overflow-hidden">
 <div class="flex items-center justify-between px-4 py-2.5 bg-white/[0.03] border-b border-white/[0.04]">
-<span class="text-[11px] font-mono text-neutral-500" data-i18n="2-steps">2 steps</span>
+<span class="text-[11px] font-mono text-neutral-400" data-i18n="2-steps">2 steps</span>
 </div>
-<pre class="code-block p-4 overflow-x-auto text-left text-[12px]"><code><span class="text-neutral-500" data-i18n-pre="1-install-dependencies"># 1. Install dependencies</span>
+<pre class="code-block p-4 overflow-x-auto text-left text-[12px]"><code><span class="text-neutral-400" data-i18n-pre="1-install-dependencies"># 1. Install dependencies</span>
 npm install
+npm run build
 
-<span class="text-neutral-500" data-i18n-pre="2-add-to-claude-desktop-config"># 2. Add to Claude Desktop config.json</span>
-{ "command": "node", "args": ["./server/index.js"] }</code></pre>
+<span class="text-neutral-400" data-i18n-pre="2-add-to-claude-desktop-config"># 2. Add to Claude Desktop config.json</span>
+{ "command": "node", "args": ["/path/to/server/dist/index.js"] }</code></pre>
 </div>
 <a class="inline-block mt-4 text-[13px] text-brand-400 hover:text-brand-300 transition-colors" data-i18n="view-full-documentation" href="docs.html">View full documentation →</a>
 </div>
 <!-- Help -->
-<div class="text-[13px] text-neutral-500">
+<div class="text-[13px] text-neutral-400">
 <p><span data-i18n="need-help">Need help?</span> <a class="text-brand-400 hover:text-brand-300 transition-colors" data-i18n="contact-support" href="support.html">Contact support</a></p>
 </div>
 <!-- Back to home -->
-<a class="inline-block mt-6 text-[12px] text-neutral-500 hover:text-white transition-colors" data-i18n="back-to-home" href="index.html">← Back to home</a>
-</div>
+<a class="inline-block mt-6 text-[12px] text-neutral-400 hover:text-white transition-colors" data-i18n="back-to-home" href="index.html">← Back to home</a>
+</main>
 <script>
     // Parse order ID from URL params (e.g., ?order=MB-XXXXXX)
     const params = new URLSearchParams(window.location.search);
@@ -99,7 +123,13 @@ npm install
     (function () {
       var raw = null;
       try { raw = sessionStorage.getItem('mcpBuild'); } catch (e) { /* storage unavailable */ }
-      if (!raw) return;
+      if (!raw) {
+        document.getElementById('downloadStatus').textContent = I18N.t('success.nobuild');
+        document.addEventListener('langchange', function () {
+          document.getElementById('downloadStatus').textContent = I18N.t('success.nobuild');
+        });
+        return;
+      }
       var build;
       try { build = JSON.parse(raw); } catch (e) { return; }
 
@@ -120,8 +150,58 @@ npm install
       }
 
       document.getElementById('listenButton').addEventListener('click', listen);
+
+      // ---- rules, file preview and real download ----
+      var files = build.files || {};
+      var names = Object.keys(files);
+      document.getElementById('buildDetails').classList.remove('hidden');
+
+      var aiKey = { applied: 'success.ai.applied', defaults: 'success.ai.defaults', template: 'success.ai.template' }[build.ai_status];
+      function renderAiStatus() {
+        document.getElementById('aiStatusText').textContent = aiKey ? I18N.t(aiKey) : '';
+      }
+      renderAiStatus();
+      document.addEventListener('langchange', renderAiStatus);
+
+      var list = document.getElementById('rulesList');
+      (build.applied_rules || []).forEach(function (rule) {
+        var item = document.createElement('li');
+        item.textContent = rule;
+        list.appendChild(item);
+      });
+
+      var select = document.getElementById('fileSelect');
+      var preview = document.getElementById('filePreview');
+      names.forEach(function (name) {
+        var option = document.createElement('option');
+        option.value = name;
+        option.textContent = name;
+        select.appendChild(option);
+      });
+      function showFile() { preview.textContent = files[select.value] || ''; }
+      select.addEventListener('change', showFile);
+      showFile();
+
+      var downloadButton = document.getElementById('downloadZip');
+      var downloadStatus = document.getElementById('downloadStatus');
+      downloadButton.disabled = names.length === 0;
+      downloadButton.addEventListener('click', function () {
+        try {
+          var url = URL.createObjectURL(McpZip.build(files, build.server_name));
+          var link = document.createElement('a');
+          link.href = url;
+          link.download = build.server_name + '.zip';
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
+          downloadStatus.textContent = I18N.t('success.downloaded');
+        } catch (error) {
+          downloadStatus.textContent = I18N.t('success.zip.error');
+        }
+      });
       // Browsers may block autoplay; the button above is the fallback.
-      document.addEventListener('DOMContentLoaded', listen);
+      if (build.autoRead !== false) document.addEventListener('DOMContentLoaded', listen);
     })();
   </script>
 </body>

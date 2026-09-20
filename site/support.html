@@ -46,7 +46,7 @@
 </div>
 <span class="font-mono font-bold text-[15px] tracking-tight"><span class="text-brand-500">&gt;_</span><span class="text-white">mcp</span><span class="text-neutral-400">builder</span></span>
 </a>
-<nav class="hidden lg:flex items-center gap-1">
+<nav aria-label="Main navigation" class="hidden lg:flex items-center gap-1" data-i18n-aria-label="nav.main">
 <a class="px-3.5 py-2 text-[13px] font-medium text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]" data-i18n="home" href="index.html">Home</a>
 <a class="px-3.5 py-2 text-[13px] font-medium text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]" data-i18n="documentation" href="docs.html">Documentation</a>
 <a class="px-3.5 py-2 text-[13px] font-medium text-brand-400 rounded-lg bg-brand-500/8" data-i18n="support" href="support.html">Support</a>
@@ -66,21 +66,25 @@
 <!-- Contact Form -->
 <div class="max-w-2xl mx-auto">
 <div class="card rounded-2xl p-8">
+<div class="card rounded-xl p-5 mb-6 border-amber-500/20" role="note">
+<p class="text-[13px] font-semibold text-amber-400 mb-1" data-i18n="demo.support.title">Demo form</p>
+<p class="text-[13px] text-neutral-400" data-i18n="demo.support.text">This form does not send messages, and there is no support desk behind it. For real questions, open an issue on the project's GitHub.</p>
+</div>
 <h2 class="text-xl font-semibold text-white mb-6" data-i18n="send-a-message">Send a message</h2>
 <form class="space-y-5" onsubmit="submitSupport(event)">
 <div class="grid sm:grid-cols-2 gap-4">
 <div>
-<label class="text-[11px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block" data-i18n="name">Name</label>
-<input class="input-field w-full px-4 py-3 rounded-xl text-[14px]" data-i18n-placeholder="your-name" placeholder="Your name" required="" type="text"/>
+<label class="text-[11px] font-medium text-neutral-400 uppercase tracking-wider mb-1.5 block" data-i18n="name" for="field-1">Name</label>
+<input class="input-field w-full px-4 py-3 rounded-xl text-[14px]" data-i18n-placeholder="your-name" placeholder="Your name" required="" type="text" id="field-1"/>
 </div>
 <div>
-<label class="text-[11px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block" data-i18n="email">Email</label>
-<input class="input-field w-full px-4 py-3 rounded-xl text-[14px]" data-i18n-placeholder="you-email-com" placeholder="you@email.com" required="" type="email"/>
+<label class="text-[11px] font-medium text-neutral-400 uppercase tracking-wider mb-1.5 block" data-i18n="email" for="field-2">Email</label>
+<input class="input-field w-full px-4 py-3 rounded-xl text-[14px]" data-i18n-placeholder="you-email-com" placeholder="you@email.com" required="" type="email" id="field-2"/>
 </div>
 </div>
 <div>
-<label class="text-[11px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block" data-i18n="subject">Subject</label>
-<select class="input-field w-full px-4 py-3 rounded-xl text-[14px]" required="">
+<label class="text-[11px] font-medium text-neutral-400 uppercase tracking-wider mb-1.5 block" data-i18n="subject" for="field-3">Subject</label>
+<select class="input-field w-full px-4 py-3 rounded-xl text-[14px]" required="" id="field-3">
 <option data-i18n="select-a-topic" disabled="" selected="" value="">Select a topic...</option>
 <option data-i18n="installation-problem" value="install">Installation problem</option>
 <option data-i18n="payment-problem" value="payment">Payment problem</option>
@@ -91,12 +95,12 @@
 </select>
 </div>
 <div>
-<label class="text-[11px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block" data-i18n="order-id-if-applicable">Order ID (if applicable)</label>
-<input class="input-field w-full px-4 py-3 rounded-xl text-[14px] font-mono" placeholder="#MB-XXXXXX" type="text"/>
+<label class="text-[11px] font-medium text-neutral-400 uppercase tracking-wider mb-1.5 block" data-i18n="order-id-if-applicable" for="field-4">Order ID (if applicable)</label>
+<input class="input-field w-full px-4 py-3 rounded-xl text-[14px] font-mono" placeholder="#MB-XXXXXX" type="text" id="field-4"/>
 </div>
 <div>
-<label class="text-[11px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block" data-i18n="message">Message</label>
-<textarea class="input-field w-full px-4 py-3 rounded-xl resize-none text-[14px]" data-i18n-placeholder="describe-your-problem-or-question" placeholder="Describe your problem or question..." required="" rows="5"></textarea>
+<label class="text-[11px] font-medium text-neutral-400 uppercase tracking-wider mb-1.5 block" data-i18n="message" for="field-5">Message</label>
+<textarea class="input-field w-full px-4 py-3 rounded-xl resize-none text-[14px]" data-i18n-placeholder="describe-your-problem-or-question" placeholder="Describe your problem or question..." required="" rows="5" id="field-5"></textarea>
 </div>
 <button class="btn-primary w-full py-3.5 rounded-xl text-white font-semibold text-[14px] flex items-center justify-center gap-2 shadow-lg shadow-brand-500/25" type="submit">
               <span data-i18n="send-message">Send message</span>
@@ -108,8 +112,8 @@
 <div class="w-10 h-10 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-3">
 <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
-<p class="text-[14px] font-semibold text-white mb-1" data-i18n="message-sent">Message sent!</p>
-<p class="text-[13px] text-neutral-400" data-i18n="we-will-reply-within-24-hours">We will reply within 24 hours.</p>
+<p class="text-[14px] font-semibold text-white mb-1" data-i18n="demo.support.sent">Demo only</p>
+<p class="text-[13px] text-neutral-400" data-i18n="demo.support.sent.text">Nothing was sent. Open an issue on GitHub to reach the team.</p>
 </div>
 </div>
 <!-- Quick help -->
@@ -119,28 +123,28 @@
 <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 <p class="text-[13px] font-medium text-white mb-1" data-i18n="troubleshooting">Troubleshooting</p>
-<p class="text-[11px] text-neutral-500" data-i18n="quickly-fix-common-issues">Quickly fix common issues</p>
+<p class="text-[11px] text-neutral-400" data-i18n="quickly-fix-common-issues">Quickly fix common issues</p>
 </a>
 <a class="card rounded-xl p-5 text-center hover:border-brand-500/20 transition-all" href="docs.html">
 <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mx-auto mb-3">
 <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 <p class="text-[13px] font-medium text-white mb-1" data-i18n="documentation">Documentation</p>
-<p class="text-[11px] text-neutral-500" data-i18n="step-by-step-guides">Step-by-step guides</p>
+<p class="text-[11px] text-neutral-400" data-i18n="step-by-step-guides">Step-by-step guides</p>
 </a>
 <a class="card rounded-xl p-5 text-center hover:border-brand-500/20 transition-all" href="index.html#faq">
 <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mx-auto mb-3">
 <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 <p class="text-[13px] font-medium text-white mb-1">FAQ</p>
-<p class="text-[11px] text-neutral-500" data-i18n="frequently-asked-questions">Frequently asked questions</p>
+<p class="text-[11px] text-neutral-400" data-i18n="frequently-asked-questions">Frequently asked questions</p>
 </a>
 </div>
 <!-- Response time info -->
 <div class="mt-10 text-center">
-<p class="text-[12px] text-neutral-500 mb-2" data-i18n="average-response-time">Average response time</p>
-<p class="text-[20px] font-bold text-white" data-i18n="24-hours">&lt; 24 hours</p>
-<p class="text-[11px] text-neutral-600 mt-1" data-i18n="monday-to-friday">Monday to Friday</p>
+<p class="text-[12px] text-neutral-400 mb-2" data-i18n="demo.support.response">Response time</p>
+<p class="text-[20px] font-bold text-white" data-i18n="demo.support.response.value">Not applicable</p>
+<p class="text-[11px] text-neutral-400 mt-1" data-i18n="demo.support.response.note">Hackathon demo</p>
 </div>
 </div>
 </div>
@@ -148,11 +152,11 @@
 <footer class="py-10 px-6 border-t border-white/[0.04]">
 <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
 <div class="flex items-center gap-4">
-<span class="font-mono font-bold text-[13px]"><span class="text-brand-500">&gt;_</span><span class="text-white">mcp</span><span class="text-neutral-500">builder</span></span>
-<span class="text-[11px] text-neutral-600">© 2026</span>
-<a class="text-[11px] text-neutral-500 hover:text-white transition-colors" href="https://github.com/Josequevedov08" target="_blank">@Josequevedov08</a>
+<span class="font-mono font-bold text-[13px]"><span class="text-brand-500">&gt;_</span><span class="text-white">mcp</span><span class="text-neutral-400">builder</span></span>
+<span class="text-[11px] text-neutral-400">© 2026</span>
+<a class="text-[11px] text-neutral-400 hover:text-white transition-colors" href="https://github.com/Josequevedov08" target="_blank">@Josequevedov08</a>
 </div>
-<div class="flex flex-wrap items-center gap-4 md:gap-6 text-[12px] font-medium text-neutral-500">
+<div class="flex flex-wrap items-center gap-4 md:gap-6 text-[12px] font-medium text-neutral-400">
 <a class="hover:text-white transition-colors" data-i18n="home" href="index.html">Home</a>
 <a class="hover:text-white transition-colors" data-i18n="documentation" href="docs.html">Documentation</a>
 <a class="hover:text-white transition-colors" data-i18n="terms" href="politics.html">Terms</a>

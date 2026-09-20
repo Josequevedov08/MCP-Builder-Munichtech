@@ -72,5 +72,9 @@ def test_readme_neutralizes_hostile_resource_names():
 
 def test_rules_and_env_schema_describe_every_source():
     for source in ("files", "database", "api"):
-        assert describe_rules(source, default_policy())
-        assert env_schema(source, "postgresql")["required"]
+        english = describe_rules(source, default_policy())
+        assert english and env_schema(source, "postgresql")["required"]
+        for language in ("de", "es"):
+            translated = describe_rules(source, default_policy(), language)
+            assert len(translated) == len(english) and translated != english
+            assert not any("{" in rule for rule in translated)

@@ -82,13 +82,18 @@ class Settings:
 
         # ElevenLabs text-to-speech
         self.elevenlabs_api_key = os.getenv("ELEVENLABS_API_KEY", "")
+        # Optional backup key, used only when the main one is out of credits or rejected.
+        self.elevenlabs_api_key_2 = os.getenv("ELEVENLABS_API_KEY_2", "")
+        self.elevenlabs_api_keys = [
+            key for key in (self.elevenlabs_api_key, self.elevenlabs_api_key_2) if key
+        ]
         self.elevenlabs_base_url = os.getenv(
             "ELEVENLABS_BASE_URL", "https://api.elevenlabs.io"
         ).rstrip("/")
         self.elevenlabs_voice_id = os.getenv(
             "ELEVENLABS_VOICE_ID", "Xb7hH8MSUJpSbSDYk0k2"
         )
-        self.voice_enabled = bool(self.elevenlabs_api_key)
+        self.voice_enabled = bool(self.elevenlabs_api_keys)
 
         # Security and storage
         self.encryption_key = os.getenv("CREDENTIALS_ENCRYPTION_KEY", "")
@@ -481,51 +486,66 @@ class FeatherlessClient:
 class VoiceService:
     """Turns short status sentences into MP3 audio through ElevenLabs."""
 
+    # Statuses that mean "this key cannot be used right now": bad key, no credits, quota.
+    _KEY_FAILURES = (401, 402, 403, 429)
+
     def __init__(self, cfg: Settings, http: httpx.AsyncClient) -> None:
         self._cfg = cfg
         self._http = http
+        self._active = 0  # index of the key that worked last, so a spent key is not retried first
+
+    async def _request(self, api_key: str, text: str) -> httpx.Response:
+        response = await self._http.post(
+            f"{self._cfg.elevenlabs_base_url}/v1/text-to-speech/{self._cfg.elevenlabs_voice_id}",
+            params={"output_format": "mp3_44100_128"},
+            headers={"xi-api-key": api_key, "Accept": "audio/mpeg"},
+            json={
+                "text": text,
+                "model_id": ELEVENLABS_MODEL_ID,
+                "voice_settings": {"stability": 0.5, "similarity_boost": 0.75},
+            },
+            timeout=30.0,
+        )
+        response.raise_for_status()
+        return response
 
     async def synthesize(self, text: str) -> bytes:
-        if not self._cfg.voice_enabled:
+        keys = self._cfg.elevenlabs_api_keys
+        if not self._cfg.voice_enabled or not keys:
             raise ApiError(
                 503, "voice_unavailable", "Voice notifications are not enabled on this server."
             )
-        try:
-            response = await self._http.post(
-                f"{self._cfg.elevenlabs_base_url}/v1/text-to-speech/{self._cfg.elevenlabs_voice_id}",
-                params={"output_format": "mp3_44100_128"},
-                headers={
-                    "xi-api-key": self._cfg.elevenlabs_api_key,
-                    "Accept": "audio/mpeg",
-                },
-                json={
-                    "text": text,
-                    "model_id": ELEVENLABS_MODEL_ID,
-                    "voice_settings": {"stability": 0.5, "similarity_boost": 0.75},
-                },
-                timeout=30.0,
-            )
-            response.raise_for_status()
-        except httpx.TimeoutException:
-            raise ApiError(
-                504, "voice_timeout", "The voice service took too long to respond."
-            ) from None
-        except httpx.HTTPStatusError as exc:
-            status = exc.response.status_code
-            logger.error("ElevenLabs returned HTTP %s", status)
-            if status in (401, 403):
+        # Start with the key that worked last, then try the others.
+        order = [(self._active + i) % len(keys) for i in range(len(keys))]
+        response: httpx.Response | None = None
+        for position, index in enumerate(order):
+            try:
+                response = await self._request(keys[index], text)
+                self._active = index
+                break
+            except httpx.TimeoutException:
                 raise ApiError(
-                    503, "voice_not_configured", "The voice service is not configured correctly."
+                    504, "voice_timeout", "The voice service took too long to respond."
                 ) from None
-            raise ApiError(
-                502, "voice_unavailable", "The voice service is currently unavailable."
-            ) from None
-        except httpx.HTTPError:
-            logger.exception("ElevenLabs request failed")
-            raise ApiError(
-                502, "voice_unavailable", "The voice service is currently unavailable."
-            ) from None
-        if not response.content:
+            except httpx.HTTPStatusError as exc:
+                status = exc.response.status_code
+                logger.error("ElevenLabs returned HTTP %s", status)
+                if status in self._KEY_FAILURES and position < len(order) - 1:
+                    logger.warning("Voice key %d unusable (HTTP %s), trying the backup key", index + 1, status)
+                    continue
+                if status in (401, 403):
+                    raise ApiError(
+                        503, "voice_not_configured", "The voice service is not configured correctly."
+                    ) from None
+                raise ApiError(
+                    502, "voice_unavailable", "The voice service is currently unavailable."
+                ) from None
+            except httpx.HTTPError:
+                logger.exception("ElevenLabs request failed")
+                raise ApiError(
+                    502, "voice_unavailable", "The voice service is currently unavailable."
+                ) from None
+        if response is None or not response.content:
             raise ApiError(502, "voice_unavailable", "The voice service returned no audio.")
         return response.content
 
@@ -705,7 +725,7 @@ async def build_mcp(payload: BuildRequest, request: Request) -> BuildResponse:
         server_name=payload.server_name,
         source_type=payload.source_type,
         ai_status=ai_status,
-        applied_rules=describe_rules(source, policy),
+        applied_rules=describe_rules(source, policy, payload.language),
         config_schema=env_schema(source, engine),
         files=files,
         spoken_summary=compose_voice_message(
