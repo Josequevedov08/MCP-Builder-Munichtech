@@ -55,7 +55,7 @@ Real Stripe test mode with server-side prices, tests against live PostgreSQL and
 
 ## Honest note on what is demo
 
-Payment, the promo code, receipts, the support form, the legal text and the admin panel are demos. Generation, the AI step, the voice report and the download are real. The README lists this in detail.
+Payment, the promo code, the support form, the legal text and the admin panel are demos. Generation, the AI step, the voice report, the download and the receipt email (with the server .zip attached) are real. The README lists this in detail.
 
 ## Built with
 

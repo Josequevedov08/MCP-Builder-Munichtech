@@ -16,6 +16,8 @@ Deadline: submit before 9:30. Hard limit about 11:00.
 - [ ] https://mcpbuilder.quevedojose.com loads and the status card shows both services online
 - [ ] Do one full build on the live site: fill the form, demo checkout, hear the report, download and unzip the .zip, run `npm install` and `npm run build`
 - [ ] Try the site in German and Spanish
+- [ ] Receipt email: `email_enabled` is `true` in `/api/health`, and a test purchase with a second address (not the account owner) delivers the email with the .zip attached
+- [ ] If the Resend domain is not verified, remember the test sender only delivers to the account owner's address
 - [ ] Render: the service is awake right before submitting (open the health URL)
 
 ## Devpost

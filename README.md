@@ -131,7 +131,7 @@ python -m pytest tests -m "not e2e" -q     # unit tests: API and generator
 python -m pytest tests/e2e -q              # needs Node.js and network access
 ```
 
-- Unit tests cover the policy sanitizing (hostile values are clamped and cleaned), the project renderer, the localized rules and the API contract.
+- Unit tests cover the policy sanitizing (hostile values are clamped and cleaned), the project renderer, the localized rules, the API contract, the ElevenLabs backup key and the receipt email (server-side amounts, one email per build, no leaked secrets).
 - End-to-end tests render real projects, install their dependencies, compile them with TypeScript and talk to them through the official MCP client over stdio. They check that path escapes are refused in the files server, that the API server calls only allowed endpoints and reports upstream errors, and that the database servers run inside a read-only transaction and reject unsafe SQL (against simulated drivers).
 - A test also unpacks the ZIP produced by the browser writer with a standard tool and verifies its integrity and UTF-8 content.
 - GitHub Actions runs both groups on every push (`.github/workflows/tests.yml`).
@@ -302,6 +302,7 @@ A multilingual static site without a build step. The interface is translated at 
 ## Roadmap
 
 - Real Stripe test mode checkout, with the price and promo code checked on the server.
+- A verified sending domain for receipt emails, so they reach any address (the test sender only reaches the account owner).
 - Tests against live PostgreSQL and MySQL instances.
 - Manual testing with real screen reader users and fixes from their feedback.
 - Real metrics in the admin panel (builds by source type, AI status, generation time), protected by a token.
