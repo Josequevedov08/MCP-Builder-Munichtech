@@ -94,6 +94,19 @@ async function connect(): Promise<Db> {
 let dbPromise: Promise<Db> | null = null;
 const getDb = (): Promise<Db> => (dbPromise ??= connect());
 
+// Turns driver errors into advice. Only the error code is shown, never the connection string.
+function describeError(error: unknown): string {
+  const failureCode = String((error as { code?: unknown }).code ?? "");
+  if (["ECONNREFUSED", "ENOTFOUND", "ETIMEDOUT", "EAI_AGAIN", "EHOSTUNREACH", "ECONNRESET"].includes(failureCode)) {
+    return `Could not reach the database (${failureCode}). Check the host and port in DATABASE_URL and that the database accepts connections from this machine.`;
+  }
+  if (["28P01", "28000", "ER_ACCESS_DENIED_ERROR"].includes(failureCode)) return "The database refused the user or the password in DATABASE_URL.";
+  if (["3D000", "ER_BAD_DB_ERROR"].includes(failureCode)) return "The database name in DATABASE_URL does not exist.";
+  if (failureCode === "57014") return "The query took too long and was stopped.";
+  if (/invalid (url|connection)/i.test((error as Error).message ?? "")) return "DATABASE_URL is not a valid connection string.";
+  return (error as Error).message ?? "Unexpected error.";
+}
+
 // ---- SQL guard -------------------------------------------------------------
 
 const FORBIDDEN_KEYWORDS =
@@ -174,7 +187,7 @@ server.registerTool(
       const names = rows.map((row) => String(row.table_name)).filter(tableAllowed);
       return text(names.length > 0 ? names.join("\n") : "No allowed tables were found.");
     } catch (error) {
-      return failure((error as Error).message);
+      return failure(describeError(error));
     }
   },
 );
@@ -196,7 +209,7 @@ server.registerTool(
       if (visible.length === 0) throw new Error(`The table "${table}" was not found.`);
       return text(toJson(visible));
     } catch (error) {
-      return failure((error as Error).message);
+      return failure(describeError(error));
     }
   },
 );
@@ -216,7 +229,7 @@ server.registerTool(
       const visible = rows.slice(0, maxRows).map(stripBlocked);
       return text(toJson({ row_count: visible.length, truncated: rows.length > maxRows, rows: visible }));
     } catch (error) {
-      return failure((error as Error).message);
+      return failure(describeError(error));
     }
   },
 );

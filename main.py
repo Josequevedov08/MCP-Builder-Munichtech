@@ -243,10 +243,23 @@ class BuildRequest(BaseModel):
 
     @model_validator(mode="after")
     def validate_resources_for_source(self) -> "BuildRequest":
+        # The messages are short codes: the website turns them into text in the user's language.
+        resources = self.resources
         if self.source_type is SourceType.DATABASE:
-            invalid = [r for r in self.resources if not re.match(r"^[A-Za-z_][\w$]*(\.[A-Za-z_][\w$]*)?$", r)]
-            if invalid:
-                raise ValueError("database resources must be table names such as orders or public.orders")
+            if not resources:
+                raise ValueError("tables_required")
+            if any(not re.match(r"^[A-Za-z_][\w$]*(\.[A-Za-z_][\w$]*)?$", r) for r in resources):
+                raise ValueError("invalid_tables")
+        elif self.source_type is SourceType.API:
+            if not resources:
+                raise ValueError("endpoints_required")
+            if any(
+                "://" in r or ".." in r.split("/") or not re.match(r"^/?[A-Za-z0-9._~\-/{}:@%]+$", r)
+                for r in resources
+            ):
+                raise ValueError("invalid_endpoints")
+        elif any(".." in re.split(r"[\\/]", r) or re.fullmatch(r"([A-Za-z]:)?[\\/]*", r) for r in resources):
+            raise ValueError("invalid_folders")
         return self
 
     @field_validator("credentials")
@@ -754,13 +767,12 @@ async def handle_api_error(request: Request, exc: ApiError) -> JSONResponse:
 @app.exception_handler(RequestValidationError)
 async def handle_validation_error(_: Request, exc: RequestValidationError) -> JSONResponse:
     # Field names and messages only: submitted values are never echoed back.
-    fields = [
-        {
-            "field": ".".join(str(part) for part in err["loc"][1:]) or "body",
-            "message": str(err["msg"]),
-        }
-        for err in exc.errors()
-    ]
+    resource_codes = ("tables_required", "invalid_tables", "endpoints_required", "invalid_endpoints", "invalid_folders")
+    fields = []
+    for err in exc.errors():
+        message = re.sub(r"^Value error, ", "", str(err["msg"]))
+        name = ".".join(str(part) for part in err["loc"][1:]) or "body"
+        fields.append({"field": "resources" if message in resource_codes else name, "message": message})
     return JSONResponse(
         status_code=422,
         content=error_body("invalid_request", "The request contains invalid data.", fields),

@@ -22,11 +22,12 @@
     model_bad_output: 'error.model_bad_output'
   };
 
-  function ApiClientError(code, message, status) {
+  function ApiClientError(code, message, status, fields) {
     this.name = 'ApiClientError';
     this.code = code;
     this.message = message;
     this.status = status;
+    this.fields = fields || [];
   }
   ApiClientError.prototype = Object.create(Error.prototype);
 
@@ -45,12 +46,14 @@
     if (!response.ok) {
       var code = 'internal_error';
       var message = '';
+      var fields = [];
       try {
         var body = await response.json();
         code = (body.error && body.error.code) || code;
         message = (body.error && body.error.message) || '';
+        fields = (body.error && body.error.fields) || [];
       } catch (parseError) { /* keep defaults */ }
-      throw new ApiClientError(code, message, response.status);
+      throw new ApiClientError(code, message, response.status, fields);
     }
     return response;
   }
@@ -152,8 +155,28 @@
 
   // Localized, user-safe message for an error thrown by this client.
   // Pass a language code to get the message in a language other than the interface.
+  var RESOURCE_CODES = ['tables_required', 'invalid_tables', 'endpoints_required', 'invalid_endpoints', 'invalid_folders'];
+
+  // The same rules as the server, so the form can explain a problem before anything is sent.
+  // Returns an error code, or null when the resources are fine.
+  function validateResources(source, resources) {
+    var list = resources || [];
+    if (source === 'database') {
+      if (!list.length) return 'tables_required';
+      if (list.some(function (r) { return !/^[A-Za-z_][\w$]*(\.[A-Za-z_][\w$]*)?$/.test(r); })) return 'invalid_tables';
+    } else if (source === 'api') {
+      if (!list.length) return 'endpoints_required';
+      if (list.some(function (r) { return r.indexOf('://') !== -1 || r.split('/').indexOf('..') !== -1 || !/^\/?[A-Za-z0-9._~\-\/{}:@%]+$/.test(r); })) return 'invalid_endpoints';
+    } else if (list.some(function (r) { return r.split(/[\\/]/).indexOf('..') !== -1 || /^([A-Za-z]:)?[\\/]*$/.test(r); })) {
+      return 'invalid_folders';
+    }
+    return null;
+  }
+
   function errorMessage(err, lang) {
-    var key = ERROR_KEYS[err && err.code] || 'error.generic';
+    // A specific reason from the server (for example a missing table) beats the generic text.
+    var reason = err && err.fields && err.fields.map(function (f) { return f.message; }).filter(function (m) { return RESOURCE_CODES.indexOf(m) !== -1; })[0];
+    var key = reason ? 'error.' + reason : ERROR_KEYS[err && err.code] || 'error.generic';
     return lang ? I18N.tIn(lang, key) : I18N.t(key);
   }
 
@@ -167,6 +190,7 @@
     sendSupport: sendSupport,
     sendReceipt: sendReceipt,
     slugify: slugify,
+    validateResources: validateResources,
     isValidServerName: isValidServerName,
     errorMessage: errorMessage
   };

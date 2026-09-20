@@ -202,7 +202,22 @@ def describe_rules(source: str, policy: Policy, language: str = "en") -> list[st
         "chars": f"{policy.max_response_chars:,}",
     }
     templates = _RULES[source].get(language, _RULES[source]["en"])
-    return [template.format(**values) for template in templates]
+    return [_singular(template.format(**values)) for template in templates]
+
+
+# "1 rows" reads badly, so counts of exactly one use the singular form.
+_SINGULAR = (
+    (" 1 rows ", " 1 row "), (" 1 filas ", " 1 fila "), (" 1 Zeilen ", " 1 Zeile "),
+    (" 1 results ", " 1 result "), (" 1 resultados ", " 1 resultado "), (" 1 Ergebnisse ", " 1 Ergebnis "),
+    (" 1 segundos", " 1 segundo"), (" 1 Sekunden", " 1 Sekunde"),
+)
+
+
+def _singular(text: str) -> str:
+    padded = f" {text} "
+    for plural, single in _SINGULAR:
+        padded = padded.replace(plural, single)
+    return padded[1:-1]
 
 
 def env_schema(source: str, db_engine: str | None) -> dict[str, Any]:

@@ -188,3 +188,34 @@ def test_unknown_routes_use_the_envelope(client):
     response = client.get("/api/nope")
     assert response.status_code == 404
     assert response.json()["error"]["code"] == "http_error"
+
+
+@pytest.mark.parametrize(
+    "body, reason",
+    [
+        ({"server_name": "shop-db", "source_type": "database", "resources": []}, "tables_required"),
+        ({"server_name": "shop-db", "source_type": "database", "resources": ["orders; DROP TABLE users"]}, "invalid_tables"),
+        ({"server_name": "shop-api", "source_type": "api", "resources": []}, "endpoints_required"),
+        ({"server_name": "shop-api", "source_type": "api", "resources": ["https://evil.example.com/x"]}, "invalid_endpoints"),
+        ({"server_name": "shop-api", "source_type": "api", "resources": ["/../admin"]}, "invalid_endpoints"),
+        ({"server_name": "shop-fil", "source_type": "files", "resources": ["../../etc"]}, "invalid_folders"),
+        ({"server_name": "shop-fil", "source_type": "files", "resources": ["C:/"]}, "invalid_folders"),
+        ({"server_name": "shop-fil", "source_type": "files", "resources": ["/"]}, "invalid_folders"),
+    ],
+)
+def test_wrong_resources_are_refused_with_a_readable_reason(client, body, reason):
+    response = client.post("/api/build-mcp", json=body)
+    assert response.status_code == 422
+    fields = response.json()["error"]["fields"]
+    assert {"field": "resources", "message": reason} in fields
+
+
+def test_reasonable_resources_are_accepted(client):
+    good = [
+        {"server_name": "shop-db", "source_type": "database", "resources": ["orders", "public.customers"]},
+        {"server_name": "shop-api", "source_type": "api", "resources": ["/products", "orders/{id}"]},
+        {"server_name": "shop-fil", "source_type": "files", "resources": ["./docs", "C:/Company/Reports"]},
+        {"server_name": "shop-fil", "source_type": "files", "resources": []},
+    ]
+    for body in good:
+        assert client.post("/api/build-mcp", json=body).status_code == 200, body

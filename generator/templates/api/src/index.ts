@@ -111,7 +111,11 @@ server.registerTool(
       if (!response.ok) throw new Error(`The API answered with status ${response.status}: ${body.slice(0, 300)}`);
       return text(formatBody(body));
     } catch (error) {
-      const message = (error as Error).name === "TimeoutError" ? "The API did not answer in time." : (error as Error).message;
+      const cause = String(((error as { cause?: { code?: unknown } }).cause?.code) ?? "");
+      let message = (error as Error).message;
+      if ((error as Error).name === "TimeoutError") message = "The API did not answer in time.";
+      else if (cause) message = `Could not reach the API (${cause}). Check API_BASE_URL and your network connection.`;
+      else if (message === "fetch failed") message = "Could not reach the API. Check API_BASE_URL and your network connection.";
       return failure(message);
     }
   },

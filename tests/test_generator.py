@@ -79,3 +79,11 @@ def test_rules_and_env_schema_describe_every_source():
             translated = describe_rules(source, default_policy(), language)
             assert len(translated) == len(english) and translated != english
             assert not any("{" in rule for rule in translated)
+
+
+def test_counts_of_one_use_the_singular():
+    policy = Policy.model_validate({"max_rows": 1, "max_results": 1, "statement_timeout_ms": 1000, "max_file_bytes": 5000})
+    assert "At most 1 row per query, 1 second time limit" in describe_rules("database", policy, "en")[1]
+    assert "Máximo 1 fila por consulta, límite de 1 segundo" in describe_rules("database", policy, "es")[1]
+    assert "Höchstens 1 Zeile pro Abfrage, Zeitlimit 1 Sekunde" in describe_rules("database", policy, "de")[1]
+    assert "At most 1 result per listing" in describe_rules("files", policy, "en")[3]

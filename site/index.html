@@ -438,7 +438,7 @@
 <div class="w-px h-4 bg-white/10 hidden sm:block"></div>
 <div class="flex items-center gap-2 text-neutral-400">
 <svg aria-hidden="true" class="w-4 h-4 text-blue-400" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" fill-rule="evenodd"></path></svg>
-<span class="text-[13px] font-medium" data-i18n="your-data-never-leaves-your-machine">Your data never leaves your machine</span>
+<span class="text-[13px] font-medium" data-i18n="your-data-never-leaves-your-machine">Your database and files stay on your machine</span>
 </div>
 <div class="w-px h-4 bg-white/10 hidden sm:block"></div>
 <div class="flex items-center gap-2 text-neutral-400">
@@ -712,6 +712,7 @@
 </div>
 </div>
 </div>
+<p aria-live="assertive" class="hidden mb-3 rounded-lg bg-red-500/[0.08] border border-red-500/20 px-3 py-2 text-[12px] text-red-300" id="resourcesHint" role="alert"></p>
 <button class="btn-primary w-full py-4 rounded-xl text-white font-semibold text-[15px] flex items-center justify-center gap-2.5 shadow-lg shadow-brand-500/25" id="payButton" onclick="openCheckout()">
 <svg aria-hidden="true" class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 <span id="ctaText">Generate MCP - $0.00</span>
@@ -740,7 +741,7 @@
 <svg aria-hidden="true" class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 <h3 class="text-[16px] font-semibold text-white mb-2" data-i18n="100-local-and-private">100% local and private</h3>
-<p class="text-[13px] text-neutral-400 leading-relaxed" data-i18n="your-server-runs-on-your-machine">Your server runs on your machine and your data never leaves your infrastructure. Only the rules you write are sent to generate it.</p>
+<p class="text-[13px] text-neutral-400 leading-relaxed" data-i18n="your-server-runs-on-your-machine">Your server runs on your machine, and the contents of your databases and files never reach us. We only receive what you type in the form and, if you enter it, your email for the receipt.</p>
 </div>
 <!-- Feature 2 -->
 <div class="card card-interactive reveal stagger-1 rounded-xl p-7 group">
@@ -1487,6 +1488,19 @@
         return;
       }
       nameHint.classList.add('hidden');
+
+      // Same rules as the server: say what is wrong before the checkout opens.
+      const resourcesHint = document.getElementById('resourcesHint');
+      const resourcesProblem = McpApi.validateResources(source === 'local' ? 'files' : source, collectBuildPayload().resources);
+      if (resourcesProblem) {
+        resourcesHint.textContent = I18N.t('error.' + resourcesProblem);
+        resourcesHint.classList.remove('hidden');
+        const field = document.getElementById({ database: 'dbTables', api: 'apiEndpoints', local: 'localPath' }[source]);
+        if (field) { field.setAttribute('aria-invalid', 'true'); field.focus(); }
+        return;
+      }
+      resourcesHint.classList.add('hidden');
+      ['dbTables', 'apiEndpoints', 'localPath'].forEach((id) => document.getElementById(id).removeAttribute('aria-invalid'));
       document.getElementById('serverName').removeAttribute('aria-invalid');
       document.getElementById('checkoutError').classList.add('hidden');
 
@@ -1510,20 +1524,15 @@
       currentPaymentMethod = method;
       const tabCard = document.getElementById('tabCard');
       const tabPaypal = document.getElementById('tabPaypal');
-      const cardForm = document.getElementById('cardForm');
-      const paypalForm = document.getElementById('paypalForm');
-
-      if (method === 'card') {
-        tabCard.className = 'flex-1 py-2.5 rounded-lg text-[12px] font-semibold transition-all bg-brand-500/10 border border-brand-500/30 text-brand-400';
-        tabPaypal.className = 'flex-1 py-2.5 rounded-lg text-[12px] font-semibold transition-all bg-white/[0.02] border border-white/[0.08] text-neutral-400 hover:text-neutral-300';
-        cardForm.classList.remove('hidden');
-        paypalForm.classList.add('hidden');
-      } else {
-        tabCard.className = 'flex-1 py-2.5 rounded-lg text-[12px] font-semibold transition-all bg-white/[0.02] border border-white/[0.08] text-neutral-400 hover:text-neutral-300';
-        tabPaypal.className = 'flex-1 py-2.5 rounded-lg text-[12px] font-semibold transition-all bg-blue-500/10 border border-blue-500/30 text-blue-400';
-        cardForm.classList.add('hidden');
-        paypalForm.classList.remove('hidden');
-      }
+      // Both tabs keep the same layout classes: only the colors change with the selection.
+      const base = 'flex-1 py-2.5 rounded-lg text-[12px] font-semibold transition-all flex items-center justify-center gap-2 ';
+      const idle = 'bg-white/[0.02] border border-white/[0.08] text-neutral-400 hover:text-neutral-300';
+      tabCard.className = base + (method === 'card' ? 'bg-brand-500/10 border border-brand-500/30 text-brand-400' : idle);
+      tabPaypal.className = base + (method === 'paypal' ? 'bg-blue-500/10 border border-blue-500/30 text-blue-400' : idle);
+      tabCard.setAttribute('aria-pressed', String(method === 'card'));
+      tabPaypal.setAttribute('aria-pressed', String(method === 'paypal'));
+      document.getElementById('cardForm').classList.toggle('hidden', method !== 'card');
+      document.getElementById('paypalForm').classList.toggle('hidden', method !== 'paypal');
     }
 
     function formatCardNumber(input) {

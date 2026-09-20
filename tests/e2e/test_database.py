@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from conftest import NPM, Policy, _run, build_project, render_project, run_scenario
+from conftest import NPM, Policy, _run, build_project, default_policy, render_project, run_scenario
 
 pytestmark = pytest.mark.e2e
 
@@ -168,3 +168,28 @@ def test_mysql_server_uses_a_read_only_transaction(tmp_path):
     assert "SET SESSION TRANSACTION READ ONLY" in statements
     assert statements.index("SET SESSION TRANSACTION READ ONLY") < statements.index("BEGIN")
     assert not any(line.upper().startswith("DROP") for line in statements)
+
+
+def test_database_server_explains_connection_problems_without_leaking_the_password(tmp_path):
+    project = tmp_path / "real-driver-server"
+    build_project(project, render_project("shop-db", "database", ["customers"], default_policy(), "postgresql"))
+    unreachable = {
+        "env": {"DATABASE_URL": "postgresql://user:SuperSecret123@127.0.0.1:1/nodb"},
+        "tools": ["list_tables", "describe_table", "run_query"],
+        "steps": [
+            {"tool": "list_tables", "error": True, "contains": ["Could not reach the database", "DATABASE_URL"], "excludes": ["SuperSecret123"]},
+            {"tool": "run_query", "args": {"sql": "SELECT * FROM customers"}, "error": True, "contains": ["Could not reach the database"], "excludes": ["SuperSecret123"]},
+            # Wrong SQL is refused before any connection is tried, with a reason a person can act on.
+            {"tool": "run_query", "args": {"sql": "DROP TABLE customers"}, "error": True, "contains": ["Only SELECT"]},
+        ],
+    }
+    result = run_scenario(project, unreachable)
+    assert result.returncode == 0, result.stdout + result.stderr
+
+    missing = {
+        "env": {"DATABASE_URL": ""},
+        "tools": ["list_tables", "describe_table", "run_query"],
+        "steps": [{"tool": "list_tables", "error": True, "contains": ["DATABASE_URL is not set"]}],
+    }
+    result = run_scenario(project, missing)
+    assert result.returncode == 0, result.stdout + result.stderr

@@ -117,3 +117,23 @@ def test_api_server_reports_upstream_errors(tmp_path, api_server):
     }
     result = run_scenario(project, scenario)
     assert result.returncode == 0, result.stdout + result.stderr
+
+
+def test_api_server_explains_a_wrong_or_missing_address(tmp_path):
+    project = tmp_path / "api-server-bad-address"
+    build_project(project, render_project("shop-api", "api", ["/products"], default_policy()))
+    unreachable = {
+        "env": {"API_BASE_URL": "http://127.0.0.1:1/v1", "API_TOKEN": "tok_SuperSecret"},
+        "tools": ["list_endpoints", "call_endpoint"],
+        "steps": [{"tool": "call_endpoint", "args": {"path": "/products"}, "error": True, "contains": ["Could not reach the API", "API_BASE_URL"], "excludes": ["tok_SuperSecret"]}],
+    }
+    result = run_scenario(project, unreachable)
+    assert result.returncode == 0, result.stdout + result.stderr
+
+    missing = {
+        "env": {"API_BASE_URL": ""},
+        "tools": ["list_endpoints", "call_endpoint"],
+        "steps": [{"tool": "call_endpoint", "args": {"path": "/products"}, "error": True, "contains": ["API_BASE_URL is not set"]}],
+    }
+    result = run_scenario(project, missing)
+    assert result.returncode == 0, result.stdout + result.stderr
