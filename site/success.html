@@ -63,6 +63,7 @@
 <!-- Build status (text and audio) -->
 <div class="card rounded-2xl p-5 mb-6 hidden" id="buildStatusCard">
 <p aria-live="polite" class="text-[13px] text-neutral-300 mb-3" id="buildSummary" role="status"></p>
+<p aria-live="polite" class="text-[12px] text-amber-300 mb-3" id="audioHint" role="status"></p>
 <button class="px-4 py-2 rounded-lg border border-white/10 bg-white/5 text-[13px] font-medium text-neutral-200 hover:bg-white/10 transition-colors" id="listenButton" type="button"><span data-i18n="success.listen">Listen to build status</span></button>
 </div>
 <!-- Download card -->
@@ -88,6 +89,14 @@
 <select class="w-full px-4 py-3 rounded-xl text-[13px] bg-[#0A0A0A] border border-white/10 text-white mb-3" id="fileSelect"></select>
 <pre class="code-block rounded-xl p-4 overflow-auto text-left text-[12px] max-h-80" id="filePreview" tabindex="0"></pre>
 </div>
+</div>
+<!-- Receipt -->
+<div class="hidden card rounded-2xl p-6 mb-6 text-left" id="receiptCard">
+<h2 class="text-[15px] font-semibold text-white mb-1" data-i18n="receipt.title">Receipt</h2>
+<p class="text-[12px] text-neutral-400 mb-4" data-i18n="receipt.demo">Demo payment: no charge was made and no email is sent. Download the receipt if you need it.</p>
+<dl class="text-[13px] text-neutral-300 space-y-1.5 mb-4" id="receiptList"></dl>
+<button class="px-4 py-2 rounded-lg border border-white/10 bg-white/5 text-[13px] font-medium text-neutral-200 hover:bg-white/10 transition-colors" id="receiptDownload" type="button" data-i18n="receipt.download">Download receipt</button>
+<p aria-live="polite" class="text-[12px] text-neutral-300 mt-2" id="receiptStatus" role="status"></p>
 </div>
 <!-- Instructions -->
 <div class="card rounded-2xl p-6 mb-6">
@@ -123,6 +132,7 @@ npm run build
     (function () {
       var raw = null;
       try { raw = sessionStorage.getItem('mcpBuild'); } catch (e) { /* storage unavailable */ }
+      if (!raw) { try { raw = localStorage.getItem('mcpLastBuild'); } catch (e) { /* storage unavailable */ } }
       if (!raw) {
         document.getElementById('downloadStatus').textContent = I18N.t('success.nobuild');
         document.addEventListener('langchange', function () {
@@ -140,16 +150,30 @@ npm run build
       // The text matches what is spoken, in the language chosen for the audio report.
       summary.textContent = build.spoken_summary || '';
 
-      function listen() {
+      var hint = document.getElementById('audioHint');
+      var hintShown = false;
+      function renderHint() { hint.textContent = hintShown ? I18N.t('success.audio.blocked') : ''; }
+      document.addEventListener('langchange', renderHint);
+
+      function listen(auto) {
+        hintShown = false;
+        renderHint();
         return McpApi.speakStatus({
           status: 'success',
           server_name: build.server_name,
           file_count: build.file_count,
           language: build.language || I18N.getLang()
-        }).catch(function () { /* audio is optional */ });
+        }).catch(function (error) {
+          // Audio is optional. When the browser blocks autoplay, say so and point at the button.
+          if (auto === true && error && error.name === 'NotAllowedError') {
+            hintShown = true;
+            renderHint();
+            document.getElementById('listenButton').focus();
+          }
+        });
       }
 
-      document.getElementById('listenButton').addEventListener('click', listen);
+      document.getElementById('listenButton').addEventListener('click', function () { listen(false); });
 
       // ---- rules, file preview and real download ----
       var files = build.files || {};
@@ -200,8 +224,59 @@ npm run build
           downloadStatus.textContent = I18N.t('success.zip.error');
         }
       });
+
+      // ---- receipt, generated in the browser ----
+      var order = build.order;
+      if (order) {
+        document.getElementById('receiptCard').classList.remove('hidden');
+        var money = function (n) { return '$' + Number(n).toFixed(2); };
+        var receiptRows = function () {
+          return [
+            [I18N.t('receipt.order'), '#' + order.id],
+            [I18N.t('receipt.date'), new Date(order.date).toLocaleString(I18N.getLang())],
+            [I18N.t('receipt.product'), order.product],
+            [I18N.t('receipt.price'), money(order.price)],
+            [I18N.t('receipt.discount'), order.discount_code ? order.discount_code + ' (-' + Math.round(order.discount_rate * 100) + '%)' : I18N.t('receipt.none')],
+            [I18N.t('receipt.total'), money(order.total)],
+            [I18N.t('receipt.email'), order.email || '-']
+          ];
+        };
+        var receiptList = document.getElementById('receiptList');
+        var renderReceipt = function () {
+          receiptList.textContent = '';
+          receiptRows().forEach(function (row) {
+            var line = document.createElement('div');
+            line.className = 'flex justify-between gap-4';
+            var term = document.createElement('dt');
+            term.className = 'text-neutral-400';
+            term.textContent = row[0];
+            var value = document.createElement('dd');
+            value.className = 'text-right';
+            value.textContent = row[1];
+            line.appendChild(term);
+            line.appendChild(value);
+            receiptList.appendChild(line);
+          });
+        };
+        renderReceipt();
+        document.addEventListener('langchange', renderReceipt);
+        document.getElementById('receiptDownload').addEventListener('click', function () {
+          var text = 'MCP Builder - ' + I18N.t('receipt.title') + '\n\n' +
+            receiptRows().map(function (row) { return row[0] + ': ' + row[1]; }).join('\n') +
+            '\n\n' + I18N.t('receipt.demo') + '\n';
+          var url = URL.createObjectURL(new Blob([text], { type: 'text/plain;charset=utf-8' }));
+          var link = document.createElement('a');
+          link.href = url;
+          link.download = 'receipt-' + order.id + '.txt';
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
+          document.getElementById('receiptStatus').textContent = I18N.t('receipt.downloaded');
+        });
+      }
       // Browsers may block autoplay; the button above is the fallback.
-      if (build.autoRead !== false) document.addEventListener('DOMContentLoaded', listen);
+      if (build.autoRead !== false) document.addEventListener('DOMContentLoaded', function () { listen(true); });
     })();
   </script>
 </body>

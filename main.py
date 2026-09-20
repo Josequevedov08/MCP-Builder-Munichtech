@@ -281,21 +281,21 @@ class VoiceStatusRequest(BaseModel):
 _VOICE_TEXT = {
     "en": {
         "subject": "Your MCP server",
-        "success": "Build complete. {subject} is ready to download.{files}",
+        "success": "Build complete. {subject} is ready to download.{files} Use the download button below, then follow the README inside the zip.",
         "files": " It contains {count} files.",
         "error": "Build failed. {reason}",
         "default_reason": "Please check your configuration and try again.",
     },
     "de": {
         "subject": "Ihr MCP-Server",
-        "success": "Build abgeschlossen. {subject} ist bereit zum Download.{files}",
+        "success": "Build abgeschlossen. {subject} ist bereit zum Download.{files} Nutzen Sie die Download-Schaltfläche weiter unten und folgen Sie dann der README in der ZIP-Datei.",
         "files": " Er enthält {count} Dateien.",
         "error": "Build fehlgeschlagen. {reason}",
         "default_reason": "Bitte prüfen Sie Ihre Konfiguration und versuchen Sie es erneut.",
     },
     "es": {
         "subject": "Tu servidor MCP",
-        "success": "Compilación completada. {subject} está listo para descargar.{files}",
+        "success": "Compilación completada. {subject} está listo para descargar.{files} Usa el botón de descarga que está debajo y luego sigue el README que viene dentro del zip.",
         "files": " Contiene {count} archivos.",
         "error": "La compilación falló. {reason}",
         "default_reason": "Revisa tu configuración e inténtalo de nuevo.",

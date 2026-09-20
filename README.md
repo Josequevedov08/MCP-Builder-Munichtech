@@ -48,7 +48,8 @@ The first request to the API can take about a minute if the free Render plan was
 | Generated servers | Real | Compiled with TypeScript and exercised through a real MCP client in the test suite |
 | Payment | Demo | Simulated. No card data is collected or sent anywhere. The test card box is only a convenience |
 | Promo code `LAUNCH20` | Demo | Applies the discount to the displayed price only |
-| Email receipts | Demo | Nothing is sent |
+| Receipt | Partly real | Generated in the browser and downloadable as a text file from the result page. No email is sent |
+| Recovering a closed download | Real | The last build is kept in the browser, and the home page links back to it. It does not sync across devices |
 | Support form | Demo | Does not send messages. Use GitHub issues for real questions |
 | Terms, privacy and refund text | Demo | Template text, not a legal document |
 | Admin panel (`admin.html`) | Demo | Sample data, clearly labeled |

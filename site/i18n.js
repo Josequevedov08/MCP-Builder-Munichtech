@@ -583,7 +583,22 @@
   "pay.demo.footer": "Simulated payment. No card data is sent anywhere.",
   "pay.demo.cta": "Demo payment. One payment equals one MCP. Nothing is charged.",
   "pay.demo.paypal": "PayPal is not available in this demo. Use the card tab.",
-  "pay.demo.checkout": "Demo checkout"
+  "pay.demo.checkout": "Demo checkout",
+  "success.audio.blocked": "Your browser blocked the automatic audio. Press the Listen button to hear the report.",
+  "receipt.title": "Receipt",
+  "receipt.demo": "Demo payment: no charge was made and no email is sent. Download the receipt if you need it.",
+  "receipt.order": "Order",
+  "receipt.product": "Product",
+  "receipt.price": "Price",
+  "receipt.discount": "Discount",
+  "receipt.total": "Total",
+  "receipt.email": "Email",
+  "receipt.date": "Date",
+  "receipt.download": "Download receipt",
+  "receipt.downloaded": "Receipt downloaded.",
+  "receipt.none": "None",
+  "pay.email.label": "Email (optional, no email is sent in this demo)",
+  "recover.link": "Your last server, {name}, is ready. Open its download page."
  },
  "de": {
   "launch-offer-20-off-your-first": "Demo-Tipp: Nutzen Sie beim Checkout den Code <span class=\"font-mono\">LAUNCH20</span> für 20 % Rabatt",
@@ -1165,7 +1180,22 @@
   "pay.demo.footer": "Simulierte Zahlung. Es werden keine Kartendaten irgendwohin gesendet.",
   "pay.demo.cta": "Demo-Zahlung. Eine Zahlung entspricht einem MCP. Es wird nichts abgebucht.",
   "pay.demo.paypal": "PayPal ist in dieser Demo nicht verfügbar. Nutzen Sie den Karten-Tab.",
-  "pay.demo.checkout": "Demo-Kasse"
+  "pay.demo.checkout": "Demo-Kasse",
+  "success.audio.blocked": "Ihr Browser hat die automatische Wiedergabe blockiert. Drücken Sie die Schaltfläche zum Anhören, um den Bericht zu hören.",
+  "receipt.title": "Quittung",
+  "receipt.demo": "Demo-Zahlung: Es wurde nichts abgebucht und keine E-Mail gesendet. Laden Sie die Quittung herunter, falls Sie sie brauchen.",
+  "receipt.order": "Bestellung",
+  "receipt.product": "Produkt",
+  "receipt.price": "Preis",
+  "receipt.discount": "Rabatt",
+  "receipt.total": "Gesamt",
+  "receipt.email": "E-Mail",
+  "receipt.date": "Datum",
+  "receipt.download": "Quittung herunterladen",
+  "receipt.downloaded": "Quittung heruntergeladen.",
+  "receipt.none": "Keiner",
+  "pay.email.label": "E-Mail (optional, in dieser Demo wird keine E-Mail gesendet)",
+  "recover.link": "Ihr letzter Server, {name}, ist bereit. Öffnen Sie die Download-Seite."
  },
  "es": {
   "launch-offer-20-off-your-first": "Consejo de la demo: usa el código <span class=\"font-mono\">LAUNCH20</span> en el pago para un 20% de descuento",
@@ -1747,7 +1777,22 @@
   "pay.demo.footer": "Pago simulado. No se envían datos de tarjeta a ningún sitio.",
   "pay.demo.cta": "Pago de demostración. Un pago equivale a un MCP. No se cobra nada.",
   "pay.demo.paypal": "PayPal no está disponible en esta demo. Usa la pestaña de tarjeta.",
-  "pay.demo.checkout": "Pago de demostración"
+  "pay.demo.checkout": "Pago de demostración",
+  "success.audio.blocked": "Tu navegador bloqueó el audio automático. Pulsa el botón de escuchar para oír el informe.",
+  "receipt.title": "Recibo",
+  "receipt.demo": "Pago de demostración: no se cobró nada y no se envía ningún correo. Descarga el recibo si lo necesitas.",
+  "receipt.order": "Pedido",
+  "receipt.product": "Producto",
+  "receipt.price": "Precio",
+  "receipt.discount": "Descuento",
+  "receipt.total": "Total",
+  "receipt.email": "Correo",
+  "receipt.date": "Fecha",
+  "receipt.download": "Descargar recibo",
+  "receipt.downloaded": "Recibo descargado.",
+  "receipt.none": "Ninguno",
+  "pay.email.label": "Correo (opcional, en esta demo no se envía ningún correo)",
+  "recover.link": "Tu último servidor, {name}, está listo. Abre su página de descarga."
  }
 };
   var LANGS = ['en', 'de', 'es'];
