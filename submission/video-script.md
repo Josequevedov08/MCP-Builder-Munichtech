@@ -1,24 +1,60 @@
 # Three minute video script
 
-Record the screen with your voice. Keep the total under 3:00. Practice once with the real site so the timings are true. Turn the sound of your computer on so the ElevenLabs report is recorded.
+Target length: 2:45 to 2:55, never above 3:00. The narration is generated with ElevenLabs (one audio file per scene) and laid over a silent screen recording. The site's own spoken report is left audible in scene 4.
 
-Before recording: open the API health URL so the server is awake, open the site in English, and have a terminal ready in an empty folder.
+Demo choice: use the Files source for the whole flow, so the generated server can be connected to Claude Desktop with no database.
 
-| Time | On screen | What you say |
-| --- | --- | --- |
-| 0:00 to 0:15 | Landing page hero | "Connecting your data to an AI takes days of work with MCP. And for a blind developer, build tools are even harder, because progress is shown on a screen. MCP Builder fixes both." |
-| 0:15 to 0:35 | Live service status card | "The page checks the live service. The open-weight model on Featherless.ai and the ElevenLabs voice are both online." |
-| 0:35 to 1:10 | Quote builder: choose Database, name `clinic-patients`, tables `patients, appointments`, instruction "Read only. Never show phone numbers or diagnosis." | "I choose a database, name my server and list the tables. Then I write my rules in plain words. I do not write any code." |
-| 1:10 to 1:25 | Checkout: click "Fill in test card", pay | "The payment is a demo, nothing is charged. That is stated on the page." |
-| 1:25 to 1:55 | Result page: the spoken report plays, then the rules list | "Now the build report is read aloud, in the language I chose. The same text is on the page for screen readers. Below are the rules the AI derived from my sentence: read only, phone and diagnosis blocked, row limit. I can verify what it understood." |
-| 1:55 to 2:15 | File preview, click Download server.zip, then show the receipt email with the .zip attached | "The AI only writes this small policy. The server code comes from templates that we compile and test, so it always builds and the security checks are always there. The same .zip also arrives by email with the receipt." |
-| 2:15 to 2:40 | Terminal: unzip, `npm install`, `npm run build` | "I unzip it, install and build. It compiles." |
-| 2:40 to 2:55 | Docs page, Accessibility section, or GitHub Actions green check | "The test suite compiles each server and talks to it through a real MCP client. The accessibility audit reports zero violations in English, German and Spanish." |
-| 2:55 to 3:00 | Logo and site address | "MCP Builder. Describe it, hear it, download it." |
+Before recording
+
+1. Open https://mcpbuilder-api.quevedojose.com/api/health until it answers (wakes the free server).
+2. Site in English, browser zoom 100 percent, one clean window, notifications off.
+3. Create a folder `C:\demo-docs` with 3 or 4 fake files (`clients.csv`, `notes.txt`, `prices.csv`). No real data.
+4. Have an empty folder and a terminal ready. Have Claude Desktop installed and closed.
+5. Do one full dry run so the timings are true.
+
+## Narration (paste each block into ElevenLabs as its own clip)
+
+Scene 1, hook (0:00)
+Connecting company data to an AI assistant with MCP takes days of careful work. And for a blind developer, build tools are even harder, because progress is shown on a screen. MCP Builder fixes both.
+
+Scene 2, live status (0:15)
+The home page checks the live service. The open-weight model on Featherless.ai and the ElevenLabs voice are both online, and the counter shows real servers generated.
+
+Scene 3, builder (0:30)
+I choose a files source, name my server, and point it to a folder. Then I write my rules in plain words: read only, small files, no secrets. I write no code. Payment runs in test mode, so nothing is charged.
+
+Scene 4, result (1:00)
+The build report is read aloud, in the language I chose.
+[pause about 8 seconds: the site speaks]
+The same text is on the page for screen readers. Below are the rules the AI derived from my sentence, so I can verify what it understood.
+
+Scene 5, files and download (1:30)
+The AI only writes this small policy. The server code comes from verified templates that we compile and test, so it always builds and the security checks are always there. I download the zip, and it also arrives by email with my receipt.
+
+Scene 6, terminal and Claude Desktop (1:55)
+I unzip it, install and build. It compiles. Now I add it to Claude Desktop and ask about my files. It answers from my folder, and stays inside the rules.
+
+Scene 7, proof (2:25)
+The usage page shows real events from this session. Our test suite compiles each generated server and drives it through a real MCP client, and the accessibility audit reports zero violations in English, German and Spanish.
+
+Scene 8, closing (2:45)
+MCP Builder. Describe it, hear it, download it.
+
+## On screen
+
+| Scene | Show |
+| --- | --- |
+| 1 | Landing page hero |
+| 2 | Live service status card, then scroll slowly |
+| 3 | Quote builder filled in, "Fill in test card", pay |
+| 4 | Result page: audio plays, then the rules list |
+| 5 | File preview, click Download server.zip, then the receipt email with the zip |
+| 6 | Terminal: unzip, `npm install`, `npm run build`. Then Claude Desktop asking about the folder |
+| 7 | `/admin.html` numbers, then the green GitHub Actions check |
+| 8 | Logo and site address |
 
 Tips
 
-- If the build is slow, cut the waiting in the edit rather than talking over it.
-- Optional 10 second shot: after the purchase, open `/admin.html` and show the numbers you just created. Say: "These numbers are real events. The support inbox is private on purpose because it holds personal data."
-- Do not claim things that are demo. The judges' page and README already say which parts are simulated.
-- Optional: show Windows Narrator reading the result page for five seconds, to prove the screen reader path.
+- Cut the waiting (build, npm install) in the edit rather than talking over it.
+- Do not claim things that are demo. Say "test mode" for payment.
+- Optional five seconds of Windows Narrator reading the result page.
