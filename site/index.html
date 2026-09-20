@@ -8,6 +8,7 @@
 <meta content="Generate production-ready MCP servers and connect Claude, Cursor or any AI to your data in minutes. No accounts, no friction, one-time payment per server." data-i18n-content="meta.index.desc" name="description"/>
 <link href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23DC2626'/%3E%3Cpath d='M11 11l4 4-4 4M19 19h3' stroke='white' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E" rel="icon" type="image/svg+xml"/>
   <script src="i18n.js"></script>
+  <script src="api.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -576,6 +577,12 @@
 </div>
 <!-- Generator card -->
 <div class="card rounded-2xl p-8 md:p-10 shadow-2xl shadow-black/40">
+<!-- Server name -->
+<div class="mb-7">
+<label class="text-[14px] font-semibold text-white block mb-3" data-i18n="field.server_name" for="serverName">Server name</label>
+<input autocomplete="off" class="input-field w-full px-4 py-3.5 rounded-xl text-[14px]" data-i18n-placeholder="field.server_name.placeholder" id="serverName" maxlength="60" placeholder="e.g. shop-database" type="text"/>
+<p class="hidden text-[11px] text-red-400 mt-2" data-i18n="error.server_name" id="serverNameHint" role="alert">Use 3 to 40 characters: lowercase letters, numbers and hyphens, starting with a letter.</p>
+</div>
 <!-- Step 1: Data source -->
 <div class="mb-7">
 <div class="flex items-center gap-3 mb-3">
@@ -599,18 +606,18 @@
 <div class="hidden space-y-3" id="dbFields">
 <input class="input-field w-full px-4 py-3.5 rounded-xl text-[14px]" data-i18n-placeholder="host-e-g-localhost-5432" placeholder="Host (e.g. localhost:5432)" type="text"/>
 <input class="input-field w-full px-4 py-3.5 rounded-xl text-[14px]" data-i18n-placeholder="database-name" placeholder="Database name" type="text"/>
-<textarea class="input-field w-full px-4 py-3.5 rounded-xl resize-none text-[14px]" data-i18n-placeholder="which-tables-should-the-ai-read" placeholder="Which tables should the AI read? (e.g. users, sales, inventory)" rows="2"></textarea>
+<textarea class="input-field w-full px-4 py-3.5 rounded-xl resize-none text-[14px]" id="dbTables" data-i18n-placeholder="which-tables-should-the-ai-read" placeholder="Which tables should the AI read? (e.g. users, sales, inventory)" rows="2"></textarea>
 </div>
 <!-- Local fields -->
 <div class="hidden space-y-3" id="localFields">
-<input class="input-field w-full px-4 py-3.5 rounded-xl text-[14px]" data-i18n-placeholder="folder-path-e-g-c-documents" placeholder="Folder path (e.g. C:/Documents/Company)" type="text"/>
-<input class="input-field w-full px-4 py-3.5 rounded-xl text-[14px]" data-i18n-placeholder="file-types-e-g-csv-json" placeholder="File types (e.g. .csv, .json, .txt)" type="text"/>
+<input class="input-field w-full px-4 py-3.5 rounded-xl text-[14px]" id="localPath" data-i18n-placeholder="folder-path-e-g-c-documents" placeholder="Folder path (e.g. C:/Documents/Company)" type="text"/>
+<input class="input-field w-full px-4 py-3.5 rounded-xl text-[14px]" id="localTypes" data-i18n-placeholder="file-types-e-g-csv-json" placeholder="File types (e.g. .csv, .json, .txt)" type="text"/>
 </div>
 <!-- API fields -->
 <div class="hidden space-y-3" id="apiFields">
 <input class="input-field w-full px-4 py-3.5 rounded-xl text-[14px]" data-i18n-placeholder="api-base-url-e-g-https" placeholder="API base URL (e.g. https://api.shopify.com)" type="text"/>
 <input class="input-field w-full px-4 py-3.5 rounded-xl text-[14px]" data-i18n-placeholder="api-key-or-access-token" placeholder="API key or access token" type="text"/>
-<input class="input-field w-full px-4 py-3.5 rounded-xl text-[14px]" data-i18n-placeholder="endpoints-to-expose-e-g-products" placeholder="Endpoints to expose (e.g. /products, /orders)" type="text"/>
+<input class="input-field w-full px-4 py-3.5 rounded-xl text-[14px]" id="apiEndpoints" data-i18n-placeholder="endpoints-to-expose-e-g-products" placeholder="Endpoints to expose (e.g. /products, /orders)" type="text"/>
 </div>
 </div>
 <!-- Step 3: Custom instructions -->
@@ -620,7 +627,17 @@
 <label class="text-[14px] font-semibold text-white" data-i18n="instructions-for-the-ai">Instructions for the AI</label>
 <span class="text-[11px] font-mono text-neutral-600 bg-white/[0.03] px-2 py-0.5 rounded" data-i18n="optional">optional</span>
 </div>
-<textarea class="input-field w-full px-4 py-3.5 rounded-xl resize-none text-[14px]" data-i18n-placeholder="specific-rules-e-g-read-only" placeholder="Specific rules (e.g. read-only, block access to passwords, limit to 50 rows)" rows="3"></textarea>
+<textarea class="input-field w-full px-4 py-3.5 rounded-xl resize-none text-[14px]" id="aiInstructions" data-i18n-placeholder="specific-rules-e-g-read-only" placeholder="Specific rules (e.g. read-only, block access to passwords, limit to 50 rows)" rows="3"></textarea>
+</div>
+<!-- Audio report language -->
+<div class="mb-8">
+<label class="text-[14px] font-semibold text-white block mb-3" data-i18n="field.audio_language" for="voiceLanguage">Audio report language</label>
+<select aria-describedby="voiceLanguageHint" class="input-field w-full px-4 py-3.5 rounded-xl text-[14px] cursor-pointer" id="voiceLanguage">
+<option value="en">English</option>
+<option value="es">Español</option>
+<option value="de">Deutsch</option>
+</select>
+<p class="text-[11px] text-neutral-500 mt-2" data-i18n="field.audio_language.hint" id="voiceLanguageHint">Build status and errors are announced in this language.</p>
 </div>
 <!-- Price & CTA -->
 <div class="rounded-xl bg-white/[0.02] border border-white/[0.06] p-5 mb-6">
@@ -1235,6 +1252,7 @@
 <p class="text-[13px] text-neutral-400 mb-1" data-i18n="pay-with-paypal">Pay with PayPal</p>
 <p class="text-[11px] text-neutral-500" data-i18n="you-will-be-redirected-to-paypal">You will be redirected to PayPal to complete the payment</p>
 </div>
+<p class="hidden mt-4 rounded-lg bg-red-500/[0.08] border border-red-500/20 px-3 py-2 text-[12px] text-red-300" id="checkoutError" role="alert"></p>
 <!-- Test mode banner -->
 <div class="mt-4 rounded-lg bg-amber-500/[0.06] border border-amber-500/15 px-3 py-2 flex items-center gap-2">
 <svg class="w-3.5 h-3.5 text-amber-400 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" fill-rule="evenodd"></path></svg>
@@ -1243,7 +1261,7 @@
 </div>
 <!-- Footer -->
 <div class="px-6 pb-6">
-<button class="btn-primary w-full py-3.5 rounded-xl text-white font-semibold text-[14px] flex items-center justify-center gap-2 shadow-lg shadow-brand-500/25" id="payButton" onclick="processPayment()">
+<button class="btn-primary w-full py-3.5 rounded-xl text-white font-semibold text-[14px] flex items-center justify-center gap-2 shadow-lg shadow-brand-500/25" id="checkoutPayButton" onclick="processPayment()">
 <span id="payButtonText">Pay $5.00</span>
 <svg class="w-4 h-4" fill="none" id="payButtonIcon" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 <svg class="w-4 h-4 animate-spin hidden" fill="none" id="payButtonSpinner" viewbox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path></svg>
@@ -1386,6 +1404,16 @@
         return;
       }
 
+      const serverName = McpApi.slugify(document.getElementById('serverName').value);
+      const nameHint = document.getElementById('serverNameHint');
+      if (!McpApi.isValidServerName(serverName)) {
+        nameHint.classList.remove('hidden');
+        document.getElementById('serverName').focus();
+        return;
+      }
+      nameHint.classList.add('hidden');
+      document.getElementById('checkoutError').classList.add('hidden');
+
       const price = prices[source];
       document.getElementById('checkoutItem').textContent = I18N.t('checkout.item', { name: I18N.t('plan.' + source) });
       resetPromo();
@@ -1446,27 +1474,91 @@
       input.value = value;
     }
 
-    function processPayment() {
-      const btn = document.getElementById('payButton');
-      const btnText = document.getElementById('payButtonText');
-      const btnIcon = document.getElementById('payButtonIcon');
-      const btnSpinner = document.getElementById('payButtonSpinner');
+    function splitList(value) {
+      return value.split(',').map((item) => item.trim()).filter(Boolean);
+    }
 
-      btn.disabled = true;
-      btnText.textContent = I18N.t('checkout.processing');
-      btnIcon.classList.add('hidden');
-      btnSpinner.classList.remove('hidden');
-      btn.classList.add('opacity-80', 'cursor-not-allowed');
+    function fieldValue(id) {
+      return document.getElementById(id).value.trim();
+    }
 
-      setTimeout(() => {
+    // Builds the body expected by POST /api/build-mcp from the quote builder form.
+    function collectBuildPayload() {
+      const source = document.getElementById('sourceSelect').value;
+      const notes = [];
+      const credentials = {};
+      let resources = [];
+
+      if (source === 'database') {
+        resources = splitList(fieldValue('dbTables'));
+      } else if (source === 'local') {
+        resources = splitList(fieldValue('localPath'));
+        if (fieldValue('localTypes')) notes.push('Allowed file types: ' + fieldValue('localTypes') + '.');
+      } else if (source === 'api') {
+        resources = splitList(fieldValue('apiEndpoints'));
+        // Only the variable name is sent. The token stays on the user's machine.
+        credentials.API_TOKEN = '';
+      }
+      if (fieldValue('aiInstructions')) notes.unshift(fieldValue('aiInstructions'));
+
+      return {
+        server_name: McpApi.slugify(fieldValue('serverName')),
+        source_type: source,
+        resources: resources,
+        instructions: notes.join(' ').slice(0, 1000) || null,
+        credentials: credentials,
+        language: fieldValue('voiceLanguage')
+      };
+    }
+
+    function setPayButtonBusy(busy) {
+      const btn = document.getElementById('checkoutPayButton');
+      btn.disabled = busy;
+      btn.classList.toggle('opacity-80', busy);
+      btn.classList.toggle('cursor-not-allowed', busy);
+      document.getElementById('payButtonIcon').classList.toggle('hidden', busy);
+      document.getElementById('payButtonSpinner').classList.toggle('hidden', !busy);
+      document.getElementById('payButtonText').textContent = busy
+        ? I18N.t('checkout.processing')
+        : I18N.t('checkout.pay', { price: document.getElementById('checkoutPrice').textContent });
+    }
+
+    async function processPayment() {
+      const errorBox = document.getElementById('checkoutError');
+      errorBox.classList.add('hidden');
+      setPayButtonBusy(true);
+
+      // Demo payment step, followed by the real API call.
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+
+      const payload = collectBuildPayload();
+      try {
+        const build = await McpApi.buildMcp(payload);
+        try {
+          sessionStorage.setItem('mcpBuild', JSON.stringify({
+            build_id: build.build_id,
+            server_name: build.server_name,
+            file_count: Object.keys(build.files).length,
+            language: payload.language,
+            spoken_summary: build.spoken_summary,
+            files: build.files
+          }));
+        } catch (storageError) { /* storage unavailable */ }
         closeCheckout();
+        setPayButtonBusy(false);
         showSuccess();
-        btn.disabled = false;
-        btnText.textContent = I18N.t('checkout.pay', { price: document.getElementById('checkoutPrice').textContent });
-        btnIcon.classList.remove('hidden');
-        btnSpinner.classList.add('hidden');
-        btn.classList.remove('opacity-80', 'cursor-not-allowed');
-      }, 2200);
+      } catch (err) {
+        setPayButtonBusy(false);
+        errorBox.textContent = McpApi.errorMessage(err);
+        errorBox.classList.remove('hidden');
+        // Announce the failure by voice, in the language chosen for the audio report.
+        // Voice problems must never block the UI.
+        McpApi.speakStatus({
+          status: 'error',
+          message: McpApi.errorMessage(err, payload.language),
+          language: payload.language
+        }).catch(() => {});
+      }
     }
 
     function showSuccess() {
@@ -1798,8 +1890,13 @@
         </div>`;
     }
 
+    // The audio language follows the interface language until the user picks one explicitly.
+    const voiceLanguage = document.getElementById('voiceLanguage');
+    voiceLanguage.addEventListener('change', () => { voiceLanguage.dataset.touched = '1'; });
+
     // Re-render every piece of text that page scripts generate whenever the language changes.
     document.addEventListener('langchange', () => {
+      if (!voiceLanguage.dataset.touched) voiceLanguage.value = I18N.getLang();
       updateForm();
       const source = document.getElementById('sourceSelect').value;
       if (source) {

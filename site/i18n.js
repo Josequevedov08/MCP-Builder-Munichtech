@@ -383,7 +383,21 @@
   "meta.support.title": "Support - MCP Builder",
   "meta.docs.title": "Documentation - MCP Builder",
   "meta.legal.title": "Legal - MCP Builder",
-  "meta.index.desc": "Generate production-ready MCP servers and connect Claude, Cursor or any AI to your data in minutes. No accounts, no friction, one-time payment per server."
+  "meta.index.desc": "Generate production-ready MCP servers and connect Claude, Cursor or any AI to your data in minutes. No accounts, no friction, one-time payment per server.",
+  "field.server_name": "Server name",
+  "field.server_name.placeholder": "e.g. shop-database",
+  "error.server_name": "Use 3 to 40 characters: lowercase letters, numbers and hyphens, starting with a letter.",
+  "error.invalid_request": "Some fields are missing or invalid. Please review the form and try again.",
+  "error.model_timeout": "The code generation service took too long to respond. Please try again.",
+  "error.model_busy": "The code generation service is busy. Please retry in a moment.",
+  "error.model_unavailable": "The code generation service is unavailable right now. Please try again later.",
+  "error.model_bad_output": "The generated server could not be validated. Please try again.",
+  "error.network": "Could not reach the server. Check your connection and try again.",
+  "error.generic": "Something went wrong. Please try again.",
+  "success.listen": "Listen to build status",
+  "success.summary": "Build complete. Your MCP server {name} is ready to download. It contains {count} files.",
+  "field.audio_language": "Audio report language",
+  "field.audio_language.hint": "Build status and errors are announced in this language."
  },
  "de": {
   "launch-offer-20-off-your-first": "Einführungsangebot: 20 % Rabatt auf Ihren ersten MCP-Server mit dem Code <span class=\"font-mono\">LAUNCH20</span>",
@@ -765,7 +779,21 @@
   "meta.support.title": "Support - MCP Builder",
   "meta.docs.title": "Dokumentation - MCP Builder",
   "meta.legal.title": "Rechtliches - MCP Builder",
-  "meta.index.desc": "Erzeugen Sie produktionsreife MCP-Server und verbinden Sie Claude, Cursor oder jede KI in Minuten mit Ihren Daten. Keine Konten, keine Reibung, Einmalzahlung pro Server."
+  "meta.index.desc": "Erzeugen Sie produktionsreife MCP-Server und verbinden Sie Claude, Cursor oder jede KI in Minuten mit Ihren Daten. Keine Konten, keine Reibung, Einmalzahlung pro Server.",
+  "field.server_name": "Servername",
+  "field.server_name.placeholder": "z. B. shop-datenbank",
+  "error.server_name": "Verwenden Sie 3 bis 40 Zeichen: Kleinbuchstaben, Zahlen und Bindestriche, beginnend mit einem Buchstaben.",
+  "error.invalid_request": "Einige Felder fehlen oder sind ungültig. Bitte prüfen Sie das Formular und versuchen Sie es erneut.",
+  "error.model_timeout": "Der Code-Generierungsdienst hat zu lange gebraucht. Bitte versuchen Sie es erneut.",
+  "error.model_busy": "Der Code-Generierungsdienst ist ausgelastet. Bitte versuchen Sie es gleich noch einmal.",
+  "error.model_unavailable": "Der Code-Generierungsdienst ist derzeit nicht verfügbar. Bitte versuchen Sie es später erneut.",
+  "error.model_bad_output": "Der erzeugte Server konnte nicht validiert werden. Bitte versuchen Sie es erneut.",
+  "error.network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+  "error.generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+  "success.listen": "Build-Status anhören",
+  "success.summary": "Build abgeschlossen. Ihr MCP-Server {name} ist bereit zum Download. Er enthält {count} Dateien.",
+  "field.audio_language": "Sprache des Audioberichts",
+  "field.audio_language.hint": "Build-Status und Fehler werden in dieser Sprache angesagt."
  },
  "es": {
   "launch-offer-20-off-your-first": "Lanzamiento: primer servidor MCP con 20% de descuento usando el código <span class=\"font-mono\">LAUNCH20</span>",
@@ -1147,7 +1175,21 @@
   "meta.support.title": "Soporte - MCP Builder",
   "meta.docs.title": "Documentación - MCP Builder",
   "meta.legal.title": "Legal - MCP Builder",
-  "meta.index.desc": "Genera servidores MCP listos para producción y conecta Claude, Cursor o cualquier IA a tus datos en minutos. Sin cuentas, sin fricción, pago único por servidor."
+  "meta.index.desc": "Genera servidores MCP listos para producción y conecta Claude, Cursor o cualquier IA a tus datos en minutos. Sin cuentas, sin fricción, pago único por servidor.",
+  "field.server_name": "Nombre del servidor",
+  "field.server_name.placeholder": "ej: tienda-database",
+  "error.server_name": "Usa entre 3 y 40 caracteres: minúsculas, números y guiones, empezando por una letra.",
+  "error.invalid_request": "Faltan campos o hay datos no válidos. Revisa el formulario e inténtalo de nuevo.",
+  "error.model_timeout": "El servicio de generación de código tardó demasiado. Inténtalo de nuevo.",
+  "error.model_busy": "El servicio de generación está ocupado. Inténtalo de nuevo en un momento.",
+  "error.model_unavailable": "El servicio de generación no está disponible ahora. Inténtalo más tarde.",
+  "error.model_bad_output": "No se pudo validar el servidor generado. Inténtalo de nuevo.",
+  "error.network": "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+  "error.generic": "Algo salió mal. Inténtalo de nuevo.",
+  "success.listen": "Escuchar el estado de la compilación",
+  "success.summary": "Compilación completada. Tu servidor MCP {name} está listo para descargar. Contiene {count} archivos.",
+  "field.audio_language": "Idioma del reporte de audio",
+  "field.audio_language.hint": "El estado de la compilación y los errores se anuncian en este idioma."
  }
 };
   var LANGS = ['en', 'de', 'es'];
@@ -1171,8 +1213,8 @@
     try { window.localStorage.setItem(STORAGE_KEY, lang); } catch (e) { /* storage unavailable */ }
   }
 
-  function t(key, vars) {
-    var value = (DICT[current] || {})[key];
+  function translate(lang, key, vars) {
+    var value = (DICT[lang] || {})[key];
     if (value === undefined) value = (DICT.en || {})[key];
     if (value === undefined) return key;
     if (vars) {
@@ -1181,6 +1223,10 @@
       });
     }
     return value;
+  }
+
+  function t(key, vars) {
+    return translate(current, key, vars);
   }
 
   function each(selector, fn) {
@@ -1253,6 +1299,7 @@
 
   window.I18N = {
     t: t,
+    tIn: translate,
     setLang: setLang,
     getLang: function () { return current; },
     locale: function () { return LOCALES[current]; },
