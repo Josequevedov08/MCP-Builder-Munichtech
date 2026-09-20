@@ -51,11 +51,11 @@ Constraining the model to a small, validated output is more reliable than asking
 
 ## What's next for MCP Builder
 
-Real Stripe test mode with server-side prices, tests against live PostgreSQL and MySQL, sessions with real screen reader users, and real metrics in the admin panel.
+Real Stripe test mode, tests against live PostgreSQL and MySQL for the generated servers, and sessions with real screen reader users.
 
 ## Honest note on what is demo
 
-Payment, the promo code, the support form, the legal text and the admin panel are demos. Generation, the AI step, the voice report, the download and the receipt email (with the server .zip attached) are real. The README lists this in detail.
+Payment runs in test mode and the legal text is a template. Generation, the AI step, the voice report, the download, the receipt email (with the server .zip attached), the support form and the usage page are real, and the usage page counts real events. The README lists this in detail.
 
 ## Built with
 

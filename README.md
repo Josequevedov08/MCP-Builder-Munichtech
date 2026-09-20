@@ -46,13 +46,13 @@ The first request to the API can take about a minute if the free Render plan was
 | Spoken report (ElevenLabs) | Real | English, German and Spanish, plus the same text for screen readers |
 | `.zip` download | Real | Built in the browser from the generated files |
 | Generated servers | Real | Compiled with TypeScript and exercised through a real MCP client in the test suite |
-| Payment | Demo | Simulated. No card data is collected or sent anywhere. The test card box is only a convenience |
-| Promo code `LAUNCH20` | Demo | Applies the discount to the displayed price only |
+| Payment | Test mode | Simulated. No card data is collected or sent anywhere. The order itself is recorded, with the price computed on the server |
+| Promo code `LAUNCH20` | Real rule | Applied by the server to the recorded order and the receipt. Test amounts only |
 | Receipt | Real | Shown on the result page, downloadable as a text file and, if you give an email, sent with the server .zip attached. The amounts are computed on the server. No card is charged |
 | Recovering a closed download | Real | The last build is kept in the browser, and the home page links back to it. It does not sync across devices |
-| Support form | Demo | Does not send messages. Use GitHub issues for real questions |
+| Support form | Real | Messages are stored, given a ticket number and forwarded by email to the owner. Replies go to the address the user typed |
 | Terms, privacy and refund text | Demo | Template text, not a legal document |
-| Admin panel (`admin.html`) | Demo | Sample data, clearly labeled |
+| Usage page (`admin.html`) | Real | Every number comes from real events on the server: builds, downloads, test orders, voice reports, receipts, errors. The support inbox needs an admin token |
 
 Database servers are tested against simulated drivers that log every statement, not against a live PostgreSQL or MySQL instance. The SQL guard and the read-only transaction are verified, but a full run against a real database is on the roadmap.
 
@@ -142,6 +142,7 @@ python -m pytest tests/e2e -q              # needs Node.js and network access
 MCP-Builder-Munichtech/
   main.py                      FastAPI application, services and routes
   receipts.py                  Receipt email: server-side amounts, ZIP attachment and SMTP sending
+  metrics.py                   Usage events, PostgreSQL storage with a memory fallback, and the public numbers
   generator/
     __init__.py                Policy validation, rules text and project renderer
     templates/                 Verified TypeScript templates (files, database, api, common)
@@ -180,6 +181,10 @@ Excluded from version control: `.env`, `.venv/`, `__pycache__/` and other local 
 | POST | `/api/build-mcp` | Generate an MCP server project from a configuration |
 | POST | `/api/voice-status` | Return an MP3 that announces a build result or error |
 | POST | `/api/send-receipt` | Email the receipt and the generated server as a .zip, once per build |
+| GET | `/api/stats` | Public usage numbers (no personal data) |
+| POST | `/api/events/download` | Count a download of a generated server |
+| POST | `/api/support` | Store a support message and forward it by email |
+| GET | `/api/admin/support` | The support inbox, protected with the `X-Admin-Token` header |
 | GET | `/api/health` | Service and integration status |
 
 Interactive documentation is available at `/docs` while the API is running.
@@ -305,7 +310,6 @@ A multilingual static site without a build step. The interface is translated at 
 - A verified sending domain for receipt emails, so they reach any address (the test sender only reaches the account owner).
 - Tests against live PostgreSQL and MySQL instances.
 - Manual testing with real screen reader users and fixes from their feedback.
-- Real metrics in the admin panel (builds by source type, AI status, generation time), protected by a token.
 - Persist builds in a database instead of memory.
 - Automatic deployment of the generated server.
 
@@ -338,6 +342,10 @@ Fill in the keys you have in `.env`:
 | `ELEVENLABS_API_KEY_2` | Optional backup ElevenLabs key. Used only when the main key returns 401, 402, 403 or 429 |
 | `RESEND_API_KEY` and `MAIL_FROM` | Receipt emails through the Resend HTTPS API (recommended: some hosts block SMTP ports). `MAIL_FROM` is a verified sender such as `MCP Builder <receipts@yourdomain.com>` |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_SECURITY` | Alternative: any SMTP account (Brevo, a Gmail app password). `SMTP_SECURITY` is `starttls`, `ssl` or `none` (local test servers only). With neither Resend nor SMTP set, receipt emails are disabled |
+| `DATABASE_URL` | PostgreSQL connection string. With it, the usage numbers and support messages survive restarts. Without it they live in memory |
+| `ADMIN_TOKEN` | Secret that unlocks the support inbox (`X-Admin-Token`). Without it the inbox is disabled |
+| `SUPPORT_TO` | Address that receives a notice for each support message |
+| `RATE_LIMIT_SUPPORT_PER_MINUTE`, `RATE_LIMIT_EVENTS_PER_MINUTE` | Support messages (default `3`) and stats or download events (default `60`) per client IP each minute |
 | `RATE_LIMIT_RECEIPTS_PER_MINUTE` | Receipt emails allowed per client IP each minute. Defaults to `3` |
 | `ELEVENLABS_VOICE_ID` | Voice used for announcements. Must be available on your plan |
 | `CREDENTIALS_ENCRYPTION_KEY` | Fernet key. If empty, an ephemeral key is generated at startup |

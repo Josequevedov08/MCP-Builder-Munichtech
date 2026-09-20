@@ -223,6 +223,7 @@ npm run build
           link.remove();
           setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
           downloadStatus.textContent = I18N.t('success.downloaded');
+          McpApi.recordDownload(build.build_id);
         } catch (error) {
           downloadStatus.textContent = I18N.t('success.zip.error');
         }

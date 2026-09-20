@@ -499,6 +499,10 @@
 <p class="text-[11px] text-neutral-400" data-i18n="status.policy.label">AI policy step</p>
 <p class="text-[18px] font-bold text-white" data-i18n="status.policy.value">about 3 s</p>
 </div>
+<div class="text-center">
+<p class="text-[11px] text-neutral-400" data-i18n="live.builds.label">Servers generated</p>
+<p aria-live="polite" class="text-[18px] font-bold text-white" id="liveBuilds">-</p>
+</div>
 <div class="text-right">
 <p class="text-[11px] text-neutral-400" data-i18n="status.languages.label">Languages</p>
 <p class="text-[18px] font-bold text-white">3</p>
@@ -1623,6 +1627,8 @@
       const payload = collectBuildPayload();
       const orderId = 'MB-' + Math.random().toString(36).substring(2, 8).toUpperCase();
       const baseAmount = getBaseAmount();
+      payload.order_id = orderId;
+      payload.discount_code = appliedDiscountRate > 0 ? appliedDiscountCode : null;
       const order = {
         id: orderId,
         product: document.getElementById('checkoutItem').textContent,
@@ -2013,6 +2019,10 @@
       const wakeTimer = setTimeout(() => { serviceState.state = 'waking'; renderServiceStatus(); }, 4000);
       try {
         serviceState = { state: 'ok', health: await McpApi.health() };
+        // A real number from the server. If it cannot be read, the dash stays.
+        McpApi.getStats().then((stats) => {
+          document.getElementById('liveBuilds').textContent = Number(stats.builds.total).toLocaleString(I18N.getLang());
+        }).catch(() => {});
       } catch (error) {
         serviceState = { state: 'down', health: null };
       }

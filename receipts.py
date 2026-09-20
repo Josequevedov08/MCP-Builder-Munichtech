@@ -128,12 +128,15 @@ def send_email(
     subject: str,
     body: str,
     attachment: tuple[str, bytes] | None,
+    reply_to: str | None = None,
 ) -> None:
     """Blocking SMTP send. Run it in a thread. Header values cannot contain newlines."""
     message = EmailMessage()
     message["From"] = sender if "<" in sender else formataddr(("MCP Builder", sender))
     message["To"] = to
     message["Subject"] = subject
+    if reply_to:
+        message["Reply-To"] = reply_to
     message["Message-ID"] = make_msgid(domain=sender.split("@")[-1].strip("> "))
     message.set_content(body)
     if attachment:
@@ -163,6 +166,7 @@ async def send_with_resend(
     subject: str,
     body: str,
     attachment: tuple[str, bytes] | None,
+    reply_to: str | None = None,
 ) -> None:
     """Sends through the Resend HTTPS API. Hosts that block SMTP ports can still use it."""
     payload: dict = {
@@ -171,6 +175,8 @@ async def send_with_resend(
         "subject": subject,
         "text": body,
     }
+    if reply_to:
+        payload["reply_to"] = reply_to
     if attachment:
         payload["attachments"] = [{"filename": attachment[0], "content": base64.b64encode(attachment[1]).decode()}]
     response = await http.post(

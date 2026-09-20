@@ -16,6 +16,7 @@ Run locally:
 """
 
 import asyncio
+import hmac
 import json
 import logging
 import os
@@ -49,6 +50,7 @@ from pydantic import (
 )
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+import metrics as usage
 import receipts
 
 from generator import Policy, default_policy, describe_rules, env_schema, render_project
@@ -112,6 +114,11 @@ class Settings:
         self.resend_api_key = os.getenv("RESEND_API_KEY", "")
         self.email_enabled = bool(self.mail_from and (self.resend_api_key or self.smtp_host))
 
+        # Usage numbers: PostgreSQL keeps them across restarts, memory is the fallback.
+        self.database_url = os.getenv("DATABASE_URL", "")
+        self.admin_token = os.getenv("ADMIN_TOKEN", "")
+        self.support_to = os.getenv("SUPPORT_TO", "")
+
         # Security and storage
         self.encryption_key = os.getenv("CREDENTIALS_ENCRYPTION_KEY", "")
         self.max_stored_builds = int(os.getenv("MAX_STORED_BUILDS", "500"))
@@ -120,6 +127,8 @@ class Settings:
         self.rate_limit_builds = int(os.getenv("RATE_LIMIT_BUILDS_PER_MINUTE", "5"))
         self.rate_limit_voice = int(os.getenv("RATE_LIMIT_VOICE_PER_MINUTE", "20"))
         self.rate_limit_receipts = int(os.getenv("RATE_LIMIT_RECEIPTS_PER_MINUTE", "3"))
+        self.rate_limit_support = int(os.getenv("RATE_LIMIT_SUPPORT_PER_MINUTE", "3"))
+        self.rate_limit_events = int(os.getenv("RATE_LIMIT_EVENTS_PER_MINUTE", "60"))
         self.max_concurrent_builds = int(os.getenv("MAX_CONCURRENT_BUILDS", "3"))
 
         # HTTP
@@ -213,6 +222,8 @@ class BuildRequest(BaseModel):
     language: Literal["en", "de", "es"] = Field(
         default="en", description="Language of the spoken report: 'en', 'de' or 'es'."
     )
+    order_id: str | None = Field(default=None, pattern=r"^MB-[A-Z0-9]{6}$")
+    discount_code: str | None = Field(default=None, max_length=20, pattern=r"^[A-Za-z0-9]*$")
 
     @field_validator("source_type", mode="before")
     @classmethod
@@ -312,6 +323,39 @@ class ReceiptRequest(BaseModel):
     def lowercase_email(cls, value: str) -> str:
         # Mail providers treat addresses as case-insensitive, and some compare them literally.
         return value.lower()
+
+
+class SupportRequest(BaseModel):
+    """Payload accepted by POST /api/support."""
+
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+
+    name: str = Field(min_length=1, max_length=80)
+    email: str = Field(max_length=254, pattern=EMAIL_PATTERN)
+    topic: Literal["install", "payment", "download", "server", "refund", "other"]
+    order_id: str | None = Field(default=None, pattern=r"^MB-[A-Z0-9]{6}$")
+    message: str = Field(min_length=5, max_length=2000)
+
+    @field_validator("email")
+    @classmethod
+    def lowercase_email(cls, value: str) -> str:
+        return value.lower()
+
+    @field_validator("name")
+    @classmethod
+    def clean_name(cls, value: str) -> str:
+        return re.sub(r"[\x00-\x1f\x7f]", " ", value).strip()
+
+    @field_validator("message")
+    @classmethod
+    def clean_message(cls, value: str) -> str:
+        return re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]", " ", value).strip()
+
+
+class DownloadEvent(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    build_id: str = Field(pattern=r"^[a-f0-9]{32}$")
 
 
 # ---------------------------------------------------------------------------
@@ -638,6 +682,10 @@ class Services:
     build_limiter: RateLimiter
     voice_limiter: RateLimiter
     receipt_limiter: RateLimiter
+    support_limiter: RateLimiter
+    events_limiter: RateLimiter
+    admin_limiter: RateLimiter
+    metrics: usage.Metrics
     build_slots: asyncio.Semaphore
 
 
@@ -653,8 +701,13 @@ async def lifespan(app: FastAPI):
         build_limiter=RateLimiter(settings.rate_limit_builds),
         voice_limiter=RateLimiter(settings.rate_limit_voice),
         receipt_limiter=RateLimiter(settings.rate_limit_receipts),
+        support_limiter=RateLimiter(settings.rate_limit_support),
+        events_limiter=RateLimiter(settings.rate_limit_events),
+        admin_limiter=RateLimiter(10),
+        metrics=usage.Metrics(settings.database_url),
         build_slots=asyncio.Semaphore(settings.max_concurrent_builds),
     )
+    await app.state.services.metrics.start()
     logger.info(
         "Started (llm=%s, voice=%s)",
         "mock" if settings.use_mock_llm else settings.featherless_model,
@@ -663,6 +716,7 @@ async def lifespan(app: FastAPI):
     try:
         yield
     finally:
+        await app.state.services.metrics.stop()
         await http.aclose()
 
 
@@ -677,7 +731,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins,
     allow_methods=["GET", "POST"],
-    allow_headers=["Content-Type", "Authorization"],
+    allow_headers=["Content-Type", "Authorization", "X-Admin-Token"],
 )
 
 
@@ -689,7 +743,11 @@ def get_services(request: Request) -> Services:
 # Error handlers: every error leaves the API in the same JSON envelope
 # ---------------------------------------------------------------------------
 @app.exception_handler(ApiError)
-async def handle_api_error(_: Request, exc: ApiError) -> JSONResponse:
+async def handle_api_error(request: Request, exc: ApiError) -> JSONResponse:
+    try:
+        request.app.state.services.metrics.record("error", {"code": exc.code})
+    except Exception:
+        pass
     return JSONResponse(status_code=exc.status_code, content=error_body(exc.code, exc.message))
 
 
@@ -733,12 +791,13 @@ async def handle_unexpected_error(_: Request, exc: Exception) -> JSONResponse:
 # Routes
 # ---------------------------------------------------------------------------
 @app.get("/api/health")
-async def health() -> dict[str, Any]:
+async def health(request: Request) -> dict[str, Any]:
     return {
         "status": "ok",
         "llm": "mock" if settings.use_mock_llm else settings.featherless_model,
         "voice_enabled": settings.voice_enabled,
         "email_enabled": settings.email_enabled,
+        "metrics_persistent": get_services(request).metrics.persistent,
     }
 
 
@@ -750,6 +809,7 @@ async def build_mcp(payload: BuildRequest, request: Request) -> BuildResponse:
         raise ApiError(
             429, "model_busy", "The service is busy. Please retry shortly."
         )
+    started = time.monotonic()
     try:
         record = services.store.create(payload.server_name)
         # Credentials are encrypted immediately; the model only sees variable names.
@@ -770,6 +830,31 @@ async def build_mcp(payload: BuildRequest, request: Request) -> BuildResponse:
             500, "internal_error", "An unexpected error occurred while building the server."
         ) from None
 
+    services.metrics.record(
+        "build",
+        {
+            "source": source,
+            "ai_status": ai_status,
+            "seconds": round(time.monotonic() - started, 2),
+            "language": payload.language,
+            "files": len(files),
+        },
+    )
+    if payload.order_id:
+        # The price comes from the plan and the code, never from the client.
+        price = receipts.PRICES[source]
+        rate = receipts.PROMO_CODES.get((payload.discount_code or "").upper(), 0.0)
+        services.metrics.record(
+            "order",
+            {
+                "order_id": payload.order_id,
+                "source": source,
+                "price": price,
+                "discount_code": (payload.discount_code or "").upper() if rate else "",
+                "total": round(price * (1 - rate), 2),
+                "test": True,
+            },
+        )
     return BuildResponse(
         build_id=record.build_id,
         status="succeeded",
@@ -809,7 +894,57 @@ async def voice_status(payload: VoiceStatusRequest, request: Request) -> Respons
         raise ApiError(
             500, "internal_error", "An unexpected error occurred while generating audio."
         ) from None
+    services.metrics.record("voice", {"status": payload.status, "language": payload.language})
     return Response(content=audio, media_type="audio/mpeg", headers={"Cache-Control": "no-store"})
+
+
+async def deliver_email(
+    services: Services,
+    to: str,
+    subject: str,
+    body: str,
+    attachment: tuple[str, bytes] | None = None,
+    reply_to: str | None = None,
+) -> None:
+    """Sends one email through Resend or SMTP and maps every failure to a safe API error."""
+    try:
+        if settings.resend_api_key:
+            await receipts.send_with_resend(
+                services.http,
+                api_key=settings.resend_api_key,
+                sender=settings.mail_from,
+                to=to,
+                subject=subject,
+                body=body,
+                attachment=attachment,
+                reply_to=reply_to,
+            )
+        else:
+            await asyncio.to_thread(
+                receipts.send_email,
+                host=settings.smtp_host,
+                port=settings.smtp_port,
+                user=settings.smtp_user,
+                password=settings.smtp_password,
+                sender=settings.mail_from,
+                security=settings.smtp_security,
+                to=to,
+                subject=subject,
+                body=body,
+                attachment=attachment,
+                reply_to=reply_to,
+            )
+    except smtplib.SMTPAuthenticationError:
+        logger.error("SMTP rejected the configured credentials")
+        raise ApiError(503, "email_not_configured", "The email service is not configured correctly.") from None
+    except httpx.HTTPStatusError as exc:
+        logger.error("Resend returned HTTP %s", exc.response.status_code)
+        if exc.response.status_code in (401, 403):
+            raise ApiError(503, "email_not_configured", "The email service is not configured correctly.") from None
+        raise ApiError(502, "email_unavailable", "The email could not be sent.") from None
+    except (smtplib.SMTPException, httpx.HTTPError, OSError):
+        logger.exception("Email failed")
+        raise ApiError(502, "email_unavailable", "The email could not be sent.") from None
 
 
 @app.post("/api/send-receipt")
@@ -829,43 +964,77 @@ async def send_receipt(payload: ReceiptRequest, request: Request) -> dict[str, b
     )
     attachment = (f"{record.server_name}.zip", receipts.build_zip(record.files, record.server_name))
     try:
-        if settings.resend_api_key:
-            await receipts.send_with_resend(
-                services.http,
-                api_key=settings.resend_api_key,
-                sender=settings.mail_from,
-                to=payload.email,
-                subject=subject,
-                body=body,
-                attachment=attachment,
-            )
-        else:
-            await asyncio.to_thread(
-                receipts.send_email,
-                host=settings.smtp_host,
-                port=settings.smtp_port,
-                user=settings.smtp_user,
-                password=settings.smtp_password,
-                sender=settings.mail_from,
-                security=settings.smtp_security,
-                to=payload.email,
-                subject=subject,
-                body=body,
-                attachment=attachment,
-            )
-    except smtplib.SMTPAuthenticationError:
-        logger.error("SMTP rejected the configured credentials")
-        raise ApiError(503, "email_not_configured", "The email service is not configured correctly.") from None
-    except httpx.HTTPStatusError as exc:
-        logger.error("Resend returned HTTP %s", exc.response.status_code)
-        if exc.response.status_code in (401, 403):
-            raise ApiError(503, "email_not_configured", "The email service is not configured correctly.") from None
-        raise ApiError(502, "email_unavailable", "The receipt email could not be sent.") from None
-    except (smtplib.SMTPException, httpx.HTTPError, OSError):
-        logger.exception("Receipt email failed")
-        raise ApiError(502, "email_unavailable", "The receipt email could not be sent.") from None
+        await deliver_email(services, payload.email, subject, body, attachment)
+    except ApiError:
+        services.metrics.record("receipt", {"ok": False})
+        raise
+    services.metrics.record("receipt", {"ok": True})
     record.receipt_sent = True
     return {"sent": True}
+
+
+@app.get("/api/stats")
+async def stats(request: Request) -> dict[str, Any]:
+    """Public numbers about real usage. Personal data is never included."""
+    services = get_services(request)
+    services.events_limiter.check(client_id(request))
+    return await services.metrics.summary()
+
+
+@app.post("/api/events/download")
+async def download_event(payload: DownloadEvent, request: Request) -> dict[str, bool]:
+    services = get_services(request)
+    services.events_limiter.check(client_id(request))
+    record = services.store.get(payload.build_id)
+    if record is None:
+        raise ApiError(404, "build_not_found", "This build is no longer available.")
+    services.metrics.record("download", {"source": record.source_type})
+    return {"ok": True}
+
+
+@app.post("/api/support")
+async def support(payload: SupportRequest, request: Request) -> dict[str, Any]:
+    services = get_services(request)
+    services.support_limiter.check(client_id(request))
+    ticket = "SUP-" + uuid.uuid4().hex[:6].upper()
+    services.metrics.record(
+        "support",
+        {
+            "ticket": ticket,
+            "name": payload.name,
+            "email": payload.email,
+            "topic": payload.topic,
+            "order_id": payload.order_id,
+            "message": payload.message,
+        },
+    )
+    notified = False
+    if settings.support_to and settings.email_enabled:
+        body = (
+            f"Ticket: {ticket}\nFrom: {payload.name} <{payload.email}>\nTopic: {payload.topic}\n"
+            f"Order: {payload.order_id or '-'}\n\n{payload.message}\n"
+        )
+        try:
+            await deliver_email(
+                services, settings.support_to, f"MCP Builder support {ticket} ({payload.topic})", body, reply_to=payload.email
+            )
+            notified = True
+        except ApiError:
+            logger.warning("The support message was saved but the notification failed")
+    return {"received": True, "ticket": ticket, "notified": notified}
+
+
+@app.get("/api/admin/support")
+async def admin_support(request: Request) -> dict[str, Any]:
+    """The support inbox. Protected with the ADMIN_TOKEN header."""
+    services = get_services(request)
+    services.admin_limiter.check(client_id(request))
+    if not settings.admin_token:
+        raise ApiError(503, "admin_disabled", "The admin inbox is not enabled on this server.")
+    supplied = request.headers.get("x-admin-token", "")
+    if not hmac.compare_digest(supplied.encode(), settings.admin_token.encode()):
+        raise ApiError(401, "unauthorized", "The admin token is not valid.")
+    return {"tickets": await services.metrics.support_tickets()}
 
 
 # The static frontend is mounted last so that it never shadows the API routes.

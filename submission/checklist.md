@@ -18,6 +18,8 @@ Deadline: submit before 9:30. Hard limit about 11:00.
 - [ ] Try the site in German and Spanish
 - [ ] Receipt email: `email_enabled` is `true` in `/api/health`, and a test purchase with a second address (not the account owner) delivers the email with the .zip attached
 - [ ] If the Resend domain is not verified, remember the test sender only delivers to the account owner's address
+- [ ] Render environment: `DATABASE_URL` (free Render PostgreSQL, so the usage numbers survive restarts), `ADMIN_TOKEN` and `SUPPORT_TO` are set, and `/api/health` shows `"metrics_persistent": true`
+- [ ] Usage page: open `/admin.html`, make a test purchase, download the .zip and send a support message, and check that the numbers and the inbox change
 - [ ] Render: the service is awake right before submitting (open the health URL)
 
 ## Devpost

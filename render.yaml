@@ -23,6 +23,12 @@ services:
         sync: false
       - key: RESEND_API_KEY
         sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: ADMIN_TOKEN
+        sync: false
+      - key: SUPPORT_TO
+        sync: false
       - key: SMTP_HOST
         sync: false
       - key: SMTP_PORT

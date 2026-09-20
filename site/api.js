@@ -67,6 +67,46 @@
     return response.json();
   }
 
+  // Same error handling as post(), for GET requests.
+  async function getJson(path, headers) {
+    var response;
+    try {
+      response = await fetch(API_BASE + path, { headers: headers || {} });
+    } catch (networkError) {
+      throw new ApiClientError('network', 'Network error', 0);
+    }
+    if (!response.ok) {
+      var code = 'internal_error';
+      try {
+        var body = await response.json();
+        code = (body.error && body.error.code) || code;
+      } catch (parseError) { /* keep defaults */ }
+      throw new ApiClientError(code, '', response.status);
+    }
+    return response.json();
+  }
+
+  // GET /api/stats: public numbers about real usage, without personal data.
+  function getStats() {
+    return getJson('/api/stats');
+  }
+
+  // GET /api/admin/support: the support inbox, protected with the admin token.
+  function getSupportInbox(token) {
+    return getJson('/api/admin/support', { 'X-Admin-Token': token });
+  }
+
+  // POST /api/events/download. Counting a download must never disturb it.
+  async function recordDownload(buildId) {
+    try { await post('/api/events/download', { build_id: buildId }); } catch (error) { /* not important */ }
+  }
+
+  // POST /api/support
+  async function sendSupport(payload) {
+    var response = await post('/api/support', payload);
+    return response.json();
+  }
+
   var currentAudio = null;
 
   // POST /api/voice-status, then plays the returned MP3.
@@ -121,6 +161,10 @@
     buildMcp: buildMcp,
     health: health,
     speakStatus: speakStatus,
+    getStats: getStats,
+    getSupportInbox: getSupportInbox,
+    recordDownload: recordDownload,
+    sendSupport: sendSupport,
     sendReceipt: sendReceipt,
     slugify: slugify,
     isValidServerName: isValidServerName,

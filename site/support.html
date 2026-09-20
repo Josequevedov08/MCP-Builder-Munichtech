@@ -9,6 +9,8 @@
 <link href="brand/favicon.ico" rel="alternate icon" sizes="any"/>
 <link href="brand/logo-180.png" rel="apple-touch-icon"/>
   <script src="i18n.js"></script>
+  <script src="config.js"></script>
+  <script src="api.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -68,12 +70,9 @@
 <!-- Contact Form -->
 <div class="max-w-2xl mx-auto">
 <div class="card rounded-2xl p-8">
-<div class="card rounded-xl p-5 mb-6 border-amber-500/20" role="note">
-<p class="text-[13px] font-semibold text-amber-400 mb-1" data-i18n="demo.support.title">Demo form</p>
-<p class="text-[13px] text-neutral-400" data-i18n="demo.support.text">This form does not send messages, and there is no support desk behind it. For real questions, open an issue on the project's GitHub.</p>
-</div>
+<p class="text-[13px] text-neutral-400 mb-6" data-i18n="support.note">Your message is saved and sent to our inbox. We answer by email, at the address you enter.</p>
 <h2 class="text-xl font-semibold text-white mb-6" data-i18n="send-a-message">Send a message</h2>
-<form class="space-y-5" onsubmit="submitSupport(event)">
+<form class="space-y-5" id="supportForm" novalidate onsubmit="submitSupport(event)">
 <div class="grid sm:grid-cols-2 gap-4">
 <div>
 <label class="text-[11px] font-medium text-neutral-400 uppercase tracking-wider mb-1.5 block" data-i18n="name" for="field-1">Name</label>
@@ -98,24 +97,26 @@
 </div>
 <div>
 <label class="text-[11px] font-medium text-neutral-400 uppercase tracking-wider mb-1.5 block" data-i18n="order-id-if-applicable" for="field-4">Order ID (if applicable)</label>
-<input class="input-field w-full px-4 py-3 rounded-xl text-[14px] font-mono" placeholder="#MB-XXXXXX" type="text" id="field-4"/>
+<input aria-describedby="orderHint" class="input-field w-full px-4 py-3 rounded-xl text-[14px] font-mono" placeholder="#MB-XXXXXX" type="text" id="field-4"/>
+<p class="hidden text-[12px] text-red-300 mt-1.5" data-i18n="support.order.invalid" id="orderHint">The order ID looks like MB-ABC123.</p>
 </div>
 <div>
 <label class="text-[11px] font-medium text-neutral-400 uppercase tracking-wider mb-1.5 block" data-i18n="message" for="field-5">Message</label>
 <textarea class="input-field w-full px-4 py-3 rounded-xl resize-none text-[14px]" data-i18n-placeholder="describe-your-problem-or-question" placeholder="Describe your problem or question..." required="" rows="5" id="field-5"></textarea>
 </div>
-<button class="btn-primary w-full py-3.5 rounded-xl text-white font-semibold text-[14px] flex items-center justify-center gap-2 shadow-lg shadow-brand-500/25" type="submit">
+<p aria-live="assertive" class="hidden rounded-lg bg-red-500/[0.08] border border-red-500/20 px-3 py-2 text-[12px] text-red-300" id="supportError" role="alert"></p>
+<button class="btn-primary w-full py-3.5 rounded-xl text-white font-semibold text-[14px] flex items-center justify-center gap-2 shadow-lg shadow-brand-500/25" id="supportSubmit" type="submit">
               <span data-i18n="send-message">Send message</span>
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </button>
 </form>
 <!-- Success message (hidden by default) -->
-<div class="hidden mt-6 rounded-xl bg-emerald-500/[0.06] border border-emerald-500/20 p-4 text-center" id="supportSuccess">
+<div class="hidden mt-6 rounded-xl bg-emerald-500/[0.06] border border-emerald-500/20 p-4 text-center" aria-live="polite" id="supportSuccess" role="status">
 <div class="w-10 h-10 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-3">
 <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
-<p class="text-[14px] font-semibold text-white mb-1" data-i18n="demo.support.sent">Demo only</p>
-<p class="text-[13px] text-neutral-400" data-i18n="demo.support.sent.text">Nothing was sent. Open an issue on GitHub to reach the team.</p>
+<p class="text-[14px] font-semibold text-white mb-1" data-i18n="support.sent.title">Message received</p>
+<p class="text-[13px] text-neutral-400" id="supportSentText"></p>
 </div>
 </div>
 <!-- Quick help -->
@@ -144,9 +145,9 @@
 </div>
 <!-- Response time info -->
 <div class="mt-10 text-center">
-<p class="text-[12px] text-neutral-400 mb-2" data-i18n="demo.support.response">Response time</p>
-<p class="text-[20px] font-bold text-white" data-i18n="demo.support.response.value">Not applicable</p>
-<p class="text-[11px] text-neutral-400 mt-1" data-i18n="demo.support.response.note">Hackathon demo</p>
+<p class="text-[12px] text-neutral-400 mb-2" data-i18n="support.reply.label">How we reply</p>
+<p class="text-[20px] font-bold text-white" data-i18n="support.reply.value">By email</p>
+<p class="text-[11px] text-neutral-400 mt-1" data-i18n="support.reply.note">To the address in the form</p>
 </div>
 </div>
 </div>
@@ -167,18 +168,57 @@
 </div>
 </footer>
 <script>
-    function submitSupport(event) {
+    var supportTicket = null;
+
+    function renderSupportSent() {
+      if (!supportTicket) return;
+      document.getElementById('supportSentText').textContent = I18N.t('support.sent.text', supportTicket);
+    }
+    document.addEventListener('langchange', renderSupportSent);
+
+    async function submitSupport(event) {
       event.preventDefault();
-      const form = event.target;
-      const btn = form.querySelector('button[type="submit"]');
-      btn.textContent = I18N.t('support.sending');
-      btn.disabled = true;
-      
-      setTimeout(() => {
+      var form = event.target;
+      var errorBox = document.getElementById('supportError');
+      var hint = document.getElementById('orderHint');
+      var button = document.getElementById('supportSubmit');
+      errorBox.classList.add('hidden');
+      hint.classList.add('hidden');
+
+      var order = document.getElementById('field-4').value.trim().replace(/^#/, '').toUpperCase();
+      if (order && !/^MB-[A-Z0-9]{6}$/.test(order)) {
+        hint.classList.remove('hidden');
+        document.getElementById('field-4').focus();
+        return;
+      }
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      var label = button.querySelector('span');
+      var original = label.textContent;
+      label.textContent = I18N.t('support.sending');
+      button.disabled = true;
+      try {
+        var result = await McpApi.sendSupport({
+          name: document.getElementById('field-1').value.trim(),
+          email: document.getElementById('field-2').value.trim(),
+          topic: document.getElementById('field-3').value,
+          order_id: order || null,
+          message: document.getElementById('field-5').value.trim()
+        });
+        supportTicket = { ticket: result.ticket, email: document.getElementById('field-2').value.trim() };
         form.reset();
         form.classList.add('hidden');
         document.getElementById('supportSuccess').classList.remove('hidden');
-      }, 1500);
+        renderSupportSent();
+      } catch (error) {
+        errorBox.textContent = error && error.code === 'rate_limited' ? McpApi.errorMessage(error) : I18N.t('support.error');
+        errorBox.classList.remove('hidden');
+        label.textContent = original;
+        button.disabled = false;
+      }
     }
   </script>
 </body>
