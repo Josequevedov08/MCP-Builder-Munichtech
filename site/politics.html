@@ -76,21 +76,22 @@
 <!-- Content -->
 <article class="max-w-3xl">
 <h1 class="text-3xl font-bold text-white mb-2" data-i18n="legal">Legal</h1>
-<p class="text-neutral-400 text-[13px] mb-10" data-i18n="last-updated-september-15-2026">Last updated: September 15, 2026</p>
+<p class="text-neutral-400 text-[13px] mb-10" data-i18n="last-updated-september-15-2026">Last updated: September 20, 2026</p>
 <div class="card rounded-xl p-5 mb-6 border-amber-500/20" role="note">
 <p class="text-[13px] font-semibold text-amber-400 mb-1" data-i18n="demo.legal.title">Demo notice</p>
-<p class="text-[13px] text-neutral-400" data-i18n="demo.legal.text">This text is a template for the hackathon demo, not a legal document. Payments are simulated and no card is charged. The payment and refund sections describe how a live service would work.</p>
+<p class="text-[13px] text-neutral-400" data-i18n="demo.legal.text">This text is a template written for the hackathon demo, not legal advice. Payments run in test mode and no card is charged. Where a section describes a live service, it says so.</p>
 </div>
 <!-- Terms -->
 <section class="mb-12" id="terms">
 <h2 class="text-xl font-semibold text-white mb-4" data-i18n="terms-of-service">Terms of Service</h2>
 <div class="space-y-4 text-[14px] text-neutral-400 leading-relaxed">
 <p data-i18n-html="1-acceptance-of-terms-by-accessing"><strong class="text-neutral-300">1. Acceptance of terms.</strong> By accessing and using MCP Builder ("the Service"), you accept these Terms of Service in full. If you disagree with any part, do not use the Service.</p>
-<p data-i18n-html="2-description-of-the-service-mcp"><strong class="text-neutral-300">2. Description of the service.</strong> MCP Builder is a platform that generates MCP (Model Context Protocol) servers through an online payment process. The user configures the parameters of the desired server, makes a one-time payment, and receives a downloadable file with the complete server.</p>
-<p data-i18n-html="3-payment-model-each-mcp-server"><strong class="text-neutral-300">3. Payment model.</strong> Each MCP server is sold separately. The price varies by the type of data source selected ($5, $15 or $20 USD per server). There are no subscriptions or recurring charges.</p>
-<p data-i18n-html="4-product-ownership-once-paid-the"><strong class="text-neutral-300">4. Product ownership.</strong> Once paid, the generated MCP server is yours to use without restrictions. The source code is delivered under the MIT license, which means you can modify it, distribute it and use it commercially.</p>
+<p data-i18n-html="2-description-of-the-service-mcp"><strong class="text-neutral-300">2. Description of the service.</strong> MCP Builder generates MCP (Model Context Protocol) servers. You describe the source and the rules, and you receive a downloadable file with the complete server and, if you enter an email address, a receipt by email.</p>
+<p data-i18n-html="3-payment-model-each-mcp-server"><strong class="text-neutral-300">3. Payment model.</strong> Each server has a price by source type ($5, $15 or $20 USD). In this version payments run in test mode: nothing is charged and the amounts are test amounts. There are no subscriptions.</p>
+<p data-i18n-html="4-product-ownership-once-paid-the"><strong class="text-neutral-300">4. Product ownership.</strong> The generated MCP server is yours to use, modify and distribute, including commercially. It is provided under the MIT License, and the license text is included in the generated project.</p>
 <p data-i18n-html="5-acceptable-use-you-agree-not"><strong class="text-neutral-300">5. Acceptable use.</strong> You agree not to use the Service to generate MCP servers for illegal or malicious purposes, or that violate third-party rights.</p>
 <p data-i18n-html="6-limitation-of-liability-the-service"><strong class="text-neutral-300">6. Limitation of liability.</strong> The Service is provided "as is", without warranties of any kind. We are not liable for damages arising from the use of the Service.</p>
+<p data-i18n-html="terms.7"><strong class="text-neutral-300">7. Availability.</strong> The service runs on free hosting plans. It may be slow, restart or be unavailable at times.</p>
 </div>
 </section>
 <!-- Privacy -->
@@ -100,8 +101,9 @@
 <p data-i18n-html="1-information-we-collect-we-only"><strong class="text-neutral-300">1. Information we collect.</strong> We only collect strictly necessary information: your email address (provided during payment) and the technical details of the MCP server you asked us to generate.</p>
 <p data-i18n-html="2-use-of-information-your-email"><strong class="text-neutral-300">2. Use of information.</strong> Your email is used only to send you the purchase receipt and download instructions. We do not send spam or share your email with third parties.</p>
 <p data-i18n-html="3-payment-data-your-credit-card"><strong class="text-neutral-300">3. Payment data.</strong> Your credit card data is processed directly by Stripe, our payment provider. We never store or have access to your full card details.</p>
-<p data-i18n-html="4-security-we-use-ssl-tls"><strong class="text-neutral-300">4. Security.</strong> We use SSL/TLS encryption for all communications. Our infrastructure follows industry security best practices.</p>
-<p data-i18n-html="5-data-retention-we-keep-your"><strong class="text-neutral-300">5. Data retention.</strong> We keep your information for as long as necessary to provide the Service and comply with legal obligations. You can request deletion of your data by contacting support.</p>
+<p data-i18n-html="privacy.providers"><strong class="text-neutral-300">4. Service providers.</strong> To provide the service we use: Featherless.ai (receives the server name, the resources and the instructions you write, never credentials, to derive the rules), ElevenLabs (receives the short sentence that is spoken, which includes the server name), Resend (delivers the receipt email) and GitHub and Render (hosting, which may log IP addresses). They process data only to provide their service.</p>
+<p data-i18n-html="4-security-we-use-ssl-tls"><strong class="text-neutral-300">5. Security.</strong> Communications use HTTPS. The site does not ask for your passwords or tokens: those stay on your machine. The support inbox needs an admin token.</p>
+<p data-i18n-html="5-data-retention-we-keep-your"><strong class="text-neutral-300">6. Data retention and your browser.</strong> Usage counters, test orders and support messages are stored in our database. The database of this hackathon version will be deleted after the event. Your browser keeps your language and your last generated server in local storage, and we set no cookies of our own. To ask for your data to be deleted, use the support form and quote your ticket number.</p>
 </div>
 </section>
 <!-- Refund -->
@@ -112,8 +114,8 @@
 <div class="flex items-start gap-3">
 <svg class="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
 <div>
-<p class="text-[14px] font-semibold text-white mb-1" data-i18n="7-day-money-back-guarantee">7-day money-back guarantee</p>
-<p class="text-[13px] text-neutral-400" data-i18n="if-the-generated-mcp-server-does">If the generated MCP server does not work as described in the documentation, you are entitled to a full refund within the first 7 days after purchase.</p>
+<p class="text-[14px] font-semibold text-white mb-1" data-i18n="7-day-money-back-guarantee">Planned policy for a live service</p>
+<p class="text-[13px] text-neutral-400" data-i18n="if-the-generated-mcp-server-does">Payments in this version are test payments, so no money is taken and there is nothing to refund. For a live service we plan a full refund within 7 days if the generated server does not work as described in the documentation.</p>
 </div>
 </div>
 </div>
@@ -121,7 +123,7 @@
 <ol class="list-decimal list-inside space-y-2 ml-4">
 <li><span data-i18n="contact-our-support-team-through-the">Contact our support team through the</span> <a class="text-brand-400 hover:text-brand-300 transition-colors" data-i18n="contact-form" href="support.html">contact form</a>.</li>
 <li data-i18n="include-your-order-id-mb-xxxxxx">Include your order ID (#MB-XXXXXX) and a description of the problem.</li>
-<li data-i18n="our-team-will-review-your-case">Our team will review your case and process the refund within 48 hours.</li>
+<li data-i18n="our-team-will-review-your-case">We would review your case and answer by email.</li>
 </ol>
 <p class="mt-4" data-i18n-html="cases-not-covered-refunds-are-not"><strong class="text-neutral-300">Cases not covered.</strong> Refunds are not issued if the problem is caused by incorrect user configuration, missing system requirements (e.g. Node.js not installed), or improper use of the MCP server.</p>
 </div>
@@ -131,14 +133,14 @@
 <h2 class="text-xl font-semibold text-white mb-4" data-i18n="license">License</h2>
 <div class="space-y-4 text-[14px] text-neutral-400 leading-relaxed">
 <p><strong class="text-neutral-300">MIT License</strong></p>
-<p data-i18n-html="the-source-code-generated-by-mcp">The source code generated by MCP Builder is licensed under the <strong class="text-neutral-300">MIT License</strong>. This means you can:</p>
+<p data-i18n-html="the-source-code-generated-by-mcp">The MCP servers generated by MCP Builder, and the source code of MCP Builder itself, are licensed under the MIT License. This means you can:</p>
 <ul class="list-disc list-inside space-y-1 ml-4">
 <li data-i18n="use-the-code-in-personal-and">Use the code in personal and commercial projects</li>
 <li data-i18n="modify-the-code-as-you-like">Modify the code as you like</li>
 <li data-i18n="distribute-the-code-original-or-modified">Distribute the code (original or modified)</li>
 <li data-i18n="use-it-in-private-projects-without">Use it in private projects without restrictions</li>
 </ul>
-<p class="mt-4" data-i18n="the-only-condition-is-to-keep">The only condition is to keep the copyright notice and license included in the code.</p>
+<p class="mt-4" data-i18n="the-only-condition-is-to-keep">The only condition is to keep the copyright notice and the license text, which are included in the generated project.</p>
 </div>
 </section>
 </article>

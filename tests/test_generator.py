@@ -50,7 +50,7 @@ def test_non_numeric_limits_are_rejected():
 )
 def test_render_project_is_complete_and_safe(source, engine, resources):
     files = render_project("demo-server", source, resources, default_policy(), engine)
-    for required in ("package.json", "tsconfig.json", "mcp.config.json", ".env.example", "README.md", "src/index.ts"):
+    for required in ("package.json", "tsconfig.json", "mcp.config.json", ".env.example", "README.md", "LICENSE", "src/index.ts"):
         assert required in files
     for name in files:
         path = PurePosixPath(name)
@@ -58,6 +58,7 @@ def test_render_project_is_complete_and_safe(source, engine, resources):
     config = json.loads(files["mcp.config.json"])
     package = json.loads(files["package.json"])
     assert config["server"]["name"] == package["name"] == "demo-server"
+    assert package["license"] == "MIT" and files["LICENSE"].startswith("MIT License")
     if source == "database":
         assert config["resources"] == [resources[0].split(".")[-1].lower()]
         driver = "mysql2" if engine == "mysql" else "pg"

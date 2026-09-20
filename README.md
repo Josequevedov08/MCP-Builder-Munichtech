@@ -24,6 +24,7 @@ Built for the MunichTech EXPO Hackathon.
 - [Roadmap](#roadmap)
 - [Local setup](#local-setup)
 - [Deployment](#deployment)
+- [License](#license)
 - [Team](#team)
 - [Hackathon and technology partners](#hackathon-and-technology-partners)
 
@@ -152,6 +153,7 @@ MCP-Builder-Munichtech/
     test_api.py                API contract tests
     test_generator.py          Policy and renderer tests
     e2e/                       Compile and run the generated servers through an MCP client
+  LICENSE                      MIT license
   requirements.txt             Python dependencies
   requirements-dev.txt         Test dependencies
   pytest.ini                   Test configuration
@@ -393,6 +395,10 @@ To run the API on another host:
 ```bash
 uvicorn main:app --host 0.0.0.0 --port $PORT --proxy-headers --forwarded-allow-ips="*"
 ```
+
+## License
+
+MIT, see [LICENSE](LICENSE). Every generated server ships with its own MIT `LICENSE` file.
 
 ## Team
 
