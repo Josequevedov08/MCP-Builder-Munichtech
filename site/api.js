@@ -61,6 +61,12 @@
     return response.json();
   }
 
+  // POST /api/send-receipt. The server computes the amounts and attaches the generated server.
+  async function sendReceipt(payload) {
+    var response = await post('/api/send-receipt', payload);
+    return response.json();
+  }
+
   var currentAudio = null;
 
   // POST /api/voice-status, then plays the returned MP3.
@@ -115,6 +121,7 @@
     buildMcp: buildMcp,
     health: health,
     speakStatus: speakStatus,
+    sendReceipt: sendReceipt,
     slugify: slugify,
     isValidServerName: isValidServerName,
     errorMessage: errorMessage

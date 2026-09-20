@@ -20,6 +20,7 @@ import json
 import logging
 import os
 import re
+import smtplib
 import time
 import uuid
 from collections import OrderedDict, deque
@@ -47,6 +48,8 @@ from pydantic import (
     model_validator,
 )
 from starlette.exceptions import HTTPException as StarletteHTTPException
+
+import receipts
 
 from generator import Policy, default_policy, describe_rules, env_schema, render_project
 
@@ -95,6 +98,20 @@ class Settings:
         )
         self.voice_enabled = bool(self.elevenlabs_api_keys)
 
+        # Receipt emails over SMTP (any provider: Resend, Brevo, a Gmail app password, and so on).
+        self.smtp_host = os.getenv("SMTP_HOST", "")
+        self.smtp_port = int(os.getenv("SMTP_PORT", "587"))
+        self.smtp_user = os.getenv("SMTP_USER", "")
+        self.smtp_password = os.getenv("SMTP_PASSWORD", "")
+        self.mail_from = os.getenv("MAIL_FROM", "")
+        security = os.getenv("SMTP_SECURITY", "").lower()
+        if security not in ("ssl", "starttls", "none"):
+            security = "ssl" if self.smtp_port == 465 else "starttls"
+        self.smtp_security = security  # "none" is only for local test servers
+        # The HTTPS API of Resend is preferred: some hosts block outbound SMTP ports.
+        self.resend_api_key = os.getenv("RESEND_API_KEY", "")
+        self.email_enabled = bool(self.mail_from and (self.resend_api_key or self.smtp_host))
+
         # Security and storage
         self.encryption_key = os.getenv("CREDENTIALS_ENCRYPTION_KEY", "")
         self.max_stored_builds = int(os.getenv("MAX_STORED_BUILDS", "500"))
@@ -102,6 +119,7 @@ class Settings:
         # Abuse protection for a public deployment (per client IP and per process).
         self.rate_limit_builds = int(os.getenv("RATE_LIMIT_BUILDS_PER_MINUTE", "5"))
         self.rate_limit_voice = int(os.getenv("RATE_LIMIT_VOICE_PER_MINUTE", "20"))
+        self.rate_limit_receipts = int(os.getenv("RATE_LIMIT_RECEIPTS_PER_MINUTE", "3"))
         self.max_concurrent_builds = int(os.getenv("MAX_CONCURRENT_BUILDS", "3"))
 
         # HTTP
@@ -275,6 +293,21 @@ class VoiceStatusRequest(BaseModel):
         return self
 
 
+EMAIL_PATTERN = r"^[A-Za-z0-9._%+\-]{1,64}@[A-Za-z0-9.\-]{1,190}\.[A-Za-z]{2,24}$"
+
+
+class ReceiptRequest(BaseModel):
+    """Payload accepted by POST /api/send-receipt. Amounts are computed on the server."""
+
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+
+    build_id: str = Field(pattern=r"^[a-f0-9]{32}$")
+    email: str = Field(max_length=254, pattern=EMAIL_PATTERN)
+    order_id: str = Field(pattern=r"^MB-[A-Z0-9]{6}$")
+    discount_code: str | None = Field(default=None, max_length=20, pattern=r"^[A-Za-z0-9]*$")
+    language: Literal["en", "de", "es"] = "en"
+
+
 # ---------------------------------------------------------------------------
 # Spoken messages
 # ---------------------------------------------------------------------------
@@ -349,6 +382,9 @@ class BuildRecord:
     build_id: str
     server_name: str
     encrypted_credentials: bytes | None = None
+    source_type: str = ""
+    files: dict[str, str] | None = None
+    receipt_sent: bool = False
 
 
 class BuildStore:
@@ -364,6 +400,9 @@ class BuildStore:
         while len(self._items) > self._max_items:
             self._items.popitem(last=False)
         return record
+
+    def get(self, build_id: str) -> BuildRecord | None:
+        return self._items.get(build_id)
 
 
 # ---------------------------------------------------------------------------
@@ -592,6 +631,7 @@ class Services:
     store: BuildStore
     build_limiter: RateLimiter
     voice_limiter: RateLimiter
+    receipt_limiter: RateLimiter
     build_slots: asyncio.Semaphore
 
 
@@ -606,6 +646,7 @@ async def lifespan(app: FastAPI):
         store=BuildStore(settings.max_stored_builds),
         build_limiter=RateLimiter(settings.rate_limit_builds),
         voice_limiter=RateLimiter(settings.rate_limit_voice),
+        receipt_limiter=RateLimiter(settings.rate_limit_receipts),
         build_slots=asyncio.Semaphore(settings.max_concurrent_builds),
     )
     logger.info(
@@ -691,6 +732,7 @@ async def health() -> dict[str, Any]:
         "status": "ok",
         "llm": "mock" if settings.use_mock_llm else settings.featherless_model,
         "voice_enabled": settings.voice_enabled,
+        "email_enabled": settings.email_enabled,
     }
 
 
@@ -711,6 +753,9 @@ async def build_mcp(payload: BuildRequest, request: Request) -> BuildResponse:
         source = payload.source_type.value
         engine = payload.db_engine.value if payload.db_engine else None
         files = render_project(payload.server_name, source, payload.resources, policy, engine)
+        # Kept in memory so the receipt email can attach the server. The store is bounded.
+        record.source_type = source
+        record.files = files
     except ApiError:
         raise
     except Exception:
@@ -759,6 +804,62 @@ async def voice_status(payload: VoiceStatusRequest, request: Request) -> Respons
             500, "internal_error", "An unexpected error occurred while generating audio."
         ) from None
     return Response(content=audio, media_type="audio/mpeg", headers={"Cache-Control": "no-store"})
+
+
+@app.post("/api/send-receipt")
+async def send_receipt(payload: ReceiptRequest, request: Request) -> dict[str, bool]:
+    services = get_services(request)
+    services.receipt_limiter.check(client_id(request))
+    if not settings.email_enabled:
+        raise ApiError(503, "email_unavailable", "Receipt emails are not enabled on this server.")
+    record = services.store.get(payload.build_id)
+    if record is None or not record.files or record.source_type not in receipts.PRICES:
+        raise ApiError(404, "build_not_found", "This build is no longer available.")
+    if record.receipt_sent:
+        # One receipt per build, so the endpoint cannot be used to send repeated mail.
+        return {"sent": True, "already_sent": True}
+    subject, body = receipts.compose_receipt(
+        payload.language, record.server_name, record.source_type, payload.order_id, payload.discount_code
+    )
+    attachment = (f"{record.server_name}.zip", receipts.build_zip(record.files, record.server_name))
+    try:
+        if settings.resend_api_key:
+            await receipts.send_with_resend(
+                services.http,
+                api_key=settings.resend_api_key,
+                sender=settings.mail_from,
+                to=payload.email,
+                subject=subject,
+                body=body,
+                attachment=attachment,
+            )
+        else:
+            await asyncio.to_thread(
+                receipts.send_email,
+                host=settings.smtp_host,
+                port=settings.smtp_port,
+                user=settings.smtp_user,
+                password=settings.smtp_password,
+                sender=settings.mail_from,
+                security=settings.smtp_security,
+                to=payload.email,
+                subject=subject,
+                body=body,
+                attachment=attachment,
+            )
+    except smtplib.SMTPAuthenticationError:
+        logger.error("SMTP rejected the configured credentials")
+        raise ApiError(503, "email_not_configured", "The email service is not configured correctly.") from None
+    except httpx.HTTPStatusError as exc:
+        logger.error("Resend returned HTTP %s", exc.response.status_code)
+        if exc.response.status_code in (401, 403):
+            raise ApiError(503, "email_not_configured", "The email service is not configured correctly.") from None
+        raise ApiError(502, "email_unavailable", "The receipt email could not be sent.") from None
+    except (smtplib.SMTPException, httpx.HTTPError, OSError):
+        logger.exception("Receipt email failed")
+        raise ApiError(502, "email_unavailable", "The receipt email could not be sent.") from None
+    record.receipt_sent = True
+    return {"sent": True}
 
 
 # The static frontend is mounted last so that it never shadows the API routes.

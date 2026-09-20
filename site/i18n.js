@@ -586,7 +586,7 @@
   "pay.demo.checkout": "Demo checkout",
   "success.audio.blocked": "Your browser blocked the automatic audio. Press the Listen button to hear the report.",
   "receipt.title": "Receipt",
-  "receipt.demo": "Demo payment: no charge was made and no email is sent. Download the receipt if you need it.",
+  "receipt.demo": "Demo payment: no charge was made. Download the receipt if you need it.",
   "receipt.order": "Order",
   "receipt.product": "Product",
   "receipt.price": "Price",
@@ -597,8 +597,12 @@
   "receipt.download": "Download receipt",
   "receipt.downloaded": "Receipt downloaded.",
   "receipt.none": "None",
-  "pay.email.label": "Email (optional, no email is sent in this demo)",
-  "recover.link": "Your last server, {name}, is ready. Open its download page."
+  "pay.email.label": "Email (optional, we send your receipt and the server .zip)",
+  "recover.link": "Your last server, {name}, is ready. Open its download page.",
+  "receipt.email.sending": "Sending the receipt to {email}...",
+  "receipt.email.sent": "Receipt and server .zip sent to {email}. Check your spam folder if it does not arrive.",
+  "receipt.email.failed": "We could not send the email. Download the receipt and the server .zip from this page.",
+  "receipt.email.expired": "The email could not be sent because this build is no longer on the server. Download the receipt and the .zip from this page."
  },
  "de": {
   "launch-offer-20-off-your-first": "Demo-Tipp: Nutzen Sie beim Checkout den Code <span class=\"font-mono\">LAUNCH20</span> für 20 % Rabatt",
@@ -1183,7 +1187,7 @@
   "pay.demo.checkout": "Demo-Kasse",
   "success.audio.blocked": "Ihr Browser hat die automatische Wiedergabe blockiert. Drücken Sie die Schaltfläche zum Anhören, um den Bericht zu hören.",
   "receipt.title": "Quittung",
-  "receipt.demo": "Demo-Zahlung: Es wurde nichts abgebucht und keine E-Mail gesendet. Laden Sie die Quittung herunter, falls Sie sie brauchen.",
+  "receipt.demo": "Demo-Zahlung: Es wurde nichts abgebucht. Laden Sie die Quittung herunter, falls Sie sie brauchen.",
   "receipt.order": "Bestellung",
   "receipt.product": "Produkt",
   "receipt.price": "Preis",
@@ -1194,8 +1198,12 @@
   "receipt.download": "Quittung herunterladen",
   "receipt.downloaded": "Quittung heruntergeladen.",
   "receipt.none": "Keiner",
-  "pay.email.label": "E-Mail (optional, in dieser Demo wird keine E-Mail gesendet)",
-  "recover.link": "Ihr letzter Server, {name}, ist bereit. Öffnen Sie die Download-Seite."
+  "pay.email.label": "E-Mail (optional, wir senden Quittung und Server-ZIP)",
+  "recover.link": "Ihr letzter Server, {name}, ist bereit. Öffnen Sie die Download-Seite.",
+  "receipt.email.sending": "Die Quittung wird an {email} gesendet...",
+  "receipt.email.sent": "Quittung und Server-ZIP wurden an {email} gesendet. Prüfen Sie den Spam-Ordner, falls sie nicht ankommt.",
+  "receipt.email.failed": "Die E-Mail konnte nicht gesendet werden. Laden Sie Quittung und Server-ZIP von dieser Seite herunter.",
+  "receipt.email.expired": "Die E-Mail konnte nicht gesendet werden, weil dieser Build nicht mehr auf dem Server liegt. Laden Sie Quittung und ZIP von dieser Seite herunter."
  },
  "es": {
   "launch-offer-20-off-your-first": "Consejo de la demo: usa el código <span class=\"font-mono\">LAUNCH20</span> en el pago para un 20% de descuento",
@@ -1780,7 +1788,7 @@
   "pay.demo.checkout": "Pago de demostración",
   "success.audio.blocked": "Tu navegador bloqueó el audio automático. Pulsa el botón de escuchar para oír el informe.",
   "receipt.title": "Recibo",
-  "receipt.demo": "Pago de demostración: no se cobró nada y no se envía ningún correo. Descarga el recibo si lo necesitas.",
+  "receipt.demo": "Pago de demostración: no se cobró nada. Descarga el recibo si lo necesitas.",
   "receipt.order": "Pedido",
   "receipt.product": "Producto",
   "receipt.price": "Precio",
@@ -1791,8 +1799,12 @@
   "receipt.download": "Descargar recibo",
   "receipt.downloaded": "Recibo descargado.",
   "receipt.none": "Ninguno",
-  "pay.email.label": "Correo (opcional, en esta demo no se envía ningún correo)",
-  "recover.link": "Tu último servidor, {name}, está listo. Abre su página de descarga."
+  "pay.email.label": "Correo (opcional, te enviamos el recibo y el .zip del servidor)",
+  "recover.link": "Tu último servidor, {name}, está listo. Abre su página de descarga.",
+  "receipt.email.sending": "Enviando el recibo a {email}...",
+  "receipt.email.sent": "Recibo y .zip del servidor enviados a {email}. Revisa la carpeta de spam si no llega.",
+  "receipt.email.failed": "No pudimos enviar el correo. Descarga el recibo y el .zip del servidor desde esta página.",
+  "receipt.email.expired": "No se pudo enviar el correo porque esta generación ya no está en el servidor. Descarga el recibo y el .zip desde esta página."
  }
 };
   var LANGS = ['en', 'de', 'es'];

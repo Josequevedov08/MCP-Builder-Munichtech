@@ -93,10 +93,11 @@
 <!-- Receipt -->
 <div class="hidden card rounded-2xl p-6 mb-6 text-left" id="receiptCard">
 <h2 class="text-[15px] font-semibold text-white mb-1" data-i18n="receipt.title">Receipt</h2>
-<p class="text-[12px] text-neutral-400 mb-4" data-i18n="receipt.demo">Demo payment: no charge was made and no email is sent. Download the receipt if you need it.</p>
+<p class="text-[12px] text-neutral-400 mb-4" data-i18n="receipt.demo">Demo payment: no charge was made. Download the receipt if you need it.</p>
 <dl class="text-[13px] text-neutral-300 space-y-1.5 mb-4" id="receiptList"></dl>
 <button class="px-4 py-2 rounded-lg border border-white/10 bg-white/5 text-[13px] font-medium text-neutral-200 hover:bg-white/10 transition-colors" id="receiptDownload" type="button" data-i18n="receipt.download">Download receipt</button>
 <p aria-live="polite" class="text-[12px] text-neutral-300 mt-2" id="receiptStatus" role="status"></p>
+<p aria-live="polite" class="text-[12px] text-neutral-300 mt-2" id="receiptEmailStatus" role="status"></p>
 </div>
 <!-- Instructions -->
 <div class="card rounded-2xl p-6 mb-6">
@@ -275,6 +276,41 @@ npm run build
           document.getElementById('receiptStatus').textContent = I18N.t('receipt.downloaded');
         });
       }
+      // ---- receipt email (sent once, right after the build, while the server still has the files) ----
+      if (order) {
+        var emailStatus = document.getElementById('receiptEmailStatus');
+        var emailKey = null;
+        var renderEmailStatus = function () {
+          emailStatus.textContent = emailKey ? I18N.t(emailKey, { email: order.email }) : '';
+        };
+        document.addEventListener('langchange', renderEmailStatus);
+        var saveOrder = function () {
+          var record = JSON.stringify(build);
+          try { sessionStorage.setItem('mcpBuild', record); } catch (e) { /* storage unavailable */ }
+          try { localStorage.setItem('mcpLastBuild', record); } catch (e) { /* storage unavailable */ }
+        };
+        if (order.email && order.emailed) {
+          emailKey = 'receipt.email.sent';
+          renderEmailStatus();
+        } else if (order.email) {
+          emailKey = 'receipt.email.sending';
+          renderEmailStatus();
+          McpApi.sendReceipt({
+            build_id: build.build_id,
+            email: order.email,
+            order_id: order.id,
+            discount_code: order.discount_code || null,
+            language: build.language || I18N.getLang()
+          }).then(function () {
+            order.emailed = true;
+            saveOrder();
+            emailKey = 'receipt.email.sent';
+          }).catch(function (error) {
+            emailKey = error && error.code === 'build_not_found' ? 'receipt.email.expired' : 'receipt.email.failed';
+          }).then(renderEmailStatus);
+        }
+      }
+
       // Browsers may block autoplay; the button above is the fallback.
       if (build.autoRead !== false) document.addEventListener('DOMContentLoaded', function () { listen(true); });
     })();

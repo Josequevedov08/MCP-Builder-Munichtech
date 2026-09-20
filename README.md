@@ -48,7 +48,7 @@ The first request to the API can take about a minute if the free Render plan was
 | Generated servers | Real | Compiled with TypeScript and exercised through a real MCP client in the test suite |
 | Payment | Demo | Simulated. No card data is collected or sent anywhere. The test card box is only a convenience |
 | Promo code `LAUNCH20` | Demo | Applies the discount to the displayed price only |
-| Receipt | Partly real | Generated in the browser and downloadable as a text file from the result page. No email is sent |
+| Receipt | Real | Shown on the result page, downloadable as a text file and, if you give an email, sent with the server .zip attached. The amounts are computed on the server. No card is charged |
 | Recovering a closed download | Real | The last build is kept in the browser, and the home page links back to it. It does not sync across devices |
 | Support form | Demo | Does not send messages. Use GitHub issues for real questions |
 | Terms, privacy and refund text | Demo | Template text, not a legal document |
@@ -141,6 +141,7 @@ python -m pytest tests/e2e -q              # needs Node.js and network access
 ```
 MCP-Builder-Munichtech/
   main.py                      FastAPI application, services and routes
+  receipts.py                  Receipt email: server-side amounts, ZIP attachment and SMTP sending
   generator/
     __init__.py                Policy validation, rules text and project renderer
     templates/                 Verified TypeScript templates (files, database, api, common)
@@ -178,6 +179,7 @@ Excluded from version control: `.env`, `.venv/`, `__pycache__/` and other local 
 | --- | --- | --- |
 | POST | `/api/build-mcp` | Generate an MCP server project from a configuration |
 | POST | `/api/voice-status` | Return an MP3 that announces a build result or error |
+| POST | `/api/send-receipt` | Email the receipt and the generated server as a .zip, once per build |
 | GET | `/api/health` | Service and integration status |
 
 Interactive documentation is available at `/docs` while the API is running.
@@ -223,6 +225,18 @@ curl -X POST http://127.0.0.1:8000/api/voice-status \
   --output status.mp3
 ```
 
+### POST /api/send-receipt
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `build_id` | string | yes | The id returned by `/api/build-mcp`. The build must still be in server memory |
+| `email` | string | yes | Recipient address |
+| `order_id` | string | yes | Format `MB-` plus 6 letters or digits |
+| `discount_code` | string | no | `LAUNCH20` gives 20% off. Any other code is ignored |
+| `language` | string | no | `en`, `de` or `es` |
+
+The price is taken from the source type of the build and the discount from the code, so the client cannot set an amount. Each build can be emailed once. The endpoint answers `503 email_unavailable` when SMTP is not configured, and `404 build_not_found` when the build has left the in-memory store (for example after a restart).
+
 ### Errors
 
 Every error uses the same JSON envelope and never includes internal details or submitted values:
@@ -242,6 +256,9 @@ Every error uses the same JSON envelope and never includes internal details or s
 | 503 | `voice_unavailable` | Voice is not enabled or the voice service is unavailable |
 | 503 | `voice_not_configured` | The voice service rejected the server credentials |
 | 504 | `voice_timeout` | The voice service took too long |
+| 404 | `build_not_found` | The build to email is no longer in server memory |
+| 503 | `email_unavailable` | Receipt emails are not enabled, or the mail server failed |
+| 503 | `email_not_configured` | The mail server rejected the configured credentials |
 | 500 | `internal_error` | Unexpected internal error |
 
 ## Security
@@ -318,6 +335,9 @@ Fill in the keys you have in `.env`:
 | `FEATHERLESS_MOCK` | Set to `true` to skip the model and use safe defaults |
 | `ELEVENLABS_API_KEY` | ElevenLabs key. If empty, voice audio is disabled |
 | `ELEVENLABS_API_KEY_2` | Optional backup ElevenLabs key. Used only when the main key returns 401, 402, 403 or 429 |
+| `RESEND_API_KEY` and `MAIL_FROM` | Receipt emails through the Resend HTTPS API (recommended: some hosts block SMTP ports). `MAIL_FROM` is a verified sender such as `MCP Builder <receipts@yourdomain.com>` |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_SECURITY` | Alternative: any SMTP account (Brevo, a Gmail app password). `SMTP_SECURITY` is `starttls`, `ssl` or `none` (local test servers only). With neither Resend nor SMTP set, receipt emails are disabled |
+| `RATE_LIMIT_RECEIPTS_PER_MINUTE` | Receipt emails allowed per client IP each minute. Defaults to `3` |
 | `ELEVENLABS_VOICE_ID` | Voice used for announcements. Must be available on your plan |
 | `CREDENTIALS_ENCRYPTION_KEY` | Fernet key. If empty, an ephemeral key is generated at startup |
 | `ALLOWED_ORIGINS` | Comma separated list of allowed CORS origins |

@@ -21,5 +21,17 @@ services:
         sync: false
       - key: ELEVENLABS_API_KEY_2
         sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: MAIL_FROM
+        sync: false
       - key: ELEVENLABS_VOICE_ID
         value: Xb7hH8MSUJpSbSDYk0k2
