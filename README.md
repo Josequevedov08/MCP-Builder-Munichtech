@@ -293,15 +293,15 @@ The project runs as two pieces: the static site on GitHub Pages and the API on a
 
 | Piece | Address | Host |
 | --- | --- | --- |
-| Website | `mcp.quevedojose.com` | GitHub Pages |
-| API | `mcp-api.quevedojose.com` | Render |
+| Website | `mcpbuilder.quevedojose.com` | GitHub Pages |
+| API | `mcpbuilder-api.quevedojose.com` | Render |
 
 ### 1. API on Render
 
 1. In Render, create a new Blueprint from this repository. It reads `render.yaml`.
 2. Enter the two secret values when asked: `FEATHERLESS_API_KEY` and `ELEVENLABS_API_KEY`. The other variables are already defined in the blueprint.
 3. After the first deploy, open `https://<your-service>.onrender.com/api/health` and check that it reports `"status": "ok"`.
-4. In the service settings, add the custom domain `mcp-api.quevedojose.com`. Render shows the DNS target to use.
+4. In the service settings, add the custom domain `mcpbuilder-api.quevedojose.com`. Render shows the DNS target to use.
 
 The free plan puts the service to sleep after a period without traffic, so the first request can take about a minute. Use a paid plan for a live demo, or open the health URL a few minutes before presenting.
 
@@ -310,7 +310,7 @@ The free plan puts the service to sleep after a period without traffic, so the f
 `.github/workflows/deploy.yml` publishes only the `site/` folder on every push to `main`.
 
 1. In the repository, open Settings, Pages, and select GitHub Actions as the source.
-2. In the same page, set the custom domain to `mcp.quevedojose.com`, save, and enable Enforce HTTPS once the certificate is ready. A `CNAME` file is not needed because the site is published with a workflow.
+2. In the same page, set the custom domain to `mcpbuilder.quevedojose.com`, save, and enable Enforce HTTPS once the certificate is ready. A `CNAME` file is not needed because the site is published with a workflow.
 
 ### 3. DNS records
 
@@ -318,15 +318,15 @@ Create these records where the domain's DNS is managed:
 
 | Type | Name | Value |
 | --- | --- | --- |
-| CNAME | `mcp` | `<github-user>.github.io` |
-| CNAME | `mcp-api` | the target shown by Render |
+| CNAME | `mcpbuilder` | `<github-user>.github.io` |
+| CNAME | `mcpbuilder-api` | the target shown by Render |
 
 Only subdomain records are added, so the existing records of the main domain are not affected. DNS changes can take from a few minutes to a few hours.
 
 ### 4. Connect the two pieces
 
 - `site/config.js` maps the hostname of the website to the address of the API. If you use other names, edit that file.
-- `ALLOWED_ORIGINS` on the API must contain the public address of the website. The blueprint sets it to `https://mcp.quevedojose.com` and to the `github.io` address.
+- `ALLOWED_ORIGINS` on the API must contain the public address of the website. The blueprint sets it to `https://mcpbuilder.quevedojose.com` and to the `github.io` address.
 
 To run the API on another host, use this start command and set the same environment variables:
 

@@ -12,7 +12,7 @@ services:
       - key: SERVE_SITE
         value: "false"
       - key: ALLOWED_ORIGINS
-        value: https://mcp.quevedojose.com,https://josequevedov08.github.io
+        value: https://mcpbuilder.quevedojose.com,https://josequevedov08.github.io
       - key: FEATHERLESS_MODEL
         value: zai-org/GLM-5.2
       - key: FEATHERLESS_API_KEY

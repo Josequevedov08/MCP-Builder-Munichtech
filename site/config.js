@@ -3,8 +3,8 @@
   'use strict';
 
   var API_BY_HOST = {
-    'mcp.quevedojose.com': 'https://mcp-api.quevedojose.com',
-    'josequevedov08.github.io': 'https://mcp-api.quevedojose.com'
+    'mcpbuilder.quevedojose.com': 'https://mcpbuilder-api.quevedojose.com',
+    'josequevedov08.github.io': 'https://mcpbuilder-api.quevedojose.com'
   };
 
   var base = API_BY_HOST[window.location.hostname];
